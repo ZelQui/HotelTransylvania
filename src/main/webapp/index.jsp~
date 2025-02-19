@@ -47,7 +47,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <button type="button" class="btn btn-lg w-100 fs-6 text-white" style="background: rgb(24,59,113);" onclick="window.location.href='menu.jsp'">
+          <button type="button" class="btn btn-lg w-100 fs-6 text-white" style="background: rgb(24,59,113);" onclick="window.location.href='menu.html'">
             Iniciar Sesión
           </button>
         </div>
