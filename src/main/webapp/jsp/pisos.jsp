@@ -4,28 +4,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Catálogo de Usuarios</title>
+  <title>Niveles / Pisos</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
 <div class="d-flex justify-content-between align-items-center">
-  <h4><i class="fa-solid fa-users-gear me-2"></i> Usuarios</h4>
+  <h4><i class="fa-solid fa-gears me-2"></i> Niveles / Pisos</h4>
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb mb-0">
-      <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/menu.jsp">Inicio</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
+      <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/menu.jsp">Configuración</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Pisos</li>
     </ol>
   </nav>
 </div>
 
-<!-- Sección de usuarios -->
+<!-- Sección de Niveles / Pisos -->
 <div class="card mt-4">
   <div class="card-header">
     <div class="row align-items-center">
       <div class="col-9 d-flex gap-2">
-        <p>Catálogo de Usuarios</p>
+        <p>Catálogo de Niveles / Pisos</p>
       </div>
       <div class="col-3 d-flex justify-content-end align-items-center">
         <label for="estadoSelect" class="form-label m-0 me-2">Estado:</label>
@@ -40,45 +40,26 @@
         </script>
       </div>
     </div>
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarUsuario">
+
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarPiso">
       <i class="fas fa-plus"></i> Agregar nuevo
     </button>
   </div>
 
-  <!-- Modal para agregar usuario -->
-  <div class="modal fade" id="modalAgregarUsuario" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+  <!-- Modal para agregar Piso -->
+  <div class="modal fade" id="modalAgregarPiso" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="agregarUsuario">Agregar Usuario</h5>
+          <h5 class="modal-title" id="agregarPiso">Agregar Piso</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="formUsuario">
-            <input type="hidden" id="inputAgregarUsuario">
+          <form id="formPiso">
+            <input type="hidden" id="inputAgregarPiso">
             <div class="mb-3">
               <label for="nombre">Nombre</label>
               <input type="text" class="form-control" id="nombre" required>
-            </div>
-            <div class="mb-3">
-              <label for="correo">Correo</label>
-              <input type="email" class="form-control" id="correo" required>
-            </div>
-            <div class="mb-3">
-              <label for="tipo">Tipo</label>
-              <select class="form-select" id="tipo" required>
-                <option value="Limpieza">Limpieza</option>
-                <option value="Administrador">Administrador</option>
-                <option value="Soporte">Soporte</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="usuario">Usuario</label>
-              <input type="text" class="form-control" id="usuario" required>
-            </div>
-            <div class="mb-3">
-              <label for="contraseña">Contraseña</label>
-              <input type="password" class="form-control" id="contraseña" required>
             </div>
             <button type="button" class="btn btn-success">Guardar</button>
           </form>
@@ -87,40 +68,24 @@
     </div>
   </div>
 
-  <!-- Modal para editar usuario -->
-  <div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+  <!-- Modal para editar Piso -->
+  <div class="modal fade" id="modalEditarPiso" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editarUsuario">Editar Usuario</h5>
+          <h5 class="modal-title" id="editarPiso">Editar Piso</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="formEditarUsuario">
-            <input type="hidden" id="inputEditarUsuario">
+          <form id="formEditarPiso">
+            <input type="hidden" id="inputEditarPiso">
             <div class="mb-3">
               <label for="nombreEditar">Nombre</label>
               <input type="text" class="form-control" id="nombreEditar" required>
             </div>
             <div class="mb-3">
-              <label for="correoEditar">Correo</label>
-              <input type="email" class="form-control" id="correoEditar" required>
-            </div>
-            <div class="mb-3">
-              <label for="usuarioEditar">Usuario</label>
-              <input type="text" class="form-control" id="usuarioEditar" required>
-            </div>
-            <div class="mb-3">
-              <label for="tipoEditar">Tipo</label>
-              <select class="form-select" id="tipoEditar" required>
-                <option value="Limpieza">Limpieza</option>
-                <option value="Administrador">Administrador</option>
-                <option value="Soporte">Soporte</option>
-              </select>
-            </div>
-            <div class="mb-3">
               <label for="estatusEditar">Estatus</label>
-              <select class="form-select" id="estatusEditar" required>
+              <select class="form-select" id="estatusEditar">
                 <option value="Activo">Activo</option>
                 <option value="Inactivo">Inactivo</option>
               </select>
@@ -150,9 +115,6 @@
         <tr>
           <th>N°</th>
           <th>Nombre</th>
-          <th>Usuario</th>
-          <th>Correo</th>
-          <th>Tipo</th>
           <th>Estatus</th>
           <th>Acciones</th>
         </tr>
@@ -160,14 +122,10 @@
         <tbody id="tablaUsuarios">
         <tr>
           <td>1</td>
-          <td>Luisa</td>
-          <td>luis12</td>
-          <td>luisi@gmail.com</td>
-          <td>Limpieza</td>
+          <td>Primer Piso</td>
           <td>Activo</td>
-          <td>
-            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario">✏️</button>
-            <button class="btn btn-secondary btn-sm">🔑</button>
+          <td class="d-flex justify-content-center gap-1">
+            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarPiso">✏️</button>
             <button class="btn btn-danger btn-sm">❌</button>
           </td>
         </tr>

@@ -23,24 +23,24 @@
   <div class="card-header text-white">
     <div class="row align-items-center">
       <div class="col-9 d-flex gap-2">
-        <label>
-          <input type="text" class="form-control" placeholder="Buscar producto">
-        </label>
-        <label>
-          <select class="form-select">
-            <option selected>Open this select menu</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
-        </label>
+        <input type="text" class="form-control" placeholder="Buscar producto">
+
+        <select class="form-select">
+          <option selected>Open this select menu</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+        </select>
+
         <button class="btn btn-primary">Agregar</button>
       </div>
+
       <div class="col-3 text-end">
         <button class="btn btn-success" onclick="cargarPagina('jsp/habitacionesVenta.jsp')" >Terminar venta</button>
       </div>
     </div>
   </div>
+
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-bordered align-middle">
@@ -54,7 +54,7 @@
           <th>Eliminar</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="tablaVentaDirecta">
         <tr>
           <td>Agua</td>
           <td>Producto</td>

@@ -25,16 +25,17 @@
           <h2>Hola de Nuevo</h2>
           <p>Nos alegra tenerte de vuelta.</p>
         </div>
+
         <div class="input-group mb-3">
-          <label>
-            <input type="text" class="form-control form-control-lg bg-light fs-6" placeholder="Correo Electrónico">
-          </label>
+          <label for="email" class="input-group-text"><i class="fas fa-envelope"></i></label>
+          <input type="text" id="email" class="form-control form-control-lg bg-light fs-6" placeholder="Correo Electrónico">
         </div>
-        <div class="input-group mb-1">
-          <label>
-            <input type="password" class="form-control form-control-lg bg-light fs-6" placeholder="Contraseña">
-          </label>
+
+        <div class="input-group mb-3">
+          <label for="password" class="input-group-text"><i class="fas fa-lock"></i></label>
+          <input type="password" id="password" class="form-control form-control-lg bg-light fs-6" placeholder="Contraseña">
         </div>
+
         <div class="input-group mb-5 d-flex justify-content-between">
           <div class="form-check">
             <input type="checkbox" class="form-check-input" id="formCheck">

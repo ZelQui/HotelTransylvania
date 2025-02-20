@@ -164,15 +164,11 @@
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <span>Mostrando
-          <label>
-            <input type="number" min="1" max="999" value="1" class="form-control d-inline-block" style="width: 3rem;">
-          </label> registros
+        <input type="number" min="1" max="999" value="1" class="form-control d-inline-block" style="width: 3rem;"> registros
       </span>
 
       <div class="input-group" style="max-width: 250px;">
-        <label>
-          <input type="text" class="form-control" placeholder="Buscar">
-        </label>
+        <input type="text" class="form-control" placeholder="Buscar">
         <button class="btn btn-primary"><i class="fas fa-search"></i></button>
       </div>
     </div>
@@ -191,7 +187,7 @@
           <th>Acciones</th>
         </tr>
         </thead>
-        <tbody id="tablaUsuarios">
+        <tbody id="tablaHabitaciones">
         <tr>
           <td>100</td>
           <td>1</td>

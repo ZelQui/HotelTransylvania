@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="css/grafica.css">
   <!-- Estilo de reserva.jsp -->
   <link rel="stylesheet" href="css/reserva.css">
-  <!-- Estilo de recepcion.jsp y habitacionVenta.jsp -->
+  <!-- Estilo de recepcion.jsp y habitacionVenta.jsp y verificacionSalidas.jsp -->
   <link rel="stylesheet" href="css/habitaciones.css">
   <!-- Estilo de ventaDirecta.jsp y venderProductos.jsp -->
   <link rel="stylesheet" href="css/venderProductos.css">
@@ -90,7 +90,7 @@
         </ul>
       </li>
       <li class="sidebar-item">
-        <a href="#" class="sidebar-link" onclick="cargarPagina('jsp/VerificacionSalidas.jsp')">
+        <a href="#" class="sidebar-link" onclick="cargarPagina('jsp/verificacionSalidas.jsp')">
           <i class="fa-solid fa-right-from-bracket me-2"></i>
           <span>Verificación de Salidas</span>
         </a>

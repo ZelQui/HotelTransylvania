@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <title>Inicio</title>
 </head>
+
 <body>
 <div class="d-flex justify-content-between align-items-center">
     <h4><i class="fa-solid fa-house me-2"></i> Inicio</h4>
@@ -76,7 +77,7 @@
     <!-- Tarjeta de Estadísticas -->
     <div class="col-lg-7 col-md-7 col-sm-12">
         <div class="card mt-4">
-            <div class="card-header d-flex align-items-center">
+            <div class="card-header text-white d-flex align-items-center">
                 <p class="mb-0"><i class="fa-solid fa-chart-area me-2"></i> Estadísticas</p>
             </div>
             <div class="card-body">

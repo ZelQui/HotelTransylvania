@@ -23,10 +23,10 @@
 <div class="card mt-4">
   <div class="card-header">
     <div class="row align-items-center">
-      <div class="col-9 d-flex gap-2 text-white">
+      <div class="col-9 d-flex gap-2">
         <p>Catálogo de Productos</p>
       </div>
-      <div class="col-3 d-flex justify-content-end align-items-center text-white">
+      <div class="col-3 d-flex justify-content-end align-items-center">
         <label for="estadoSelect" class="form-label m-0 me-2">Estado:</label>
         <select id="estadoSelect" class="form-select w-auto">
           <option value="activos">Activos</option>
