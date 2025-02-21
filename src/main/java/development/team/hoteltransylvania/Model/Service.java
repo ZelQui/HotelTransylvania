@@ -1,17 +1,17 @@
 package development.team.hoteltransylvania.Model;
 
-public class Product {
+public class Service {
     private int id;
     private String name;
     private double price;
 
-    public Product() {
+    public Service() {
     }
 
-    public Product(double price, String name, int id) {
-        this.price = price;
-        this.name = name;
+    public Service(int id, String name, double price) {
         this.id = id;
+        this.name = name;
+        this.price = price;
     }
 
     public int getId() {
@@ -40,6 +40,10 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Producto{" + "ID=" + id + ", Nombre='" + name + ", Precio= S/ " + price + "}";
+        return "Service{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                '}';
     }
 }
