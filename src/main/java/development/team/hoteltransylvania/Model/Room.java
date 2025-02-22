@@ -10,12 +10,12 @@ public class Room {
     public Room() {
     }
 
-    public Room(double price, StatusRoom statusRoom, TypeRoom typeRoom, String number, int id) {
-        this.price = price;
-        this.statusRoom = statusRoom;
-        this.typeRoom = typeRoom;
-        this.number = number;
+    public Room(int id, String number, TypeRoom typeRoom, StatusRoom statusRoom, double price) {
         this.id = id;
+        this.number = number;
+        this.typeRoom = typeRoom;
+        this.statusRoom = statusRoom;
+        this.price = price;
     }
 
     public int getId() {
