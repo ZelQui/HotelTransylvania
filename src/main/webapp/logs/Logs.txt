@@ -1,0 +1,6 @@
+feb. 21, 2025 11:55:49 P. M. development.team.hoteltransylvania.Test.testGeneral main
+INFORMACIÓN: Hello World
+feb. 21, 2025 11:56:22 P. M. development.team.hoteltransylvania.Test.testGeneral main
+ADVERTENCIA: ERrror fatal
+feb. 21, 2025 11:56:22 P. M. development.team.hoteltransylvania.Test.testGeneral main
+INFORMACIÓN: testGeneral
