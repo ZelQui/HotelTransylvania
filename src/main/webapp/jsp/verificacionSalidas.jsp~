@@ -87,6 +87,7 @@
 <script>
     function handleClick(roomNumber) {
         alert("Has seleccionado la habitación " + roomNumber);
+        // Aquí puedes redirigir a otra página o realizar más acciones
     }
 </script>
 </body>

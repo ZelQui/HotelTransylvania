@@ -392,10 +392,12 @@
         <td>15-05-25 13:33</td>
         <td>16-05-25 12:05</td>
         <td class="text-primary">Nueva Reservación</td>
-        <td class="d-flex justify-content-center gap-1">
-          <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalVerDetalle">👁️</button>
-          <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarReserva">✏️</button>
-          <button class="btn btn-danger btn-sm">❌</button>
+        <td class="align-middle text-center">
+          <div class="d-flex justify-content-center align-items-center gap-1">
+            <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalVerDetalle">👁️</button>
+            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarReserva">✏️</button>
+            <button class="btn btn-danger btn-sm">❌</button>
+          </div>
         </td>
       </tr>
       </tbody>

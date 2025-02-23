@@ -7,7 +7,7 @@
 </head>
 
 <body>
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
   <h4><i class="fa-solid fa-basket-shopping me-2"></i> Catálogo de Productos</h4>
 
   <nav aria-label="breadcrumb">
@@ -23,10 +23,12 @@
 <div class="card mt-4">
   <div class="card-header">
     <div class="row align-items-center">
-      <div class="col-9 d-flex gap-2 text-white">
-        <p>Catálogo de Productos</p>
+      <div class="col-lg-9 col-md-9 col-sm-12 d-flex gap-2 text-white">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarCatalogoProducto">
+          <i class="fas fa-plus"></i> Agregar Producto
+        </button>
       </div>
-      <div class="col-3 d-flex justify-content-end align-items-center text-white">
+      <div class="col-lg-3 col-md-3 col-sm-12 d-flex justify-content-end align-items-center text-white">
         <label for="estadoSelect" class="form-label m-0 me-2">Estado:</label>
         <select id="estadoSelect" class="form-select w-auto">
           <option value="activos">Activos</option>
@@ -38,12 +40,6 @@
           });
         </script>
       </div>
-    </div>
-
-    <div class="d-flex justify-content-start mt-2">
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarCatalogoProducto">
-        <i class="fas fa-plus"></i> Agregar nuevo
-      </button>
     </div>
   </div>
 
@@ -162,14 +158,12 @@
     </div>
   </div>
 
-  <div class="card-body">
+  <div class="card-body mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <span>Mostrando
-          <label>
-            <input type="number" min="1" max="999" value="1" class="form-control d-inline-block" style="width: 3rem;">
-          </label> registros
+      <span class="d-none d-md-inline">Mostrando
+        <input type="number" min="1" max="999" value="1" class="form-control d-inline-block" style="width: 4rem;"> registros
       </span>
-      <div class="input-group" style="max-width: 250px;">
+      <div class="input-group ms-auto" style="max-width: 250px;">
         <input type="text" class="form-control" placeholder="Buscar">
         <button class="btn btn-primary"><i class="fas fa-search"></i></button>
       </div>
@@ -204,9 +198,11 @@
           <td>S/.4</td>
           <td>S/.6</td>
           <td>Activo</td>
-          <td class="d-flex justify-content-center gap-1">
-            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarCatalogoProducto">✏️</button>
-            <button class="btn btn-danger btn-sm">❌</button>
+          <td class="align-middle text-center">
+            <div class="d-flex justify-content-center align-items-center gap-1">
+              <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarCatalogoProducto">✏️</button>
+              <button class="btn btn-danger btn-sm">❌</button>
+            </div>
           </td>
         </tr>
         </tbody>

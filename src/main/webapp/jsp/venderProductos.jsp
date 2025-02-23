@@ -86,8 +86,10 @@
           </label></td>
           <td>S/.15</td>
           <td>S/.30</td>
-          <td class="text-center">
-            <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+          <td class="align-middle text-center">
+            <div class="d-flex justify-content-center align-items-center gap-1">
+              <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+            </div>
           </td>
         </tr>
         </tbody>

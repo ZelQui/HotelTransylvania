@@ -7,7 +7,7 @@
 </head>
 
 <body>
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
   <h4><i class="fa-solid fa-right-from-bracket me-2"></i> Proceso de Salida</h4>
 
   <nav aria-label="breadcrumb">
@@ -21,7 +21,7 @@
 
 <!-- Sección de Información -->
 <div class="row mt-4">
-  <div class="col-4">
+  <div class="col-lg-4 col-md-4 col-sm-12">
     <div class="card">
       <div class="card-header bg-light"><strong>Datos de la Habitación</strong></div>
       <div class="card-body">
@@ -32,7 +32,7 @@
       </div>
     </div>
   </div>
-  <div class="col-4">
+  <div class="col-lg-4 col-md-4 col-sm-12 mt-4 mt-md-0">
     <div class="card">
       <div class="card-header bg-light"><strong>Datos del Cliente</strong></div>
       <div class="card-body">
@@ -43,12 +43,12 @@
       </div>
     </div>
   </div>
-  <div class="col-4">
+  <div class="col-lg-4 col-md-4 col-sm-12 mt-4 mt-md-0">
     <div class="card">
       <div class="card-header bg-light"><strong>Datos del Hospedaje</strong></div>
       <div class="card-body">
-        <p><strong>Fecha de Entrada:</strong> 18-02-2025 13:05:30</p>
-        <p><strong>Fecha de Salida:</strong> 19-02-2025 12:05:30</p>
+        <p><strong>Fecha de Entrada:</strong> 18-02-25 13:05</p>
+        <p><strong>Fecha de Salida:</strong> 19-02-25 12:05</p>
         <p><strong>Tiempo Estimado:</strong> 1 día 0 horas 0 minutos</p>
         <p><strong>Tiempo Rebasado:</strong> <span class="text-danger">0 días 4 horas 15 minutos</span></p>
       </div>
@@ -79,9 +79,9 @@
           <td>S/.0</td>
           <td>S/.0</td>
           <td>S/.0</td>
-          <td><label>
+          <td>
             <input type="number" class="form-control" value="0">
-          </label></td>
+          </td>
           <td>S/.0</td>
           <td>Felipe</td>
         </tr>
@@ -111,8 +111,10 @@
           <td>2</td>
           <td class="text-danger">Falta Pagar</td>
           <td>S/.4</td>
-          <td class="text-center">
-            <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+          <td class="align-middle text-center">
+            <div class="d-flex justify-content-center align-items-center gap-1">
+              <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+            </div>
           </td>
         </tr>
         </tbody>
@@ -133,12 +135,12 @@
       </select>
     </div>
 
-    <div class="d-flex justify-content-between mt-2">
-      <div class="justify-content-start">
-        <button class="btn btn-danger" onclick="cargarPagina('jsp/VerificacionSalidas.jsp')"> Regresar </button>
-        <button class="btn btn-primary" onclick="cargarPagina('jsp/VerificacionSalidas.jsp')"> Realizar Limpieza Intermedia </button>
+    <div class="d-flex flex-column flex-md-row justify-content-between mt-2">
+      <div class="d-flex flex-column flex-md-row justify-content-start gap-1">
+        <button class="btn btn-danger w-auto w-sm-100" onclick="cargarPagina('jsp/VerificacionSalidas.jsp')"> Regresar </button>
+        <button class="btn btn-primary w-auto w-sm-100 mt-2 mt-md-0" onclick="cargarPagina('jsp/VerificacionSalidas.jsp')"> Realizar Limpieza Intermedia </button>
       </div>
-      <button class="btn btn-success" onclick="cargarPagina('jsp/VerificacionSalidas.jsp')"> Culminar y Limpiar Habitación </button>
+      <button class="btn btn-success w-auto w-sm-100 mt-2 mt-md-0" onclick="cargarPagina('jsp/VerificacionSalidas.jsp')"> Culminar y Limpiar Habitación </button>
     </div>
   </div>
 </div>
