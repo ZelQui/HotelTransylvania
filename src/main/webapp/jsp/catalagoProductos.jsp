@@ -1,3 +1,6 @@
+<%@ page import="java.util.List" %>
+<%@ page import="development.team.hoteltransylvania.Model.Product" %>
+<%@ page import="development.team.hoteltransylvania.Business.GestionProduct" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <head>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -5,6 +8,10 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <title>Catálogo de Productos</title>
 </head>
+
+<%
+  List<Product> productsInCatalogo = GestionProduct.getAllProducts();
+%>
 
 <body>
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
@@ -52,8 +59,9 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="formCatalogoProducto">
+          <form id="formCatalogoProducto" action="productcontrol" method="post">
             <input type="hidden" id="inputAgregarCatalagoProducto">
+            <input type="hidden" name="actionproduct" value="add">
             <div class="mb-3">
               <label for="tipo">Tipo</label>
               <select class="form-select" id="tipo" required>
@@ -64,40 +72,20 @@
             </div>
             <div class="mb-3">
               <label for="nombre">Nombre</label>
-              <input type="text" class="form-control" id="nombre" required>
-            </div>
-            <div class="mb-3">
-              <label for="marca">Marca</label>
-              <input type="text" class="form-control" id="marca" required>
-            </div>
-            <div class="mb-3">
-              <label for="detalle">Detalle</label>
-              <input type="text" class="form-control" id="detalle" required>
-            </div>
-            <div class="mb-3">
-              <label for="stock">Stock</label>
-              <input type="number" class="form-control" id="stock" min="0" required>
-            </div>
-            <div class="mb-3">
-              <label for="proveedor">Proveedor</label>
-              <input type="text" class="form-control" id="proveedor" required>
-            </div>
-            <div class="mb-3">
-              <label for="precioCompra">Precio Compra</label>
-              <input type="number" class="form-control" id="precioCompra" min="0" required>
+              <input type="text" class="form-control" name="nameproduct" id="nombre" required>
             </div>
             <div class="mb-3">
               <label for="precioVenta">Precio Venta</label>
-              <input type="number" class="form-control" id="precioVenta" min="0" required>
+              <input type="number" class="form-control" name="priceproduct" id="precioVenta" min="2" step="0.01" required>
             </div>
-            <button type="button" class="btn btn-success">Guardar</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
           </form>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal para editar Cliente -->
+  <!-- Modal para editar catalogo -->
   <div class="modal fade" id="modalEditarCatalogoProducto" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -106,8 +94,11 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="formEditarCatalogoProducto">
+
+          <form id="formEditarCatalogoProducto" action="productcontrol" method="post">
             <input type="hidden" id="inputEditarCatalagoProducto">
+            <input type="hidden" name="actionproduct" value="update">
+            <input type="text" name="idproduct" id="inputEditarIdProducto">
             <div class="mb-3">
               <label for="tipoEditar">Tipo</label>
               <select class="form-select" id="tipoEditar" required>
@@ -121,37 +112,10 @@
               <input type="text" class="form-control" id="nombreEditar" required>
             </div>
             <div class="mb-3">
-              <label for="marcaEditar">Marca</label>
-              <input type="text" class="form-control" id="marcaEditar" required>
-            </div>
-            <div class="mb-3">
-              <label for="detalleEditar">Detalle</label>
-              <input type="text" class="form-control" id="detalleEditar" required>
-            </div>
-            <div class="mb-3">
-              <label for="stockEditar">Stock</label>
-              <input type="number" class="form-control" id="stockEditar" min="0" required>
-            </div>
-            <div class="mb-3">
-              <label for="proveedorEditar">Proveedor</label>
-              <input type="text" class="form-control" id="proveedorEditar" required>
-            </div>
-            <div class="mb-3">
-              <label for="precioCompraEditar">Precio Compra</label>
-              <input type="number" class="form-control" id="precioCompraEditar" min="0" required>
-            </div>
-            <div class="mb-3">
               <label for="precioVentaEditar">Precio Venta</label>
               <input type="number" class="form-control" id="precioVentaEditar" min="0" required>
             </div>
-            <div class="mb-3">
-              <label for="estatusEditar">Estatus</label>
-              <select class="form-select" id="estatusEditar">
-                <option value="Activo">Activo</option>
-                <option value="Inactivo">Inactivo</option>
-              </select>
-            </div>
-            <button type="button" class="btn btn-success">Guardar</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
           </form>
         </div>
       </div>
@@ -176,35 +140,32 @@
           <th>N°</th>
           <th>Tipo</th>
           <th>Nombre</th>
-          <th>Marca</th>
-          <th>Detalle</th>
-          <th>Stock</th>
-          <th>Proveedor</th>
-          <th>Precio Compra</th>
           <th>Precio Venta</th>
-          <th>Estatus</th>
           <th>Acciones</th>
         </tr>
         </thead>
         <tbody id="tablaCatalagoProductos">
-        <tr>
-          <td>1</td>
-          <td>Producto</td>
-          <td>Gaseosa</td>
-          <td>Inca Kola</td>
-          <td>Gaseosa de 3L.</td>
-          <td>15</td>
-          <td>Inca Kola</td>
-          <td>S/.4</td>
-          <td>S/.6</td>
-          <td>Activo</td>
-          <td class="align-middle text-center">
-            <div class="d-flex justify-content-center align-items-center gap-1">
-              <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarCatalogoProducto">✏️</button>
-              <button class="btn btn-danger btn-sm">❌</button>
-            </div>
-          </td>
-        </tr>
+
+          <%for(Product product : productsInCatalogo){ int count=1;%>
+            <tr>
+              <td><%=count%></td>
+              <td>Producto</td>
+              <td><%=product.getName()%></td>
+              <td>S/. <%=product.getPrice()%></td>
+              <td class="align-middle text-center">
+                <div class="d-flex justify-content-center align-items-center gap-1">
+                  <button class="btn btn-warning btn-sm btn-editar-producto" data-bs-toggle="modal"
+                          data-bs-target="#modalEditarCatalogoProducto" data-id="<%=product.getId()%>">✏️</button>
+                  </form>
+                  <form action="productcontrol" method="post">
+                    <input type="hidden" name="idproduct" value="<%=product.getId()%>">
+                    <input type="hidden" name="actionproduct" value="delete">
+                    <button class="btn btn-danger btn-sm">❌</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <%count++;}%>
         </tbody>
       </table>
     </div>
@@ -222,3 +183,19 @@
 </div>
 
 </body>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const botonesEditar = document.querySelectorAll(".btn-editar-producto");
+
+    botonesEditar.forEach((boton) => {
+      boton.addEventListener("click", function () {
+        // Obtiene el ID del producto desde el atributo data-id
+        const idProducto = this.getAttribute("data-id");
+
+        // Asigna el ID al input hidden del modal
+        document.getElementById("inputEditarIdProducto").value = idProducto;
+      });
+    });
+  });
+</script>

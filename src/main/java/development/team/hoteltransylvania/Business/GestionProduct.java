@@ -49,7 +49,7 @@ public class GestionProduct {
 
             ps.setString(1, product.getName());
             ps.setDouble(2, product.getPrice());
-            ps.setInt(3, product.getId());// Se asume que `id` es un atributo de `Employee`
+            ps.setInt(3, product.getId());
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
@@ -118,4 +118,28 @@ public class GestionProduct {
 
         return products;
     }
+    public static Product getProductById(int productId) {
+        String sql = "SELECT id, nombre, precio FROM productos WHERE id = ?";
+        Product product = null;
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ps.setInt(1, productId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("nombre");
+                double price = rs.getDouble("precio");
+
+                product = new Product(id, name, price);
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error retrieving product with ID " + productId + ": " + e.getMessage());
+        }
+
+        return product;
+    }
+
 }

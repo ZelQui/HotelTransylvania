@@ -1,3 +1,6 @@
+<%@ page import="development.team.hoteltransylvania.Business.GestionEmployee" %>
+<%@ page import="java.util.List" %>
+<%@ page import="development.team.hoteltransylvania.DTO.usersEmployeeDTO" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -19,6 +22,10 @@
     </ol>
   </nav>
 </div>
+
+<%
+  List<usersEmployeeDTO> allEmplooyes = GestionEmployee.getAllEmployees();
+%>
 
 <!-- Sección de usuarios -->
 <div class="card mt-4">
@@ -158,19 +165,23 @@
         </tr>
         </thead>
         <tbody id="tablaUsuarios">
-        <tr>
-          <td>1</td>
-          <td>Luisa</td>
-          <td>luis12</td>
-          <td>luisi@gmail.com</td>
-          <td>Limpieza</td>
-          <td>Activo</td>
-          <td>
-            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario">✏️</button>
-            <button class="btn btn-secondary btn-sm">🔑</button>
-            <button class="btn btn-danger btn-sm">❌</button>
-          </td>
-        </tr>
+
+          <%for(usersEmployeeDTO employee : allEmplooyes){ int count=1;%>
+          <tr>
+            <td><%=count%></td>
+            <td><%=employee.getName_employee()%></td>
+            <td><%=employee.getName_user()%></td>
+            <td><%=employee.getEmail_user()%></td>
+            <td><%=employee.getTipo_user()%></td>
+            <td><%=employee.getEstado_user()%></td>
+            <td>
+              <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario">✏️</button>
+              <button class="btn btn-secondary btn-sm">🔑</button>
+              <button class="btn btn-danger btn-sm">❌</button>
+            </td>
+          </tr>
+          <%count++;}%>
+
         </tbody>
       </table>
     </div>

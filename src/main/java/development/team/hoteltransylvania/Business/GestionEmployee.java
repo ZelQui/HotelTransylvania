@@ -1,5 +1,6 @@
 package development.team.hoteltransylvania.Business;
 
+import development.team.hoteltransylvania.DTO.usersEmployeeDTO;
 import development.team.hoteltransylvania.Model.Employee;
 import development.team.hoteltransylvania.Services.DataBaseUtil;
 import development.team.hoteltransylvania.Util.LoggerConfifg;
@@ -95,27 +96,35 @@ public class GestionEmployee {
 
         return result;
     }
-    public static List<Employee> getAllEmployees() {
-        String sql = "SELECT * FROM empleados";
-        List<Employee> employees = new ArrayList<>();
+    public static List<usersEmployeeDTO> getAllEmployees() {
+        String sql = "SELECT e.id AS id_empleado, r.id AS id_usuario, e.nombre, u.username AS nombre_usuario,\n" +
+                "email, r.nombre AS tipo, u.estado \n" +
+                "FROM empleados as e\n" +
+                "JOIN usuarios AS u ON u.empleado_id=e.id\n" +
+                "JOIN roles AS r ON e.rol_id=r.id";
+        List<usersEmployeeDTO> allEmployees = new ArrayList<>();
 
         try (Connection cnn = dataSource.getConnection();
              PreparedStatement ps = cnn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("nombre");
-                String position = rs.getString("cargo");
+                int id_empleado = rs.getInt("id_empleado");
+                int id_usuario = rs.getInt("id_usuario");
+                String nombre = rs.getString("nombre");
+                String nombre_usuario = rs.getString("nombre_usuario");
+                String email = rs.getString("email");
+                String tipo = rs.getString("tipo");
+                String estado = rs.getString("estado");
 
-                employees.add(new Employee(id, name, position));
+                allEmployees.add(new usersEmployeeDTO(id_empleado,id_usuario,nombre,nombre_usuario,email,tipo,estado));
             }
 
         } catch (SQLException e) {
             LOGGER.severe("Error retrieving employees: " + e.getMessage());
         }
 
-        return employees;
+        return allEmployees;
     }
 
 }
