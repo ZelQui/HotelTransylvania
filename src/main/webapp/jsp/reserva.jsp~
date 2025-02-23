@@ -360,10 +360,10 @@
 
 <div class="card-body mt-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <span>Mostrando
-      <input type="number" min="1" max="999" value="1" class="form-control d-inline-block" style="width: 3rem;">registros
-    </span>
-    <div class="input-group" style="max-width: 250px;">
+  <span class="d-none d-md-inline">Mostrando
+    <input type="number" min="1" max="999" value="1" class="form-control d-inline-block" style="width: 4rem;"> registros
+  </span>
+    <div class="input-group ms-auto" style="max-width: 250px;">
       <input type="text" class="form-control" placeholder="Buscar">
       <button class="btn btn-primary"><i class="fas fa-search"></i></button>
     </div>
@@ -389,8 +389,8 @@
         <td>Gonashi</td>
         <td>696</td>
         <td>Presidencial</td>
-        <td>15-05-2025 13:33:10</td>
-        <td>16-05-2025 12:05:00</td>
+        <td>15-05-25 13:33</td>
+        <td>16-05-25 12:05</td>
         <td class="text-primary">Nueva Reservación</td>
         <td class="d-flex justify-content-center gap-1">
           <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalVerDetalle">👁️</button>

@@ -41,5 +41,6 @@
 
     .table-responsive .table {
         table-layout: auto;
+        text-align: center;
     }
 }

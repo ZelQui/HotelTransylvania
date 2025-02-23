@@ -7,7 +7,7 @@
 </head>
 
 <body>
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
     <h4><i class="fa-solid fa-house me-2"></i> Inicio</h4>
 
     <nav aria-label="breadcrumb">
@@ -125,7 +125,7 @@
                             <td>696</td>
                             <td>24hr</td>
                             <td>Presidencial</td>
-                            <td>15-05-25 16:10:05</td>
+                            <td>15-05-25 16:10</td>
                         </tr>
                         </tbody>
                     </table>

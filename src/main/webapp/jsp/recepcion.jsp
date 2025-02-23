@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
   <h4><i class="fas fa-sign-in-alt"></i> Recepción</h4>
 
   <nav aria-label="breadcrumb">

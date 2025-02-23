@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
   <h4><i class="fa-solid fa-calendar-days me-2"></i> Reserva</h4>
 
   <nav aria-label="breadcrumb">
@@ -389,8 +389,8 @@
         <td>Gonashi</td>
         <td>696</td>
         <td>Presidencial</td>
-        <td>15-05-2025 13:33:10</td>
-        <td>16-05-2025 12:05:00</td>
+        <td>15-05-25 13:33</td>
+        <td>16-05-25 12:05</td>
         <td class="text-primary">Nueva Reservación</td>
         <td class="d-flex justify-content-center gap-1">
           <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalVerDetalle">👁️</button>
