@@ -10,7 +10,7 @@ public class DataBaseUtil {
     // Variables de configuración
     private static final String DB_HOST = "roundhouse.proxy.rlwy.net";
     private static final String DB_PORT = "19051";
-    private static final String DB_NAME = "railway"; // Ajusta si tu BD tiene otro nombre
+    private static final String DB_NAME = ""; // Ajusta si tu BD tiene otro nombre
     private static final String DB_USERNAME = "postgres";
     private static final String DB_PASSWORD = "dXOcgffueCWKRUHHSSfnYjZMXodBVqtF";
     private static final String DB_DRIVER = "org.postgresql.Driver";
