@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 public class GestionProduct {
     private static final DataSource dataSource = DataBaseUtil.getDataSource();
-    private static final Logger LOGGER = LoggerConfifg.getLogger(GestionEmployee.class);
+    private static final Logger LOGGER = LoggerConfifg.getLogger(GestionProduct.class);
 
     public static boolean registerProduct(Product product) {
         String sql = "INSERT INTO productos (nombre, precio) VALUES (?, ?)";

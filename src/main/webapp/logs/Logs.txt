@@ -1,6 +1,4 @@
-feb. 21, 2025 11:55:49 P. M. development.team.hoteltransylvania.Test.testGeneral main
-INFORMACIÓN: Hello World
-feb. 21, 2025 11:56:22 P. M. development.team.hoteltransylvania.Test.testGeneral main
-ADVERTENCIA: ERrror fatal
-feb. 21, 2025 11:56:22 P. M. development.team.hoteltransylvania.Test.testGeneral main
-INFORMACIÓN: testGeneral
+feb. 23, 2025 12:17:45 A. M. development.team.hoteltransylvania.Business.GestionProduct getAllProducts
+GRAVE: Se obtuv la lista de productos.
+feb. 23, 2025 12:18:43 A. M. development.team.hoteltransylvania.Business.GestionProduct getAllProducts
+GRAVE: Se obtuv la lista de productos.
