@@ -33,7 +33,7 @@
   <div class="card-header">
     <div class="d-flex justify-content-start">
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarReserva">
-        <i class="fas fa-plus"></i> Agregar nueva
+        <i class="fas fa-plus"></i> Agregar Reserva
       </button>
     </div>
   </div>
@@ -360,10 +360,10 @@
 
 <div class="card-body mt-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <span>Mostrando
-      <input type="number" min="1" max="999" value="1" class="form-control d-inline-block" style="width: 3rem;">registros
-    </span>
-    <div class="input-group" style="max-width: 250px;">
+  <span class="d-none d-md-inline">Mostrando
+    <input type="number" min="1" max="999" value="1" class="form-control d-inline-block" style="width: 4rem;"> registros
+  </span>
+    <div class="input-group ms-auto" style="max-width: 250px;">
       <input type="text" class="form-control" placeholder="Buscar">
       <button class="btn btn-primary"><i class="fas fa-search"></i></button>
     </div>

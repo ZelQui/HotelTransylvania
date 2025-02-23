@@ -92,7 +92,7 @@
                 </div>
 
                 <!-- Gráfica de barras -->
-                <div style="height: 400px;">
+                <div style="height: auto;">
                     <canvas id="graficaIngresos"></canvas>
                 </div>
             </div>
@@ -113,7 +113,8 @@
                             <th>N°</th>
                             <th>Cliente</th>
                             <th>Habitación</th>
-                            <th>Tarifa/Tipo</th>
+                            <th>Tarifa</th>
+                            <th>Tipo</th>
                             <th>Ingreso</th>
                         </tr>
                         </thead>
@@ -122,8 +123,9 @@
                             <td>1</td>
                             <td>Gonashi</td>
                             <td>696</td>
-                            <td>24hr/Presidencial</td>
-                            <th>15-05-25 16:10:05</th>
+                            <td>24hr</td>
+                            <td>Presidencial</td>
+                            <td>15-05-25 16:10:05</td>
                         </tr>
                         </tbody>
                     </table>

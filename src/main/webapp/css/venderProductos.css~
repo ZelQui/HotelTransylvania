@@ -1,5 +1,12 @@
 .table-responsive .table {
+    table-layout: fixed;
     width: 100%;
+}
+
+@media (max-width: 768px) {
+    .table-responsive .table {
+        table-layout: auto;
+    }
 }
 
 .card-header {
@@ -37,9 +44,5 @@
 
     .card-header .col-3 {
         text-align: center;
-    }
-
-    .table-responsive .table {
-        table-layout: auto;
     }
 }
