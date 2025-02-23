@@ -11,7 +11,7 @@ public class LoggerConfifg {
     public static Logger getLogger(Class<?> clazz) {
         Logger logger = Logger.getLogger(clazz.getName());
 
-        if (logger.getHandlers().length == 0) {
+        if (logger.getHandlers().length == 0) {  // Evita agregar múltiples handlers
             try {
                 String logsPath = new File("src/main/webapp/logs").getAbsolutePath();
                 File logDir = new File(logsPath);
@@ -24,9 +24,6 @@ public class LoggerConfifg {
                 fileHandler.setFormatter(new SimpleFormatter());
                 logger.setUseParentHandlers(false);
                 logger.addHandler(fileHandler);
-                fileHandler.setLevel(Level.ALL);
-                logger.setLevel(Level.ALL);
-                fileHandler.flush();
 
             } catch (IOException e) {
                 System.err.println("No se pudo configurar el archivo de logs: " + e.getMessage());

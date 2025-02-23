@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class testGeneral {
-    private static final Logger LOGGER = LoggerConfifg.getLogger(testGeneral.class);
     public static void main(String[] args) {
 
+        List<Product> productsInList= GestionProduct.getAllProducts();
 
-
+        productsInList.forEach(System.out::println);
 
     }
 }
