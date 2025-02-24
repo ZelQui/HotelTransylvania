@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="stylesheet" href="css/login.css">
 </head>
+
 <body>
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
   <div class="row border rounded-5 p-3 bg-white shadow box-area">
@@ -53,7 +54,7 @@
           </button>
         </div>
         <div class="row">
-          <small>¿No tienes cuenta? <a href="#">Regístrate</a></small>
+          <small>¿No tienes cuenta? <a href="registro.jsp">Regístrate</a></small>
         </div>
       </div>
     </div>
