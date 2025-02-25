@@ -102,14 +102,9 @@ public class GestionRoom {
     }
     public static List<Room> getAllRooms() {
 
-        /*
-        number es una palabra reservada en SQL. En PostgreSQL
-        cambiar el nombre de la columna en la base de datos si es posible (ejemplo: room_number)
-        */
-
-        String sql = "SELECT h.id, h.number, h.tipo_id, h.estado_id, h.precio, t.nameType " +
+        String sql = "SELECT h.id, h.numero, h.tipo_id, h.estado_id, h.precio, t.tipo " +
                 "FROM habitaciones h " +
-                "JOIN type_room t ON h.tipo_id = t.id";  // Asegúrate de que la tabla y columna existen.
+                "JOIN tipo_habitacion t ON h.tipo_id = t.id";
         List<Room> Rooms = new ArrayList<>();
 
         try (Connection cnn = dataSource.getConnection();
@@ -137,9 +132,8 @@ public class GestionRoom {
         return Rooms;
     }
 
-    //POSTERIORMENTE MOVER A "GestionStatus"
     // Método para convertir estadoId en StatusRoom de manera segura
-    private static StatusRoom getStatusRoomById(int id) {
+    public static StatusRoom getStatusRoomById(int id) {
         StatusRoom[] statuses = StatusRoom.values();
         if (id >= 0 && id < statuses.length) {
             return statuses[id];

@@ -5,15 +5,17 @@ public class User {
     private Employee employee;
     private String username;
     private String password;
+    private StatusUser statusUser;
 
     public User() {
     }
 
-    public User(int id, Employee employee, String username, String password) {
+    public User(int id, Employee employee, String username, String password, StatusUser statusUser) {
         this.id = id;
         this.employee = employee;
         this.username = username;
         this.password = password;
+        this.statusUser = statusUser;
     }
 
     public int getId() {
@@ -48,6 +50,14 @@ public class User {
         this.password = password;
     }
 
+    public StatusUser getStatusUser() {
+        return statusUser;
+    }
+
+    public void setStatusUser(StatusUser statusUser) {
+        this.statusUser = statusUser;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -55,6 +65,7 @@ public class User {
                 ", employee=" + employee +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", statusUser=" + statusUser +
                 '}';
     }
 }
