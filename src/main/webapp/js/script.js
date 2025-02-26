@@ -95,3 +95,29 @@ function iniciarGrafica() {
         chart.update(); // Refrescar la gráfica
     });
 }
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".btnEditarProducto").forEach(button => {
+        button.addEventListener("click", function () {
+            let id = this.getAttribute("data-id");
+            let name = this.getAttribute("data-name");
+            let price = this.getAttribute("data-price");
+            console.log(id)
+
+            document.getElementById("inputEditarIdProducto").value = id;
+            document.getElementById("nombreEditar").value = name;
+            document.getElementById("precioVentaEditar").value = price;
+        });
+    });
+});
+function abrirModalEditar(id) {
+    document.getElementById("inputEditarIdProducto").value = id;
+    fetch("productcontrol?action=get&idproduct=" + id)
+        .then(response => response.json())  // Convertimos la respuesta a JSON
+        .then(data => {
+            // Llenar los campos del formulario con los datos obtenidos
+            document.getElementById("nombreEditar").value = data.name;
+            document.getElementById("precioVentaEditar").value = data.price;
+        })
+        .catch(error => console.error("Error al obtener datos:", error));
+}
+

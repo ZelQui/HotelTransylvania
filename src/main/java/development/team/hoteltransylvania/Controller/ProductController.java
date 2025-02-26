@@ -1,8 +1,10 @@
 package development.team.hoteltransylvania.Controller;
 
+import com.google.gson.Gson;
 import development.team.hoteltransylvania.Business.GestionEmployee;
 import development.team.hoteltransylvania.Business.GestionProduct;
 import development.team.hoteltransylvania.Model.Product;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,12 +12,25 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet(name = "productcontrol", urlPatterns = {"/productcontrol"})
 public class ProductController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.doPost(req, resp);
+        String action = req.getParameter("action");
+
+        if ("get".equals(action)) {
+            String idProduct = req.getParameter("idproduct");
+
+            Product product = GestionProduct.getProductById(Integer.parseInt(idProduct));
+
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+            PrintWriter out = resp.getWriter();
+            out.print(new Gson().toJson(product));
+            out.flush();
+        }
     }
 
     @Override
@@ -36,9 +51,14 @@ public class ProductController extends HttpServlet {
             case "update":
                 int id = Integer.parseInt(req.getParameter("idproduct"));
                 Product product = GestionProduct.getProductById(id);
+                String name = req.getParameter("nameproduct");
+                String priceString = req.getParameter("priceproduct");
+                product.setName(name); product.setPrice(Double.parseDouble(priceString));
                 GestionProduct.updateProduct(product);
+                req.getRequestDispatcher("menu.jsp").forward(req, resp);
                 break;
         }
 
     }
+
 }

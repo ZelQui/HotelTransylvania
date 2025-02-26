@@ -90,30 +90,29 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editarCatalagoProducto">Editar Catálogo de Producto</h5>
+          <h5 class="modal-title">Editar Catálogo de Producto</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-
           <form id="formEditarCatalogoProducto" action="productcontrol" method="post">
-            <input type="hidden" id="inputEditarCatalagoProducto">
             <input type="hidden" name="actionproduct" value="update">
             <input type="text" name="idproduct" id="inputEditarIdProducto">
+
             <div class="mb-3">
               <label for="tipoEditar">Tipo</label>
-              <select class="form-select" id="tipoEditar" required>
-                <option value="#">Producto</option>
-                <option value="#">Servicio</option>
-                <option value="#">Otro</option>
+              <select class="form-select" name="typeproduct" id="tipoEditar" required>
+                <option value="Producto">Producto</option>
+                <option value="Servicio">Servicio</option>
+                <option value="Otro">Otro</option>
               </select>
             </div>
             <div class="mb-3">
               <label for="nombreEditar">Nombre</label>
-              <input type="text" class="form-control" id="nombreEditar" required>
+              <input type="text" class="form-control" name="nameproduct" id="nombreEditar" required>
             </div>
             <div class="mb-3">
               <label for="precioVentaEditar">Precio Venta</label>
-              <input type="number" class="form-control" id="precioVentaEditar" min="0" required>
+              <input type="number" class="form-control" name="priceproduct" id="precioVentaEditar" min="2" step="0.01" required>
             </div>
             <button type="submit" class="btn btn-success">Guardar</button>
           </form>
@@ -154,8 +153,11 @@
               <td>S/. <%=product.getPrice()%></td>
               <td class="align-middle text-center">
                 <div class="d-flex justify-content-center align-items-center gap-1">
-                  <button class="btn btn-warning btn-sm btn-editar-producto" data-bs-toggle="modal"
-                          data-bs-target="#modalEditarCatalogoProducto" data-id="<%=product.getId()%>">✏️</button>
+                  <button class="btn btn-warning" id="btn-editar"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalEditarCatalogoProducto"
+                          onclick="abrirModalEditar(<%=product.getId()%>)">✏️
+                  </button>
                   </form>
                   <form action="productcontrol" method="post">
                     <input type="hidden" name="idproduct" value="<%=product.getId()%>">
@@ -183,19 +185,3 @@
 </div>
 
 </body>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const botonesEditar = document.querySelectorAll(".btn-editar-producto");
-
-    botonesEditar.forEach((boton) => {
-      boton.addEventListener("click", function () {
-        // Obtiene el ID del producto desde el atributo data-id
-        const idProducto = this.getAttribute("data-id");
-
-        // Asigna el ID al input hidden del modal
-        document.getElementById("inputEditarIdProducto").value = idProducto;
-      });
-    });
-  });
-</script>
