@@ -43,10 +43,12 @@ public class ProductController extends HttpServlet {
                 double price = Double.parseDouble(req.getParameter("priceproduct"));
                 GestionProduct.registerProduct(new Product(productName, price));
                 //req.getRequestDispatcher("jsp/catalagoProductos.jsp").forward(req, resp);
+                resp.sendRedirect("menu.jsp?view=catalogoProductos");
                 break;
             case "delete":
                 int productId = Integer.parseInt(req.getParameter("idproduct"));
                 GestionProduct.deleteProduct(productId);
+                resp.sendRedirect("menu.jsp?view=catalogoProductos");
                 break;
             case "update":
                 int id = Integer.parseInt(req.getParameter("idproduct"));
