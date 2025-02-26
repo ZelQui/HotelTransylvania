@@ -191,25 +191,5 @@
         crossorigin="anonymous"></script>
 <script src="js/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Obtener parámetros de la URL
-    const params = new URLSearchParams(window.location.search);
-    const view = params.get("view");
-
-    // Si el parámetro 'view' es 'catalogoProductos', cargar automáticamente la página
-    if (view === "catalogoProductos") {
-      cargarPagina('jsp/catalagoProductos.jsp');
-
-      // Expandir el menú de "Punto de Venta" automáticamente
-      const puntoVenta = document.getElementById("puntoVenta");
-      if (puntoVenta) {
-        puntoVenta.classList.add("show"); // Bootstrap usa "show" para expandir
-        const link = document.querySelector("[data-bs-target='#puntoVenta']");
-        if (link) link.setAttribute("aria-expanded", "true"); // Marcar como expandido
-      }
-    }
-  });
-</script>
 </body>
 </html>

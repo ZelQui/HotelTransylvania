@@ -55,7 +55,7 @@ public class ProductController extends HttpServlet {
                 String priceString = req.getParameter("priceproduct");
                 product.setName(name); product.setPrice(Double.parseDouble(priceString));
                 GestionProduct.updateProduct(product);
-                req.getRequestDispatcher("menu.jsp").forward(req, resp);
+                resp.sendRedirect("menu.jsp?view=catalogoProductos");
                 break;
         }
 
