@@ -188,5 +188,52 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const sidebarLinks = document.querySelectorAll(".sidebar-link");
+
+    sidebarLinks.forEach(link => {
+        link.addEventListener("click", function () {
+            // Remover clase 'active' de todos los enlaces
+            sidebarLinks.forEach(item => item.classList.remove("active"));
+
+            // Agregar la clase 'active' al elemento seleccionado
+            this.classList.add("active");
+
+            // Cerrar todos los dropdowns
+            document.querySelectorAll(".sidebar-dropdown").forEach(dropdown => {
+                dropdown.classList.remove("show");
+            });
+
+            // Si el enlace pertenece a un dropdown, abrir el menú y resaltar la opción
+            let parentDropdown = this.closest(".sidebar-dropdown");
+            if (parentDropdown) {
+                parentDropdown.classList.add("show");
+                let parentItem = parentDropdown.closest(".sidebar-item");
+                if (parentItem) {
+                    parentItem.querySelector(".has-dropdown").classList.add("active");
+                }
+            }
+        });
+    });
+
+    // Verificar la URL para marcar como activo el enlace correspondiente al cargar la página
+    let currentPage = window.location.pathname.split("/").pop();
+    sidebarLinks.forEach(link => {
+        if (link.getAttribute("onclick")?.includes(currentPage)) {
+            link.classList.add("active");
+
+            // Si está dentro de un dropdown, abrirlo
+            let parentDropdown = link.closest(".sidebar-dropdown");
+            if (parentDropdown) {
+                parentDropdown.classList.add("show");
+                let parentItem = parentDropdown.closest(".sidebar-item");
+                if (parentItem) {
+                    parentItem.querySelector(".has-dropdown").classList.add("active");
+                }
+            }
+        }
+    });
+});
+
 
 
