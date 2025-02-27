@@ -67,20 +67,8 @@
               <input type="text" class="form-control" id="documento" required>
             </div>
             <div class="mb-3">
-              <label for="nit">NIT</label>
-              <input type="text" class="form-control" id="nit" required>
-            </div>
-            <div class="mb-3">
-              <label for="facturar">Nombre a Facturar</label>
-              <input type="text" class="form-control" id="facturar" required>
-            </div>
-            <div class="mb-3">
               <label for="correo">Correo</label>
               <input type="email" class="form-control" id="correo" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
-            </div>
-            <div class="mb-3">
-              <label for="telefono">Teléfono</label>
-              <input type="tel" class="form-control" id="telefono" pattern="[0-9]{10}" maxlength="9" required>
             </div>
 
             <hr>
