@@ -266,7 +266,7 @@
         <thead class="table-warning">
         <tr>
             <th>N°</th>
-            <th>Identificador</th>
+            <th>DNI</th>
             <th>Tipo</th>
             <th>Habitación</th>
             <th>Descuento</th>

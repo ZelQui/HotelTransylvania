@@ -70,8 +70,8 @@
     </label>
 
     <div class="input-group" style="max-width: 250px;">
-        <input id="buscar" type="text" class="form-control" placeholder="Buscar">
-        <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+        <input type="text" class="form-control" id="nameSearch" placeholder="Buscar">
+        <span class="input-group-text"><i class="fas fa-search"></i></span>
     </div>
 </div>
 

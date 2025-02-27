@@ -118,7 +118,7 @@
       <form>
         <div class="input-group ms-auto" style="max-width: 250px;">
           <input type="text" class="form-control" id="nameSearch" placeholder="Buscar" onkeyup="buscar()">
-          <i class="fas fa-search"></i>
+          <span class="input-group-text"><i class="fas fa-search"></i></span>
         </div>
       </form>
     </div>
@@ -144,12 +144,12 @@
               <td>S/. <%=product.getPrice()%></td>
               <td class="align-middle text-center">
                 <div class="d-flex justify-content-center align-items-center gap-1">
-                  <button class="btn btn-warning" id="btn-editar"
+                  <button class="btn btn-warning btn-sm" id="btn-editar"
                           data-bs-toggle="modal"
                           data-bs-target="#modalEditarCatalogoProducto"
-                          onclick="abrirModalEditar(<%=product.getId()%>)">✏️
+                          onclick="abrirModalEditar(<%=product.getId()%>)">
+                    ✏️
                   </button>
-                  </form>
                   <form action="productcontrol" method="post">
                     <input type="hidden" name="idproduct" value="<%=product.getId()%>">
                     <input type="hidden" name="actionproduct" value="delete">
