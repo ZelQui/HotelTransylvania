@@ -120,4 +120,23 @@ function abrirModalEditar(id) {
         })
         .catch(error => console.error("Error al obtener datos:", error));
 }
+function buscar() {
+    var nameFilter = $("#nameSearch").val();
+    $.ajax({
+        url: "filterProducServlet",
+        data: { filter: nameFilter },
+        success: function (result) {
+            // Insertar la tabla filtrada
+            $("#tablaCatalagoProductos").html(result);
+
+            // Extraer la cantidad de productos desde el comentario oculto
+            var match = result.match(/<!--COUNT:(\d+)-->/);
+            var cantidad = match ? match[1] : 0;
+
+            // Actualizar el input con la cantidad de registros
+            $("#sizeProducts").val(cantidad);
+        }
+    });
+}
+
 

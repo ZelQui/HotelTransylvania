@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <title>Catálogo de Productos</title>
+
 </head>
 
 <%
@@ -34,18 +35,6 @@
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarCatalogoProducto">
           <i class="fas fa-plus"></i> Agregar Producto
         </button>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-12 d-flex justify-content-end align-items-center text-white">
-        <label for="estadoSelect" class="form-label m-0 me-2">Estado:</label>
-        <select id="estadoSelect" class="form-select w-auto">
-          <option value="activos">Activos</option>
-          <option value="inactivos">Inactivos</option>
-        </select>
-        <script>
-          document.getElementById("estadoSelect").addEventListener("change", function() {
-            console.log("Estado seleccionado:", this.value);
-          });
-        </script>
       </div>
     </div>
   </div>
@@ -124,12 +113,14 @@
   <div class="card-body mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <span class="d-none d-md-inline">Mostrando
-        <input type="number" min="1" max="999" value="1" class="form-control d-inline-block" style="width: 4rem;"> registros
+        <input type="number" id="sizeProducts" min="1" max="999" value="<%=productsInCatalogo.size()%>" class="form-control d-inline-block" style="width: 4rem;"> registros
       </span>
-      <div class="input-group ms-auto" style="max-width: 250px;">
-        <input type="text" class="form-control" placeholder="Buscar">
-        <button class="btn btn-primary"><i class="fas fa-search"></i></button>
-      </div>
+      <form>
+        <div class="input-group ms-auto" style="max-width: 250px;">
+          <input type="text" class="form-control" id="nameSearch" placeholder="Buscar">
+          <button type="button" onclick="buscar()" class="btn btn-primary"><i class="fas fa-search"></i></button>
+        </div>
+      </form>
     </div>
 
     <div class="table-responsive">
@@ -183,5 +174,4 @@
     </div>
   </div>
 </div>
-
 </body>

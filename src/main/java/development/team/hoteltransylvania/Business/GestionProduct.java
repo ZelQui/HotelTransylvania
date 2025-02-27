@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class GestionProduct {
     private static final DataSource dataSource = DataBaseUtil.getDataSource();
@@ -140,6 +141,15 @@ public class GestionProduct {
         }
 
         return product;
+    }
+    public static List<Product> filterProducts(String nombre) {
+        if (nombre == null || nombre.isEmpty()) {
+            return getAllProducts(); // Devuelve todos los productos si no hay búsqueda.
+        }
+
+        return getAllProducts().stream()
+                .filter(product -> product.getName().toLowerCase().contains(nombre.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
 }
