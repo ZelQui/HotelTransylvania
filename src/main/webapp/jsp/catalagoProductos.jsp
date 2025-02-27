@@ -117,8 +117,8 @@
       </span>
       <form>
         <div class="input-group ms-auto" style="max-width: 250px;">
-          <input type="text" class="form-control" id="nameSearch" placeholder="Buscar">
-          <button type="button" onclick="buscar()" class="btn btn-primary"><i class="fas fa-search"></i></button>
+          <input type="text" class="form-control" id="nameSearch" placeholder="Buscar" onkeyup="buscar()">
+          <i class="fas fa-search"></i>
         </div>
       </form>
     </div>
