@@ -4,11 +4,13 @@ public class Employee {
     private int id;
     private String name;
     private String position;
+    private String email;
 
-    public Employee(int id, String name, String position) {
+    public Employee(int id, String name, String position, String email) {
         this.id = id;
         this.name = name;
         this.position = position;
+        this.email = email;
     }
 
     public Employee() {
@@ -38,12 +40,17 @@ public class Employee {
         this.position = position;
     }
 
+    public String getEmail() {return email;}
+
+    public void setEmail(String email) {this.email = email;}
+
     @Override
     public String toString() {
         return "Employee{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", position='" + position + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }

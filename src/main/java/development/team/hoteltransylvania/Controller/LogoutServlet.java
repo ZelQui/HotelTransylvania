@@ -6,22 +6,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
-@WebServlet("/login")
-public class LoginServlet extends HttpServlet {
-    private Auth authService = new Auth(); // Instanciamos la clase Auth
+@WebServlet("/logout")
+public class LogoutServlet extends HttpServlet {
+    private final Auth authService = new Auth();
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
-
-        if (authService.login(username, password, req)) {
-            resp.sendRedirect("menu.jsp"); // Éxito: redirigir al dashboard
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (authService.logout(request)) {
+            response.sendRedirect("index.jsp");
         } else {
-            resp.sendRedirect("index.jsp"); // Error: mensaje Credenciales incorrectas
+            response.sendRedirect("index.jsp"); //MENSAJE ERROR: No hay sesión activa
         }
     }
 

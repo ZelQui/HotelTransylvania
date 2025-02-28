@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -19,22 +20,24 @@ import java.util.logging.Logger;
         private static final Logger LOGGER = LoggerConfifg.getLogger(development.team.hoteltransylvania.Business.GestionUser.class);
 
         public static int registerUser(User user) {
-            String sql = "INSERT INTO usuarios (username, password, empleado_id, estado) VALUES (?, ?,?,?)";
+            String sql = "INSERT INTO usuarios (username, password, empleado_id, estado) VALUES (?, ?, ?, ?)";
             int usuarioId = -1;
 
             try (Connection cnn = dataSource.getConnection();
-                 PreparedStatement ps = cnn.prepareStatement(sql)) {
+                 PreparedStatement ps = cnn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) { // Importante para obtener ID generado
 
                 ps.setString(1, user.getUsername());
                 ps.setString(2, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-                ps.setInt(4, user.getEmployee().getId());
-                ps.setString(4, user.getStatusUser().name());
+                ps.setInt(3, user.getEmployee().getId()); // Corregir índice
+                ps.setString(4, user.getStatusUser().name()); // Corregir índice
 
                 int rowsAffected = ps.executeUpdate();
                 if (rowsAffected > 0) {
-                    LOGGER.info("user " + user.getUsername() + " registered successfully");
+                    LOGGER.info("User " + user.getUsername() + " registered successfully");
                     try (ResultSet rs = ps.getGeneratedKeys()) {
-                        if (rs.next()) usuarioId = rs.getInt(1); // Obtener el ID generado
+                        if (rs.next()) {
+                            usuarioId = rs.getInt(1); // Obtener el ID generado
+                        }
                     }
                 }
             } catch (SQLException e) {
@@ -182,7 +185,7 @@ import java.util.logging.Logger;
 
         public User obtenerUsuarioSesion(String username) {
             User user = null;
-            String sql = "SELECT id, username, empleado_id, estado FROM Usuarios WHERE username = ?";
+            String sql = "SELECT id, username, empleado_id, estado FROM usuarios WHERE username = ?";
 
             try (Connection con = dataSource.getConnection();
                  PreparedStatement ps = con.prepareStatement(sql)) {
@@ -214,7 +217,7 @@ import java.util.logging.Logger;
         }
 
         public Employee obtenerEmpleadoPorId(int empleadoId) {
-            String sql = "SELECT id, nombre, cargo FROM empleados WHERE id = ?";
+            String sql = "SELECT id, nombre, rol_id, correo FROM empleados WHERE id = ?";
             Employee employee = null;
 
             try (Connection cnn = dataSource.getConnection();
@@ -226,7 +229,9 @@ import java.util.logging.Logger;
                         employee = new Employee();
                         employee.setId(rs.getInt("id"));
                         employee.setName(rs.getString("nombre"));
-                        employee.setPosition(rs.getString("cargo"));
+                        employee.setPosition(rs.getInt("rol_id") == 1 ? "Empleado" : "OtroRol");
+                        employee.setEmail(rs.getString("correo"));
+
                     } else {
                         LOGGER.warning("No se encontró ningún empleado con el ID: " + empleadoId);
                     }
@@ -239,7 +244,7 @@ import java.util.logging.Logger;
         }
 
         public List<User> getAllUsers() {
-            String sql = "SELECT id, username, empleado_id, estado FROM Usuarios";
+            String sql = "SELECT id, username, empleado_id, estado FROM usuarios";
             List<User> lista = new ArrayList<>();
             try (Connection con = dataSource.getConnection();
                  PreparedStatement ps = con.prepareStatement(sql);
@@ -264,7 +269,7 @@ import java.util.logging.Logger;
         }
 
         public boolean existeUsuario(String username) {
-            String sql = "SELECT COUNT(*) FROM Usuarios WHERE username = ?";
+            String sql = "SELECT COUNT(*) FROM usuarios WHERE username = ?";
             boolean existe = false;
 
             try (Connection con = dataSource.getConnection();

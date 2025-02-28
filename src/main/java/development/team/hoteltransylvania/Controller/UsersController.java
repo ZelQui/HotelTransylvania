@@ -3,6 +3,7 @@ package development.team.hoteltransylvania.Controller;
 import development.team.hoteltransylvania.Business.GestionEmployee;
 import development.team.hoteltransylvania.Business.GestionUser;
 import development.team.hoteltransylvania.Model.Employee;
+import development.team.hoteltransylvania.Model.StatusUser;
 import development.team.hoteltransylvania.Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,6 +25,7 @@ public class UsersController extends HttpServlet {
 
     String mensaje = "";
     int IdUsuario = 0;
+    int IdEmployee = 0;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,17 +43,29 @@ public class UsersController extends HttpServlet {
                 break;
             case "Registrar":
                 //Para validar datos de inicio de sesión
-                String nombre = "nombre";
+                String name = req.getParameter("nombre");
                 String email = req.getParameter("email");
-                String telefono = req.getParameter("telefono");
-                String genero = req.getParameter("genero");
-                String contrasena = req.getParameter("password");
+                String username1 = req.getParameter("username");;
+                String password1 = req.getParameter("password");
 
-                if (userdao.existeUsuario(email)) {
+                if (userdao.existeUsuario(username1)) {
                     System.out.println("El email ya está registrado.");
                 } else {
                     //AGREGAR A USUARIOS
+                    user.setUsername(username1);
+                    user.setPassword(password1);
+
+                        //AGREGAR A EMPLEADOS
+                        employee.setName(name);
+                        employee.setPosition("rolEmpleado"); //VALOR PREDETERMINADO PARA ROL DE EMPLEADO EN REGISTEO.JSP
+                        employee.setEmail(email);
+                        IdEmployee = employeedao.registerEmployee(employee);
+                        employee.setId(IdEmployee);
+
+                    user.setEmployee(employee);
+                    user.setStatusUser(StatusUser.valueOf("Activo"));
                     IdUsuario = userdao.registerUser(user);
+
                     System.out.printf("Se ha registrado el User con ID: " + IdUsuario);
                 }
                 resp.sendRedirect("index.jsp");

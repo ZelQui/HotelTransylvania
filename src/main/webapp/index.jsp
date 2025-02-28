@@ -27,32 +27,35 @@
           <p>Nos alegra tenerte de vuelta.</p>
         </div>
 
-        <div class="input-group mb-3">
-          <label for="email" class="input-group-text"><i class="fas fa-envelope"></i></label>
-          <input type="text" id="email" class="form-control form-control-lg bg-light fs-6" placeholder="Correo Electrónico">
-        </div>
-
-        <div class="input-group mb-3">
-          <label for="password" class="input-group-text"><i class="fas fa-lock"></i></label>
-          <input type="password" id="password" class="form-control form-control-lg bg-light fs-6" placeholder="Contraseña">
-        </div>
-
-        <div class="input-group mb-5 d-flex justify-content-between">
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="formCheck">
-            <label for="formCheck" class="form-check-label text-secondary">
-              <small>Recordar</small>
-            </label>
+        <form action="login" method="post">
+          <div class="input-group mb-3">
+            <label for="username" class="input-group-text"><i class="fas fa-user"></i></label>
+            <input type="text" id="username" name="username" class="form-control form-control-lg bg-light fs-6" placeholder="Nombre Usuario">
           </div>
-          <div class="forgot">
-            <small><a href="#">¿Has olvidado tu contraseña?</a></small>
+
+          <div class="input-group mb-3">
+            <label for="password" class="input-group-text"><i class="fas fa-lock"></i></label>
+            <input type="password" id="password" class="form-control form-control-lg bg-light fs-6" placeholder="Contraseña">
           </div>
-        </div>
-        <div class="input-group mb-3">
-          <button type="button" class="btn btn-lg w-100 fs-6 text-white" style="background: rgb(24,59,113);" onclick="window.location.href='menu.jsp'">
-            Iniciar Sesión
-          </button>
-        </div>
+
+          <div class="input-group mb-5 d-flex justify-content-between">
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="formCheck">
+              <label for="formCheck" class="form-check-label text-secondary">
+                <small>Recordar</small>
+              </label>
+            </div>
+            <div class="forgot">
+              <small><a href="#">¿Has olvidado tu contraseña?</a></small>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <button type="submit" class="btn btn-lg w-100 fs-6 text-white" style="background: rgb(24,59,113);">
+              Iniciar Sesión
+            </button>
+          </div>
+        </form>
+
         <div class="row">
           <small>¿No tienes cuenta? <a href="registro.jsp">Regístrate</a></small>
         </div>

@@ -6,10 +6,7 @@ import development.team.hoteltransylvania.Services.DataBaseUtil;
 import development.team.hoteltransylvania.Util.LoggerConfifg;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -18,29 +15,33 @@ public class GestionEmployee {
     private static final DataSource dataSource = DataBaseUtil.getDataSource();
     private static final Logger LOGGER = LoggerConfifg.getLogger(GestionEmployee.class);
 
-    public static boolean registerEmployee(Employee employee) {
-        String sql = "INSERT INTO empleados (nombre, cargo) VALUES (?, ?)";
-
-        boolean result = false;
+    public static int registerEmployee(Employee employee) {
+        String sql = "INSERT INTO empleados (nombre, rol_id, correo) VALUES (?, ?, ?)";
+        int empleadoId = -1;
 
         try (Connection cnn = dataSource.getConnection();
-             PreparedStatement ps = cnn.prepareStatement(sql)) {
+             PreparedStatement ps = cnn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) { // Permite obtener el ID generado
 
             ps.setString(1, employee.getName());
-            ps.setString(2, employee.getPosition());
+            ps.setInt(2, 1); // Se mantiene el valor 1 para rol_id
+            ps.setString(3, employee.getEmail());
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 LOGGER.info("Employee " + employee.getName() + " registered successfully");
-                result = true;
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        empleadoId = rs.getInt(1); // Obtener el ID generado
+                    }
+                }
             }
         } catch (SQLException e) {
             LOGGER.warning("Error when registering the employee: " + e.getMessage());
         }
-        return result;
+        return empleadoId;
     }
     public static boolean updateEmployee(Employee newEmployee) {
-        String sql = "UPDATE empleados SET nombre = ?, cargo = ? WHERE id = ?";
+        String sql = "UPDATE empleados SET nombre = ?, rol_id = ? , correo = ? WHERE id = ?";
 
         boolean result = false;
 
@@ -49,7 +50,8 @@ public class GestionEmployee {
 
             ps.setString(1, newEmployee.getName());
             ps.setString(2, newEmployee.getPosition());
-            ps.setInt(3, newEmployee.getId()); // Se asume que `id` es un atributo de `Employee`
+            ps.setString(3, newEmployee.getEmail());
+            ps.setInt(4, newEmployee.getId()); // Se asume que `id` es un atributo de `Employee`
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
@@ -97,10 +99,10 @@ public class GestionEmployee {
         return result;
     }
     public static List<usersEmployeeDTO> getAllEmployees() {
-        String sql = "SELECT e.id AS id_empleado, r.id AS id_usuario, e.nombre, u.username AS nombre_usuario,\n" +
-                "email, r.nombre AS tipo, u.estado \n" +
-                "FROM empleados as e\n" +
-                "JOIN usuarios AS u ON u.empleado_id=e.id\n" +
+        String sql = "SELECT e.id AS id_empleado, r.id AS id_usuario, e.nombre, u.username AS nombre_usuario, " +
+                "e.correo, r.nombre AS tipo, u.estado " +
+                "FROM empleados as e " +
+                "JOIN usuarios AS u ON u.empleado_id=e.id " +
                 "JOIN roles AS r ON e.rol_id=r.id";
         List<usersEmployeeDTO> allEmployees = new ArrayList<>();
 
@@ -113,7 +115,7 @@ public class GestionEmployee {
                 int id_usuario = rs.getInt("id_usuario");
                 String nombre = rs.getString("nombre");
                 String nombre_usuario = rs.getString("nombre_usuario");
-                String email = rs.getString("email");
+                String email = rs.getString("correo");
                 String tipo = rs.getString("tipo");
                 String estado = rs.getString("estado");
 

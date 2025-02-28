@@ -1,4 +1,16 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<%@ page import="development.team.hoteltransylvania.Model.User" %>
+<%@ page import="jakarta.servlet.http.HttpSession" %>
+<%
+  HttpSession sessionObj = request.getSession(false);
+  if (sessionObj == null || sessionObj.getAttribute("usuario") == null) {
+    response.sendRedirect("index.jsp"); //Mensaje: Inicia sesión primero
+    return;
+  }
+  User usuario = (User) sessionObj.getAttribute("usuario");
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,7 +53,7 @@
     <div class="sidebar-header">
       <a href="#" class="sidebar-link">
         <i class="fa-solid fa-user me-2"></i>
-        <span>Usuario</span>
+        <span><%=usuario.getEmployee().getName()%></span>
       </a>
     </div>
 
@@ -162,7 +174,7 @@
     </ul>
 
     <div class="sidebar-footer">
-      <a href="index.jsp" class="sidebar-link">
+      <a href="logout" class="sidebar-link">
         <i class="fa-solid fa-door-open me-2"></i>
         <span>Cerrar Sesión</span>
       </a>

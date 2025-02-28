@@ -21,45 +21,39 @@
                     <p>Crea una cuenta para acceder a nuestro sistema.</p>
                 </div>
 
-                <div class="input-group mb-3">
-                    <label for="nombre" class="input-group-text"><i class="fas fa-user"></i></label>
-                    <input type="text" id="nombre" class="form-control form-control-lg bg-light fs-6" placeholder="Nombre Completo">
-                </div>
+                <form  action="user" method="post">
+                    <input type="hidden" name="accion" value="Registrar">
+                    <div class="input-group mb-3">
+                        <label for="nombre" class="input-group-text"><i class="fas fa-user"></i></label>
+                        <input type="text" id="nombre" name="nombre" class="form-control form-control-lg bg-light fs-6" placeholder="Nombre Completo">
+                    </div>
 
-                <div class="input-group mb-3">
-                    <label for="email" class="input-group-text"><i class="fas fa-envelope"></i></label>
-                    <input type="email" id="email" class="form-control form-control-lg bg-light fs-6" placeholder="Correo Electrónico">
-                </div>
+                    <div class="input-group mb-3">
+                        <label for="email" class="input-group-text"><i class="fas fa-envelope"></i></label>
+                        <input type="email" id="email" name="email" class="form-control form-control-lg bg-light fs-6" placeholder="Correo Electrónico">
+                    </div>
 
-                <div class="input-group mb-3">
-                    <label for="telefono" class="input-group-text"><i class="fa-solid fa-phone"></i></label>
-                    <input type="text" id="telefono" class="form-control form-control-lg bg-light fs-6" placeholder="Teléfono">
-                </div>
+                    <div class="input-group mb-3">
+                        <label for="username" class="input-group-text"><i class="fas fa-user"></i></label>
+                        <input type="text" id="username" name="username" class="form-control form-control-lg bg-light fs-6" placeholder="Nombre Usuario">
+                    </div>
 
-                <div class="input-group mb-3">
-                    <label for="genero" class="input-group-text"><i class="fa-solid fa-venus-mars"></i></label>
-                    <select id="genero" class="form-select form-select-lg bg-light fs-6">
-                        <option value="" selected disabled>Selecciona tu género</option>
-                        <option value="masculino">Masculino</option>
-                        <option value="femenino">Femenino</option>
-                    </select>
-                </div>
+                    <div class="input-group mb-3">
+                        <label for="password" class="input-group-text"><i class="fas fa-lock"></i></label>
+                        <input type="password" id="password" class="form-control form-control-lg bg-light fs-6" placeholder="Contraseña">
+                    </div>
 
-                <div class="input-group mb-3">
-                    <label for="password" class="input-group-text"><i class="fas fa-lock"></i></label>
-                    <input type="password" id="password" class="form-control form-control-lg bg-light fs-6" placeholder="Contraseña">
-                </div>
+                    <div class="input-group mb-3">
+                        <label for="confirm-password" class="input-group-text"><i class="fas fa-lock"></i></label>
+                        <input type="password" id="confirm-password" class="form-control form-control-lg bg-light fs-6" placeholder="Confirmar Contraseña">
+                    </div>
 
-                <div class="input-group mb-3">
-                    <label for="confirm-password" class="input-group-text"><i class="fas fa-lock"></i></label>
-                    <input type="password" id="confirm-password" class="form-control form-control-lg bg-light fs-6" placeholder="Confirmar Contraseña">
-                </div>
-
-                <div class="input-group mb-3">
-                    <button type="button" class="btn btn-lg w-100 fs-6 text-white" style="background: rgb(24,59,113);" onclick="window.location.href='index.jsp'">
-                        Registrarse
-                    </button>
-                </div>
+                    <div class="input-group mb-3">
+                        <button type="submit" class="btn btn-lg w-100 fs-6 text-white" style="background: rgb(24,59,113);" >
+                            Registrarse
+                        </button>
+                    </div>
+                </form>
 
                 <div class="row">
                     <small>¿Ya tienes cuenta? <a href="index.jsp">Inicia Sesión</a></small>
