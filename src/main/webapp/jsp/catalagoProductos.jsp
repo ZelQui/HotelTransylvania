@@ -136,7 +136,7 @@
         </thead>
         <tbody id="tablaCatalagoProductos">
 
-          <%for(Product product : productsInCatalogo){ int count=1;%>
+          <%int count=1; for(Product product : productsInCatalogo){%>
             <tr>
               <td><%=count%></td>
               <td>Producto</td>
