@@ -78,6 +78,8 @@
               <label for="tipoHabitacion">Tipo de Habitación</label><select class="form-select" id="tipoHabitacion" required>
                 <option value="#">Simple</option>
                 <option value="#">Doble</option>
+                <option value="#">Matrimonial</option>
+                <option value="#">Suite</option>
                 <option value="#">Presidencial</option>
               </select>
             </div>

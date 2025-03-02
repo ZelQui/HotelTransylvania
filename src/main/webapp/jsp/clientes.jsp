@@ -1,3 +1,6 @@
+<%@ page import="development.team.hoteltransylvania.Model.Client" %>
+<%@ page import="java.util.List" %>
+<%@ page import="development.team.hoteltransylvania.Business.GestionClient" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -7,6 +10,11 @@
   <title>Clientes</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
+<%
+  List<Client> listClients = GestionClient.getAllClients();
+%>
+
 
 <body>
 <div class="d-flex justify-content-between align-items-center">
@@ -161,7 +169,7 @@
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <span>Mostrando
-        <input type="number" min="1" max="999" value="1" class="form-control d-inline-block" style="width: 3rem;">registros
+        <input type="number" min="1" max="999" value="<%=listClients.size()%>" class="form-control d-inline-block" style="width: 3rem;">registros
       </span>
       <div class="input-group" style="max-width: 250px;">
         <input type="text" class="form-control" id="nameSearch" placeholder="Buscar">
@@ -179,28 +187,30 @@
           <th>Documento</th>
           <th>Correo</th>
           <th>Teléfono</th>
-          <th>NIT y Nombre</th>
-          <th>Alta</th>
           <th>Estatus</th>
           <th>Acciones</th>
         </tr>
         </thead>
         <tbody id="tablaClientes">
-        <tr>
-          <td>1</td>
-          <td>Gonashi</td>
-          <td>DNI</td>
-          <td>69696969</td>
-          <td>Gonashi@gmail.com</td>
-          <td>969696969</td>
-          <td>No sé que es eso</td>
-          <td>15-05-2025</td>
-          <td>Activo</td>
-          <td class="d-flex justify-content-center gap-1">
-            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarCliente">✏️</button>
-            <button class="btn btn-danger btn-sm">❌</button>
-          </td>
-        </tr>
+        <%int count=1; for(Client client : listClients){%>
+          <tr>
+            <td><%=count%></td>
+            <td><%=client.getName()%></td>
+            <td><%=client.getTypeDocument()%></td>
+            <td><%=client.getEmail()%></td>
+            <td><%=client.getTelephone()%></td>
+            <td><%=client.getEstatus()%></td>
+            <td><%=client.getEstatus()%></td>
+            <td class="d-flex justify-content-center gap-1">
+              <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarCliente">✏️</button>
+              <form action="clientcontrol" method="post">
+                <input type="hidden" name="idClient" value="<%=client.getId()%>">
+                <input type="hidden" name="actionclient" value="delete">
+                <button class="btn btn-danger btn-sm">❌</button>
+              </form>
+            </td>
+          </tr>
+        <%count++;}%>
         </tbody>
       </table>
     </div>

@@ -5,12 +5,18 @@ public class Client {
     private String name;
     private String telephone;
     private String email;
+    private TypeDocument typeDocument;
+    private String numberDocument;
+    private String estatus;
 
-    public Client(int id, String name, String telephone, String email) {
+    public Client(int id, String name, String telephone, String email, TypeDocument typeDocument, String numberDocument, String estatus) {
         this.id = id;
         this.name = name;
         this.telephone = telephone;
         this.email = email;
+        this.typeDocument = typeDocument;
+        this.numberDocument = numberDocument;
+        this.estatus = estatus;
     }
 
     public Client() {
@@ -48,6 +54,30 @@ public class Client {
         this.email = email;
     }
 
+    public TypeDocument getTypeDocument() {
+        return typeDocument;
+    }
+
+    public void setTypeDocument(TypeDocument typeDocument) {
+        this.typeDocument = typeDocument;
+    }
+
+    public String getNumberDocument() {
+        return numberDocument;
+    }
+
+    public void setNumberDocument(String numberDocument) {
+        this.numberDocument = numberDocument;
+    }
+
+    public String getEstatus() {
+        return estatus;
+    }
+
+    public void setEstatus(String estatus) {
+        this.estatus = estatus;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
@@ -55,6 +85,9 @@ public class Client {
                 ", name='" + name + '\'' +
                 ", telephone='" + telephone + '\'' +
                 ", email='" + email + '\'' +
+                ", typeDocument=" + typeDocument +
+                ", numberDocument='" + numberDocument + '\'' +
+                ", estatus='" + estatus + '\'' +
                 '}';
     }
 }
