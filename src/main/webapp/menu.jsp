@@ -61,19 +61,19 @@
 
     <ul class="sidebar-nav">
       <li class="sidebar-item">
-        <a id="btnInicio" href="#" class="sidebar-link" onclick="cargarPagina('jsp/inicio.jsp')">
+        <a id="btnInicio" href="#" class="sidebar-link" data-pagina="inicio" onclick="cargarPagina('jsp/inicio.jsp')">
           <i class="fa-solid fa-house me-2"></i>
           <span>Inicio</span>
         </a>
       </li>
       <li class="sidebar-item">
-        <a href="#" class="sidebar-link" onclick="cargarPagina('jsp/reserva.jsp')">
+        <a href="#" class="sidebar-link" data-pagina="reserva" onclick="cargarPagina('jsp/reserva.jsp')">
           <i class="fa-solid fa-calendar-days me-2"></i>
           <span>Reserva</span>
         </a>
       </li>
       <li class="sidebar-item">
-        <a href="#" class="sidebar-link" onclick="cargarPagina('jsp/recepcion.jsp')">
+        <a href="#" class="sidebar-link" data-pagina="recepcion" onclick="cargarPagina('jsp/recepcion.jsp')">
           <i class="fa-solid fa-right-to-bracket me-2"></i>
           <span>Recepción</span>
         </a>
@@ -86,13 +86,13 @@
         </a>
         <ul id="puntoVenta" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
           <li class="sidebar-item">
-            <a href="#" class="sidebar-link" onclick="cargarPagina('jsp/habitacionesVenta.jsp')">
+            <a href="#" class="sidebar-link" data-pagina="habitacionesVenta" onclick="cargarPagina('jsp/habitacionesVenta.jsp')">
             <i class="fa-solid fa-basket-shopping me-2"></i>
             Vender Productos
             </a>
           </li>
           <li class="sidebar-item">
-            <a href="#" class="sidebar-link" onclick="cargarPagina('jsp/catalagoProductos.jsp')">
+            <a href="#" class="sidebar-link" data-pagina="catalagoProductos" onclick="cargarPagina('jsp/catalagoProductos.jsp', 'catalogoProductos')">
             <i class="fa-solid fa-basket-shopping me-2"></i>
             Catálogo de Productos
             </a>
@@ -100,13 +100,13 @@
         </ul>
       </li>
       <li class="sidebar-item">
-        <a href="#" class="sidebar-link" onclick="cargarPagina('jsp/verificacionSalidas.jsp')">
+        <a href="#" class="sidebar-link" data-pagina="verificacionSalidas" onclick="cargarPagina('jsp/verificacionSalidas.jsp')">
           <i class="fa-solid fa-right-from-bracket me-2"></i>
           <span>Verificación de Salidas</span>
         </a>
       </li>
       <li class="sidebar-item">
-        <a href="#" class="sidebar-link" onclick="cargarPagina('jsp/clientes.jsp')">
+        <a href="#" class="sidebar-link" data-pagina="clientes" onclick="cargarPagina('jsp/clientes.jsp')">
           <i class="fa-solid fa-users me-2"></i>
           <span>Clientes</span>
         </a>
@@ -119,13 +119,13 @@
         </a>
         <ul id="reportes" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
           <li class="sidebar-item">
-            <a href="#" class="sidebar-link" onclick="cargarPagina('jsp/reporteDiario.jsp')">
+            <a href="#" class="sidebar-link" data-pagina="reporteDiario" onclick="cargarPagina('jsp/reporteDiario.jsp')">
             <i class="fa-solid fa-sheet-plastic me-2"></i>
             Reporte Diario
             </a>
           </li>
           <li class="sidebar-item">
-            <a href="#" class="sidebar-link" onclick="cargarPagina('jsp/reporteMensual.jsp')">
+            <a href="#" class="sidebar-link" data-pagina="reporteMensual" onclick="cargarPagina('jsp/reporteMensual.jsp')">
             <i class="fa-solid fa-sheet-plastic me-2"></i>
             Reporte Mensual
             </a>
@@ -133,7 +133,7 @@
         </ul>
       </li>
       <li class="sidebar-item">
-        <a href="#" class="sidebar-link" onclick="cargarPagina('jsp/usuarios.jsp')">
+        <a href="#" class="sidebar-link" data-pagina="usuarios" onclick="cargarPagina('jsp/usuarios.jsp')">
           <i class="fa-solid fa-users-gear me-2"></i>
           <span>Usuarios</span>
         </a>
@@ -146,25 +146,25 @@
         </a>
         <ul id="configuracion" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
           <li class="sidebar-item">
-            <a href="#" class="sidebar-link" onclick="cargarPagina('jsp/informacionHotelera.jsp')">
+            <a href="#" class="sidebar-link" data-pagina="informacionHotelera" onclick="cargarPagina('jsp/informacionHotelera.jsp')">
             <i class="fa-solid fa-gears me-2"></i>
             Información Hotelera
             </a>
           </li>
           <li class="sidebar-item">
-            <a href="#" class="sidebar-link" onclick="cargarPagina('jsp/habitaciones.jsp')">
+            <a href="#" class="sidebar-link" data-pagina="habitaciones" onclick="cargarPagina('jsp/habitaciones.jsp')">
             <i class="fa-solid fa-gears me-2"></i>
             Habitaciones
             </a>
           </li>
           <li class="sidebar-item">
-            <a href="#" class="sidebar-link" onclick="cargarPagina('jsp/habitacionesCategorias.jsp')">
+            <a href="#" class="sidebar-link" data-pagina="habitacionesCategorias" onclick="cargarPagina('jsp/habitacionesCategorias.jsp')">
             <i class="fa-solid fa-gears me-2"></i>
             Categorías
             </a>
           </li>
           <li class="sidebar-item">
-            <a href="#" class="sidebar-link" onclick="cargarPagina('jsp/pisos.jsp')">
+            <a href="#" class="sidebar-link" data-pagina="pisos" onclick="cargarPagina('jsp/pisos.jsp')">
             <i class="fa-solid fa-gears me-2"></i>
             Niveles / Pisos
             </a>

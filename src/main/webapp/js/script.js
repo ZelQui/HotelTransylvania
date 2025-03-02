@@ -23,9 +23,19 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Función para cargar el contenido sin actualizar el sidebar
-function cargarPagina(pagina) {
-    // Limpiar el view en la URL
-    history.replaceState({}, document.title, window.location.pathname);
+function cargarPagina(pagina, view = "", limpiarView = false) {
+    // Actualizar la URL con el nuevo 'view'
+    if (!view) {
+        // Si 'view' no se pasa, obtenerlo del enlace clickeado
+        const link = document.querySelector(`[onclick="cargarPagina('${pagina}')"]`);
+        view = link ? link.getAttribute("data-pagina") : "";
+    }
+
+    if (view) {
+        // Actualizar la URL con el nuevo 'view'
+        history.replaceState({}, document.title, `${window.location.pathname}?view=${view}`);
+    }
+
     fetch(pagina)  // Agrega la extensión .jsp a la página solicitada
         .then(response => {
             if (!response.ok) {
@@ -160,11 +170,14 @@ document.addEventListener("DOMContentLoaded", function () {
         informacionHotelera: "jsp/informacionHotelera.jsp",
         habitaciones: "jsp/habitaciones.jsp",
         habitacionesCategorias: "jsp/habitacionesCategorias.jsp",
-        pisos: "jsp/pisos.jsp"
+        pisos: "jsp/pisos.jsp",
+        habitacionesVenta: "jsp/habitacionesVenta.jsp",
+        procesoSalida: "jsp/procesoSalida.jsp",
+        ventaDirecta: "jsp/ventaDirecta.jsp"
     };
 
     if (paginas[view]) {
-        cargarPagina(paginas[view]);
+        cargarPagina(paginas[view], view);
     }
 
     const expandirMenu = {
@@ -186,6 +199,18 @@ document.addEventListener("DOMContentLoaded", function () {
             if (link) link.setAttribute("aria-expanded", "true");
         }
     }
+
+    /// Asignar evento a las opciones del sidebar para actualizar 'view' en la URL
+    document.querySelectorAll(".sidebar-link").forEach(item => {
+        item.addEventListener("click", function (e) {
+            e.preventDefault(); // Evita la recarga de la página
+            let paginaSeleccionada = this.getAttribute("data-pagina");
+
+            if (paginas[paginaSeleccionada]) {
+                cargarPagina(paginas[paginaSeleccionada], paginaSeleccionada);
+            }
+        });
+    });
 });
 
 

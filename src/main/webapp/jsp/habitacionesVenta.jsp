@@ -12,7 +12,7 @@
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb mb-0">
-      <li class="breadcrumb-item"><a href="#" onclick="cargarPagina('jsp/ventaDirecta.jsp')">¿Venta Directa?</a></li>
+      <li class="breadcrumb-item"><a href="#" data-pagina="ventaDirecta" onclick="cargarPagina('jsp/ventaDirecta.jsp')">¿Venta Directa?</a></li>
     </ol>
   </nav>
 </div>
