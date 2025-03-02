@@ -9,6 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clientes</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/js/script.js"></script>
 </head>
 
 <%
@@ -35,18 +36,6 @@
       <div class="col-9 d-flex gap-2">
         <p>Catálogo de Clientes</p>
       </div>
-      <div class="col-3 d-flex justify-content-end align-items-center">
-        <label for="estadoSelect" class="form-label m-0 me-2">Estado:</label>
-        <select id="estadoSelect" class="form-select  w-auto">
-          <option value="activos">Activos</option>
-          <option value="inactivos">Inactivos</option>
-        </select>
-        <script>
-          document.getElementById("estadoSelect").addEventListener("change", function() {
-            console.log("Estado seleccionado:", this.value);
-          });
-        </script>
-      </div>
     </div>
 
     <div class="d-flex justify-content-between mt-2">
@@ -68,41 +57,34 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="formCliente">
+          <form method="post" action="clientcontrol">
             <input type="hidden" id="inputAgregarCliente">
+            <input type="hidden" value="add" name="actionclient">
             <div class="mb-3">
               <label for="nombre">Nombre Completo</label>
-              <input type="text" class="form-control" id="nombre" required>
+              <input type="text" class="form-control" id="nombre" name="clientname" required>
             </div>
             <div class="mb-3">
               <label for="tipoDocumento">Tipo de Documento</label>
-              <select class="form-select" id="tipoDocumento" required>
-                <option value="#">DNI</option>
-                <option value="#">PASAPORTE</option>
-                <option value="#">RUC</option>
+              <select class="form-select" id="tipoDocumento" name="typedocument" required>
+                <option value="DNI">DNI</option>
+                <option value="Pasaporte">PASAPORTE</option>
+                <option value="RUC">RUC</option>
               </select>
             </div>
             <div class="mb-3">
               <label for="documento">Documento</label>
-              <input type="text" class="form-control" id="documento" required>
+              <input type="text" class="form-control" id="documento" name="document" required>
             </div>
             <div class="mb-3">
               <label for="correo">Correo</label>
-              <input type="email" class="form-control" id="correo" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+              <input type="email" class="form-control" id="correo" name="clientemail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
             </div>
             <div class="mb-3">
               <label for="telefono">Teléfono</label>
-              <input type="tel" class="form-control" id="telefono" pattern="[0-9]{10}" maxlength="9"  required>
+              <input type="tel" class="form-control" id="telefono" name="telephone" pattern="[0-9]{9}" maxlength="9"  required>
             </div>
-            <div class="mb-3">
-              <label for="nitNombre">NIT y Nombre</label>
-              <input type="text" class="form-control" id="nitNombre" required>
-            </div>
-            <div class="mb-3">
-              <label for="alta">Alta</label>
-              <input type="date" class="form-control" id="alta" required>
-            </div>
-            <button type="button" class="btn btn-success">Guardar</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
           </form>
         </div>
       </div>
@@ -118,48 +100,34 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="formEditarCliente">
-            <input type="hidden" id="inputEditarCliente">
+          <form id="formEditarCliente" action="clientcontrol" method="post">
+            <input type="hidden" name="actionclient" value="update">
+            <input type="hidden" name="idclient" id="inputEditarCliente">
             <div class="mb-3">
               <label for="nombreEditar">Nombre Completo</label>
-              <input type="text" class="form-control" id="nombreEditar" required>
+              <input type="text" class="form-control" id="nombreEditar" name="nombreEditar" required>
             </div>
             <div class="mb-3">
               <label for="tipoDocumentoEditar">Tipo de Documento</label>
-              <select class="form-select" id="tipoDocumentoEditar" required>
+              <select class="form-select" id="tipoDocumentoEditar" name="tipoDocumentoEditar" required>
                 <option value="DNI">DNI</option>
-                <option value="RUC">PASAPORTE</option>
+                <option value="Pasaporte">PASAPORTE</option>
                 <option value="RUC">RUC</option>
               </select>
             </div>
             <div class="mb-3">
               <label for="documentoEditar">Documento</label>
-              <input type="text" class="form-control" id="documentoEditar" required>
+              <input type="text" class="form-control" id="documentoEditar" name="documentoEditar" required>
             </div>
             <div class="mb-3">
               <label for="correoEditar">Correo</label>
-              <input type="email" class="form-control" id="correoEditar" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+              <input type="email" class="form-control" id="correoEditar" name="correoEditar" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
             </div>
             <div class="mb-3">
               <label for="telefonoEditar">Teléfono</label>
-              <input type="tel" class="form-control" id="telefonoEditar" pattern="[0-9]{10}" maxlength="9"  required>
+              <input type="tel" class="form-control" id="telefonoEditar" name="telefonoEditar" pattern="[0-9]{9}" maxlength="9"  required>
             </div>
-            <div class="mb-3">
-              <label for="nitNombreEditar">NIT y Nombre</label>
-              <input type="text" class="form-control" id="nitNombreEditar" required>
-            </div>
-            <div class="mb-3">
-              <label for="altaEditar">Alta</label>
-              <input type="date" class="form-control" id="altaEditar" required>
-            </div>
-            <div class="mb-3">
-              <label for="estatusEditar">Estatus</label>
-              <select class="form-select" id="estatusEditar">
-                <option value="Activo">Activo</option>
-                <option value="Inactivo">Inactivo</option>
-              </select>
-            </div>
-            <button type="button" class="btn btn-success">Guardar</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
           </form>
         </div>
       </div>
@@ -169,10 +137,11 @@
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <span>Mostrando
-        <input type="number" min="1" max="999" value="<%=listClients.size()%>" class="form-control d-inline-block" style="width: 3rem;">registros
+        <input type="number" id="sizeClients" min="1" max="999" value="<%=listClients.size()%>" class="form-control d-inline-block" style="width: 3rem;">registros
       </span>
       <div class="input-group" style="max-width: 250px;">
-        <input type="text" class="form-control" id="nameSearch" placeholder="Buscar">
+        <input type="text" class="form-control" id="nameSearch" placeholder="Buscar"
+               onkeyup="Search('#nameSearch','#tablaClientes','#sizeClients','filterClientServlet')">
         <span class="input-group-text"><i class="fas fa-search"></i></span>
       </div>
     </div>
@@ -187,7 +156,6 @@
           <th>Documento</th>
           <th>Correo</th>
           <th>Teléfono</th>
-          <th>Estatus</th>
           <th>Acciones</th>
         </tr>
         </thead>
@@ -197,12 +165,16 @@
             <td><%=count%></td>
             <td><%=client.getName()%></td>
             <td><%=client.getTypeDocument()%></td>
+            <td><%=client.getNumberDocument()%></td>
             <td><%=client.getEmail()%></td>
             <td><%=client.getTelephone()%></td>
-            <td><%=client.getEstatus()%></td>
-            <td><%=client.getEstatus()%></td>
             <td class="d-flex justify-content-center gap-1">
-              <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarCliente">✏️</button>
+              <button class="btn btn-warning btn-sm" id="btn-editar"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalEditarCliente"
+                      onclick="editarClient(<%=client.getId()%>)">
+                ✏️
+              </button>
               <form action="clientcontrol" method="post">
                 <input type="hidden" name="idClient" value="<%=client.getId()%>">
                 <input type="hidden" name="actionclient" value="delete">
@@ -226,7 +198,6 @@
     </div>
   </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

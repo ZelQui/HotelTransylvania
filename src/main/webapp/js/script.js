@@ -132,6 +132,21 @@ function abrirModalEditar(id) {
         })
         .catch(error => console.error("Error al obtener datos:", error));
 }
+function editarClient(id) {
+    document.getElementById("inputEditarCliente").value = id;
+
+    fetch("clientcontrol?action=get&idclient=" + id)
+        .then(response => response.json())  // Convertimos la respuesta a JSON
+        .then(data => {
+            // Llenar los campos del formulario con los datos obtenidos
+            document.getElementById("nombreEditar").value = data.name;
+            document.getElementById("tipoDocumentoEditar").value = data.typeDocument;
+            document.getElementById("documentoEditar").value = data.numberDocument;
+            document.getElementById("correoEditar").value = data.email;
+            document.getElementById("telefonoEditar").value = data.telephone;
+        })
+        .catch(error => console.error("Error al obtener datos:", error));
+}
 function buscar() {
     var nameFilter = $("#nameSearch").val();
     $.ajax({
@@ -147,6 +162,24 @@ function buscar() {
 
             // Actualizar el input con la cantidad de registros
             $("#sizeProducts").val(cantidad);
+        }
+    });
+}
+function Search(wordKey,tableSearch,quantitySearch,controller) {
+    var nameFilter = $(wordKey).val();
+    $.ajax({
+        url: controller,
+        data: { filter: nameFilter },
+        success: function (result) {
+            // Insertar la tabla filtrada
+            $(tableSearch).html(result);
+
+            // Extraer la cantidad de productos desde el comentario oculto
+            var match = result.match(/<!--COUNT:(\d+)-->/);
+            var cantidad = match ? match[1] : 0;
+
+            // Actualizar el input con la cantidad de registros
+            $(quantitySearch).val(cantidad);
         }
     });
 }

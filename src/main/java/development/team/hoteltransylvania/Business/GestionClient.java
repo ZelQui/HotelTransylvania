@@ -2,18 +2,18 @@ package development.team.hoteltransylvania.Business;
 
 import development.team.hoteltransylvania.DTO.usersEmployeeDTO;
 import development.team.hoteltransylvania.Model.Client;
+import development.team.hoteltransylvania.Model.Product;
+import development.team.hoteltransylvania.Model.Room;
 import development.team.hoteltransylvania.Model.TypeDocument;
 import development.team.hoteltransylvania.Services.DataBaseUtil;
 import development.team.hoteltransylvania.Util.LoggerConfifg;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class GestionClient {
     private static final DataSource dataSource = DataBaseUtil.getDataSource();
@@ -34,9 +34,8 @@ public class GestionClient {
                 String numDocu = rs.getString("numero_documento");
                 String tipoDoc = rs.getString("tipo_documento");
                 String telefono = rs.getString("telefono");
-                String estado = rs.getString("estado");
 
-                allClients.add(new Client(id_cliente,nombre,telefono,email, TypeDocument.valueOf(tipoDoc),numDocu,estado));
+                allClients.add(new Client(id_cliente,nombre,telefono,email, TypeDocument.valueOf(tipoDoc),numDocu));
             }
 
         } catch (SQLException e) {
@@ -76,5 +75,97 @@ public class GestionClient {
         }
 
         return result;
+    }
+    public static boolean registerClient(Client client) {
+        String sql = "INSERT INTO clientes (nombre, email, numero_documento, tipo_documento, telefono) VALUES (?, ?, ?, ?, ?)";
+        boolean result = false;
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) { // Permite obtener el ID generado
+
+            ps.setString(1, client.getName());
+            ps.setString(2, client.getEmail());
+            ps.setString(3, client.getNumberDocument());
+            ps.setString(4, client.getTypeDocument().toString());
+            ps.setString(5,client.getTelephone());
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                LOGGER.info("Client " + client.getName() + " registered successfully");
+                result = true;
+            }
+        } catch (SQLException e) {
+            LOGGER.warning("Error when registering the client: " + e.getMessage());
+        }
+        return result;
+    }
+    public static Client getClientById(int clientId) {
+        String sql = "SELECT * FROM clientes WHERE id = ?";
+        Client client = null;
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ps.setInt(1, clientId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int id_cliente = rs.getInt("id");
+                String nombre = rs.getString("nombre");
+                String email = rs.getString("email");
+                String numDocu = rs.getString("numero_documento");
+                String tipoDoc = rs.getString("tipo_documento");
+                String telefono = rs.getString("telefono");
+
+
+                client = new Client(id_cliente,nombre,telefono,email, TypeDocument.valueOf(tipoDoc),numDocu);
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error retrieving client with ID " + client + ": " + e.getMessage());
+        }
+
+        return client;
+    }
+    public static boolean updateClient(Client client) {
+        String sql = "UPDATE clientes " +
+                "SET nombre = ?,\n" +
+                "    email = ?,\n" +
+                "    numero_documento = ?,\n" +
+                "    tipo_documento = ?,\n" +
+                "    telefono = ? WHERE id = ?";
+
+        boolean result = false;
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ps.setString(1, client.getName());
+            ps.setString(2, client.getEmail());
+            ps.setString(3, client.getNumberDocument());
+            ps.setString(4, client.getTypeDocument().toString());
+            ps.setString(5, client.getTelephone());
+            ps.setInt(6, client.getId());// Se asume que `id` es un atributo de `Room`
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                LOGGER.info("Client " + client.getId() + " updated successfully.");
+                result = true;
+            } else {
+                LOGGER.warning("Error updating client. No client found with ID: " + client.getId());
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error updating client " + client.getId() + ": " + e.getMessage());
+        }
+
+        return result;
+    }
+    public static List<Client> filterClients(String nombre) {
+        if (nombre == null || nombre.isEmpty()) {
+            return getAllClients(); // Devuelve todos los productos si no hay búsqueda.
+        }
+
+        return getAllClients().stream()
+                .filter(product -> product.getName().toLowerCase().contains(nombre.toLowerCase()))
+                .collect(Collectors.toList());
     }
 }
