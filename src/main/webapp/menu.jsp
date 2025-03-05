@@ -11,8 +11,19 @@
     return;
   }
   User usuario = (User) sessionObj.getAttribute("usuario");
+  if (BCrypt.checkpw("123456", usuario.getPassword())) {
+  %>
+<!--
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+var myModal = new bootstrap.Modal(document.getElementById("modalCambiarPassword"));
+myModal.show();
+});
+</script>
+-->
+  <%
+  }
 %>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,6 +47,35 @@
 </head>
 
 <body>
+<!-- Modal para cambiar contraseña -->
+<!--
+<div class="modal fade show" id="modalCambiarPassword" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cambiar Contraseña</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p>Tu contraseña actual es la predeterminada. Por seguridad, cámbiala ahora.</p>
+        <form id="formCambiarPassword" action="user" method="post">
+          <input type="hidden" name="accion" value="updatePassword">
+          <div class="mb-3">
+            <label for="nuevaPassword">Nueva Contraseña</label>
+            <input type="password" class="form-control" name="newpassword" id="nuevaPassword" required>
+          </div>
+          <div class="mb-3">
+            <label for="confirmarPassword">Confirmar Contraseña</label>
+            <input type="password" class="form-control" id="confirmarPassword" required>
+          </div>
+          <div id="errorMensaje" class="text-danger" style="display: none;">Las contraseñas no coinciden.</div>
+          <button type="submit" class="btn btn-success">Actualizar Contraseña</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+-->
 <div class="wrapper">
   <!-- Sidebar -->
   <aside id="sidebar">
@@ -196,6 +236,24 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="js/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Script para validar que ambas contraseñas coincidan antes de enviar el formulario -->
+<!--
+<script>
+  document.getElementById("formCambiarPassword").addEventListener("submit", function(event) {
+    var nuevaPassword = document.getElementById("nuevaPassword").value;
+    var confirmarPassword = document.getElementById("confirmarPassword").value;
+    var errorMensaje = document.getElementById("errorMensaje");
+
+    if (nuevaPassword !== confirmarPassword) {
+      event.preventDefault(); // Evita el envío del formulario
+      errorMensaje.style.display = "block";
+    } else {
+      errorMensaje.style.display = "none";
+    }
+  });
+</script>
+-->
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const sidebarLinks = document.querySelectorAll(".sidebar-link");

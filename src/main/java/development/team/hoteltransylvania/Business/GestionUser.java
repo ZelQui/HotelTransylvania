@@ -126,21 +126,22 @@ import java.util.logging.Logger;
 
             return user;
         }
-        public static boolean updateUserPassword(User user, String newPassword) {
+        public static User updateUserPassword(User user, String newPassword) {
             String sql = "UPDATE usuarios SET password = ? WHERE id = ?";
 
-            boolean result = false;
+            User usuario = user;
 
             try (Connection cnn = dataSource.getConnection();
                  PreparedStatement ps = cnn.prepareStatement(sql)) {
 
-                ps.setString(1, newPassword);
+                String hashPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+                ps.setString(1, hashPassword);
                 ps.setInt(2, user.getId());
 
                 int rowsAffected = ps.executeUpdate();
                 if (rowsAffected > 0) {
                     LOGGER.info("user " + user.getId() + " updated successfully.");
-                    result = true;
+                    usuario.setPassword(hashPassword);
                 } else {
                     LOGGER.warning("Error updating user. No user found with ID: " + user.getId());
                 }
@@ -148,7 +149,7 @@ import java.util.logging.Logger;
                 LOGGER.severe("Error updating user " + user.getId() + ": " + e.getMessage());
             }
 
-            return result;
+            return usuario;
         }
 
         public static boolean deleteuser(int userId) {
@@ -266,8 +267,7 @@ import java.util.logging.Logger;
                                 rs.getString("password"),
                                 statusUser
                         );
-
-                        System.out.println(user.getUsername()+" inció sesión.");
+                        System.out.println(user.getUsername()+" inció sesión");
                     }
                 }
             } catch (SQLException e) {
@@ -348,6 +348,26 @@ import java.util.logging.Logger;
             }
 
             return existe;
+        }
+
+        public static void updateStatus(int usuarioId, String estado) {
+            String sql = "UPDATE usuarios SET estado = ? WHERE id = ?";
+
+            try (Connection cnn = dataSource.getConnection();
+                 PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+                ps.setString(1, estado);
+                ps.setInt(2, usuarioId);
+
+                int rowsAffected = ps.executeUpdate();
+                if (rowsAffected > 0) {
+                    LOGGER.info("user " + usuarioId + " updated status successfully.");
+                } else {
+                    LOGGER.warning("Error updating user. No user found with ID: " + usuarioId);
+                }
+            } catch (SQLException e) {
+                LOGGER.severe("Error updating user " + usuarioId + ": " + e.getMessage());
+            }
         }
     }
 

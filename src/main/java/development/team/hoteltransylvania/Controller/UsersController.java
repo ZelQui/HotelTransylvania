@@ -123,19 +123,29 @@ public class UsersController extends HttpServlet {
                 break;
             case "restartPass": //CUANDO SE LE DA AL BOTON DE ADMINISTRACION RESTABLECER A PREDETERMINADO
                 int idUsuario = Integer.parseInt(req.getParameter("idUser"));
-                System.out.println("SE DESEA RESTABLECER LA CONTRASEÑA DEL ID USER: "+ idUsuario);
+                User userReset = userdao.getUserById(idUsuario);
+                userdao.updateUserPassword(userReset, "123456");
+                System.out.println("Contraseña restablecida: ID USER: "+ idUsuario);
                 resp.sendRedirect("menu.jsp?view=usuarios");
                 break;
             case "delete":
                 int idUser = Integer.parseInt(req.getParameter("idUser"));
-                System.out.println("SE DESEA ELIMINAR EL ID USER: "+idUser);
+                userdao.updateStatus(idUser, "Inactivo");
+                System.out.println("Usuario inactivado: ID: "+idUser);
+                resp.sendRedirect("menu.jsp?view=usuarios");
+                break;
+            case "activate":
+                int idU = Integer.parseInt(req.getParameter("idUser"));
+                userdao.updateStatus(idU, "Activo");
+                System.out.println("Usuario activado: ID: "+idU);
                 resp.sendRedirect("menu.jsp?view=usuarios");
                 break;
             case "updatePassword": //CAMBIAR CONTRASEÑA A NUEVA
                 String newPassword = req.getParameter("newpassword");
                 HttpSession sessionActual = req.getSession();
                 User userLogin =  (User) sessionActual.getAttribute("usuario");
-                userdao.updateUserPassword(userLogin, newPassword);
+                userLogin = userdao.updateUserPassword(userLogin, newPassword);
+                sessionActual.setAttribute("usuario", userLogin);
                 resp.sendRedirect("menu.jsp");
                 break;
             default:

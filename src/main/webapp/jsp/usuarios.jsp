@@ -199,11 +199,19 @@
                 <input type="hidden" name="accion" value="restartPass">
                 <button class="btn btn-secondary btn-sm">🔑</button>
               </form>
+              <% if (employee.getEstado_user().equals("Activo")) { %>
               <form action="user" method="post">
                 <input type="hidden" name="idUser" value="<%=employee.getId_user()%>">
                 <input type="hidden" name="accion" value="delete">
                 <button class="btn btn-danger btn-sm">❌</button>
               </form>
+              <% } else { %>
+              <form action="user" method="post">
+                <input type="hidden" name="idUser" value="<%=employee.getId_user()%>">
+                <input type="hidden" name="accion" value="activate">
+                <button class="btn btn-success btn-sm">✅</button>
+              </form>
+              <% } %>
             </td>
           </tr>
           <% count++;}%>
