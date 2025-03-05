@@ -27,7 +27,10 @@ import java.util.logging.Logger;
                  PreparedStatement ps = cnn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) { // Importante para obtener ID generado
 
                 ps.setString(1, user.getUsername());
-                ps.setString(2, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+
+                String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+                ps.setString(2, hashedPassword);
+
                 ps.setInt(3, user.getEmployee().getId()); // Corregir índice
                 ps.setString(4, user.getStatusUser().name()); // Corregir índice
 
@@ -44,6 +47,32 @@ import java.util.logging.Logger;
                 LOGGER.warning("Error when registering the user: " + e.getMessage());
             }
             return usuarioId;
+        }
+        public static boolean updateUser(User newUser) {
+            String sql = "UPDATE usuarios SET username = ?, empleado_id = ? , estado = ? WHERE id = ?";
+
+            boolean result = false;
+
+            try (Connection cnn = dataSource.getConnection();
+                 PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+                ps.setString(1, newUser.getUsername());
+                ps.setInt(2, newUser.getEmployee().getId());
+                ps.setString(3, newUser.getStatusUser().name());
+                ps.setInt(4, newUser.getId());
+
+                int rowsAffected = ps.executeUpdate();
+                if (rowsAffected > 0) {
+                    LOGGER.info("User " + newUser.getId() + " updated successfully.");
+                    result = true;
+                } else {
+                    LOGGER.warning("Error updating user. No user found with ID: " + newUser.getId());
+                }
+            } catch (SQLException e) {
+                LOGGER.severe("Error updating user " + newUser.getId() + ": " + e.getMessage());
+            }
+
+            return result;
         }
         public static boolean updateUserEmployee(User newUser) {
             String sql = "UPDATE usuarios SET empleado_id = ? WHERE id = ?";
@@ -68,6 +97,35 @@ import java.util.logging.Logger;
 
             return result;
         }
+        public static User getUserById(int userId) {
+            String sql = "SELECT * FROM usuarios WHERE id = ?";
+            User user = null;
+
+            try (Connection cnn = dataSource.getConnection();
+                 PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+                ps.setInt(1, userId);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    int id_user = rs.getInt("id");
+                    String username = rs.getString("username");
+                    int empleadoId = rs.getInt("empleado_id");
+                    String status = rs.getString("estado");
+
+                    Employee employee = new Employee();
+                    employee.setId(empleadoId);
+
+                    StatusUser statusUser = getStatusUser(status); // Método seguro para convertir el ID
+
+                    user = new User(id_user, employee, username, "***", statusUser);
+                }
+            } catch (SQLException e) {
+                LOGGER.severe("Error retrieving client with ID " + user + ": " + e.getMessage());
+            }
+
+            return user;
+        }
         public static boolean updateUserPassword(User user, String newPassword) {
             String sql = "UPDATE usuarios SET password = ? WHERE id = ?";
 
@@ -77,6 +135,7 @@ import java.util.logging.Logger;
                  PreparedStatement ps = cnn.prepareStatement(sql)) {
 
                 ps.setString(1, newPassword);
+                ps.setInt(2, user.getId());
 
                 int rowsAffected = ps.executeUpdate();
                 if (rowsAffected > 0) {
@@ -126,8 +185,8 @@ import java.util.logging.Logger;
         }
         public static List<User> getAllusers() {
 
-            String sql = "SELECT u.id , u.username, u.empleado_id, u.estado" +
-                    "FROM usuarios as u" +
+            String sql = "SELECT u.id , u.username, u.empleado_id, u.estado " +
+                    "FROM usuarios as u " +
                     "JOIN empleados AS e ON u.empleado_id = e.id";
             List<User> users = new ArrayList<>();
 
@@ -166,7 +225,7 @@ import java.util.logging.Logger;
             }
         }
 
-        public boolean validarCredenciales(String username, String contrasena) {
+        public static boolean validarCredenciales(String username, String contrasena) {
             String sql = "SELECT password FROM usuarios WHERE username = ?";
 
             try (Connection con = dataSource.getConnection();
@@ -174,7 +233,9 @@ import java.util.logging.Logger;
                 ps.setString(1, username);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        return BCrypt.checkpw(contrasena, rs.getString("password"));
+                        String storedHash = rs.getString("password");
+                        storedHash = storedHash.trim();
+                        return BCrypt.checkpw(contrasena, storedHash);
                     }
                 }
             } catch (SQLException e) {
@@ -183,9 +244,9 @@ import java.util.logging.Logger;
             return false;
         }
 
-        public User obtenerUsuarioSesion(String username) {
+        public static User obtenerUsuarioSesion(String username) {
             User user = null;
-            String sql = "SELECT id, username, empleado_id, estado FROM usuarios WHERE username = ?";
+            String sql = "SELECT id, username, password, empleado_id, estado FROM usuarios WHERE username = ?";
 
             try (Connection con = dataSource.getConnection();
                  PreparedStatement ps = con.prepareStatement(sql)) {
@@ -196,17 +257,17 @@ import java.util.logging.Logger;
                     if (rs.next()) {
                         // Método para obtener Employee
                         Employee employee = obtenerEmpleadoPorId(rs.getInt("empleado_id"));
-                        StatusUser statusUser = StatusUser.valueOf(rs.getString("estado")); // Conversión a enum
+                        StatusUser statusUser = StatusUser.valueOf(rs.getString("estado"));
 
                         user = new User(
                                 rs.getInt("id"),
                                 employee,
                                 rs.getString("username"),
-                                "***", // No es necesario recuperar la contraseña aquí
+                                rs.getString("password"),
                                 statusUser
                         );
 
-                        System.out.println("Se validó el usuario: " + user.getUsername());
+                        System.out.println(user.getUsername()+" inció sesión.");
                     }
                 }
             } catch (SQLException e) {
@@ -216,7 +277,7 @@ import java.util.logging.Logger;
             return user;
         }
 
-        public Employee obtenerEmpleadoPorId(int empleadoId) {
+        public static Employee obtenerEmpleadoPorId(int empleadoId) {
             String sql = "SELECT id, nombre, rol_id, correo FROM empleados WHERE id = ?";
             Employee employee = null;
 
@@ -243,7 +304,7 @@ import java.util.logging.Logger;
             return employee;
         }
 
-        public List<User> getAllUsers() {
+        public static List<User> getAllUsers() {
             String sql = "SELECT id, username, empleado_id, estado FROM usuarios";
             List<User> lista = new ArrayList<>();
             try (Connection con = dataSource.getConnection();
@@ -251,7 +312,7 @@ import java.util.logging.Logger;
                  ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Employee employee = obtenerEmpleadoPorId(rs.getInt("empleado_id")); // Obtener Employee
-                    StatusUser statusUser = StatusUser.valueOf(rs.getString("estado")); // Convertir estado a enum
+                    StatusUser statusUser = StatusUser.valueOf(rs.getString("estado"));
 
                     User user = new User(
                             rs.getInt("id"),
@@ -268,7 +329,7 @@ import java.util.logging.Logger;
             return lista;
         }
 
-        public boolean existeUsuario(String username) {
+        public static boolean existeUsuario(String username) {
             String sql = "SELECT COUNT(*) FROM usuarios WHERE username = ?";
             boolean existe = false;
 

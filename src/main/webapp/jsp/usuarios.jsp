@@ -61,34 +61,49 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="formUsuario">
+
+          <form id="formUsuario" action="user" method="post">
             <input type="hidden" id="inputAgregarUsuario">
+            <input type="hidden" name="accion" value="Registrar">
             <div class="mb-3">
               <label for="nombre">Nombre</label>
-              <input type="text" class="form-control" id="nombre" required>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre Completo" required>
+              </div>
             </div>
             <div class="mb-3">
               <label for="correo">Correo</label>
-              <input type="email" class="form-control" id="correo" required>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input type="email" class="form-control" id="correo" name="email" placeholder="Correo Electrónico" required>
+              </div>
             </div>
             <div class="mb-3">
-              <label for="tipo">Tipo</label>
-              <select class="form-select" id="tipo" required>
-                <option value="Limpieza">Limpieza</option>
-                <option value="Administrador">Administrador</option>
-                <option value="Soporte">Soporte</option>
-              </select>
+              <label for="rol">Rol</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                <select class="form-select" id="rol" name="rol" required>
+                  <option selected disabled>Seleccionar Rol</option>
+                  <option value="1">Administrador</option>
+                  <option value="2">Recepcionista</option>
+                </select>
+              </div>
             </div>
             <div class="mb-3">
-              <label for="usuario">Usuario</label>
-              <input type="text" class="form-control" id="usuario" required>
+              <label for="username">Usuario</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Nombre Usuario" required>
+              </div>
             </div>
             <div class="mb-3">
-              <label for="contraseña">Contraseña</label>
-              <input type="password" class="form-control" id="contraseña" required>
+              <button type="submit" class="btn btn-success">
+                Guardar
+              </button>
             </div>
-            <button type="button" class="btn btn-success">Guardar</button>
           </form>
+
         </div>
       </div>
     </div>
@@ -103,36 +118,36 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="formEditarUsuario">
-            <input type="hidden" id="inputEditarUsuario">
+          <form id="formEditarUsuario" action="user" method="post">
+            <input type="hidden" name="accion" value="update">
+            <input type="hidden" name="idemployee" id="inputEditarUsuario">
             <div class="mb-3">
               <label for="nombreEditar">Nombre</label>
-              <input type="text" class="form-control" id="nombreEditar" required>
+              <input type="text" class="form-control" id="nombreEditar" name="nombreEdit" required>
             </div>
             <div class="mb-3">
               <label for="correoEditar">Correo</label>
-              <input type="email" class="form-control" id="correoEditar" required>
+              <input type="email" class="form-control" id="correoEditar" name="correoEdit" required>
             </div>
             <div class="mb-3">
               <label for="usuarioEditar">Usuario</label>
-              <input type="text" class="form-control" id="usuarioEditar" required>
+              <input type="text" class="form-control" id="usuarioEditar" name="userEdit" required>
             </div>
             <div class="mb-3">
-              <label for="tipoEditar">Tipo</label>
-              <select class="form-select" id="tipoEditar" required>
-                <option value="Limpieza">Limpieza</option>
-                <option value="Administrador">Administrador</option>
-                <option value="Soporte">Soporte</option>
+              <label for="rolEditar">Rol</label>
+              <select class="form-select" id="rolEditar" name="rolEditar" required>
+                <option value="1">Administrador</option>
+                <option value="2">Recepcionista</option>
               </select>
             </div>
             <div class="mb-3">
               <label for="estatusEditar">Estatus</label>
-              <select class="form-select" id="estatusEditar" required>
+              <select class="form-select" id="estatusEditar" name="estatusEdit" required>
                 <option value="Activo">Activo</option>
                 <option value="Inactivo">Inactivo</option>
               </select>
             </div>
-            <button type="button" class="btn btn-success">Guardar</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
           </form>
         </div>
       </div>
@@ -165,8 +180,8 @@
         </tr>
         </thead>
         <tbody id="tablaUsuarios">
-
-          <%for(usersEmployeeDTO employee : allEmplooyes){ int count=1;%>
+          <% int count = 1; // Definir count antes del bucle %>
+          <%for(usersEmployeeDTO employee : allEmplooyes){ %>
           <tr>
             <td><%=count%></td>
             <td><%=employee.getName_employee()%></td>
@@ -174,13 +189,24 @@
             <td><%=employee.getEmail_user()%></td>
             <td><%=employee.getTipo_user()%></td>
             <td><%=employee.getEstado_user()%></td>
-            <td>
-              <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario">✏️</button>
-              <button class="btn btn-secondary btn-sm">🔑</button>
-              <button class="btn btn-danger btn-sm">❌</button>
+            <td class="d-flex justify-content-center gap-1">
+              <button class="btn btn-warning btn-sm" id="btn-editar"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalEditarUsuario"
+                      onclick="editarUser(<%=employee.getId_employee()%>)">✏️</button>
+              <form action="user" method="post">
+                <input type="hidden" name="idUser" value="<%=employee.getId_user()%>">
+                <input type="hidden" name="accion" value="restartPass">
+                <button class="btn btn-secondary btn-sm">🔑</button>
+              </form>
+              <form action="user" method="post">
+                <input type="hidden" name="idUser" value="<%=employee.getId_user()%>">
+                <input type="hidden" name="accion" value="delete">
+                <button class="btn btn-danger btn-sm">❌</button>
+              </form>
             </td>
           </tr>
-          <%count++;}%>
+          <% count++;}%>
 
         </tbody>
       </table>

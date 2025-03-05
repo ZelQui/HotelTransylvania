@@ -19,6 +19,10 @@ public class usersEmployeeDTO {
         this.estado_user = estado_user;
     }
 
+    public usersEmployeeDTO() {
+
+    }
+
     public int getId_employee() {
         return id_employee;
     }
@@ -73,5 +77,18 @@ public class usersEmployeeDTO {
 
     public void setEstado_user(String estado_user) {
         this.estado_user = estado_user;
+    }
+
+    @Override
+    public String toString() {
+        return "usersEmployeeDTO{" +
+                "id_employee=" + id_employee +
+                ", id_user=" + id_user +
+                ", name_employee='" + name_employee + '\'' +
+                ", name_user='" + name_user + '\'' +
+                ", email_user='" + email_user + '\'' +
+                ", tipo_user='" + tipo_user + '\'' +
+                ", estado_user='" + estado_user + '\'' +
+                '}';
     }
 }

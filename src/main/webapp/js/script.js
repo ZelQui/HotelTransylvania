@@ -147,6 +147,27 @@ function editarClient(id) {
         })
         .catch(error => console.error("Error al obtener datos:", error));
 }
+function editarUser(id) {
+    document.getElementById("inputEditarUsuario").value = id;
+
+    fetch("user?action=get&idEmployee=" + id)
+        .then(response => response.json())  // Convertimos la respuesta a JSON
+        .then(data => {
+            // Llenar los campos del formulario con los datos obtenidos
+            document.getElementById("nombreEditar").value = data.name_employee;
+            document.getElementById("correoEditar").value = data.email_user;
+            document.getElementById("usuarioEditar").value = data.name_user;
+            document.getElementById("estatusEditar").value = data.estado_user;
+            // Obtener el select y recorrer sus opciones
+            // Mapeo del texto del rol a su valor en el <select>
+            let rolMap = {
+                "Administrador": "1",
+                "Recepcionista": "2"
+            };
+            document.getElementById("rolEditar").value = rolMap[data.tipo_user] || ""; // Si no encuentra coincidencia, deja vacío
+        })
+        .catch(error => console.error("Error al obtener datos:", error));
+}
 function buscar() {
     var nameFilter = $("#nameSearch").val();
     $.ajax({

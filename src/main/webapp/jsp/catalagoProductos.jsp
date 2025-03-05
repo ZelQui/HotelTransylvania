@@ -85,7 +85,7 @@
         <div class="modal-body">
           <form id="formEditarCatalogoProducto" action="productcontrol" method="post">
             <input type="hidden" name="actionproduct" value="update">
-            <input type="text" name="idproduct" id="inputEditarIdProducto">
+            <input type="hidden" name="idproduct" id="inputEditarIdProducto">
 
             <div class="mb-3">
               <label for="tipoEditar">Tipo</label>

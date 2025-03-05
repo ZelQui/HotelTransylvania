@@ -35,7 +35,7 @@
 
           <div class="input-group mb-3">
             <label for="password" class="input-group-text"><i class="fas fa-lock"></i></label>
-            <input type="password" id="password" class="form-control form-control-lg bg-light fs-6" placeholder="Contraseña">
+            <input type="password" id="password" name="password" class="form-control form-control-lg bg-light fs-6" placeholder="Contraseña">
           </div>
 
           <div class="input-group mb-5 d-flex justify-content-between">
@@ -55,10 +55,11 @@
             </button>
           </div>
         </form>
-
+        <!--
         <div class="row">
           <small>¿No tienes cuenta? <a href="registro.jsp">Regístrate</a></small>
         </div>
+        -->
       </div>
     </div>
   </div>

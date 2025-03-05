@@ -5,6 +5,8 @@ import development.team.hoteltransylvania.Model.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
+import java.util.Date;
+
 public class Auth {
     private final GestionUser userdao = new GestionUser(); // Instanciamos directamente
 
@@ -20,6 +22,7 @@ public class Auth {
             User user = userdao.obtenerUsuarioSesion(username);
             HttpSession session = request.getSession();
             session.setAttribute("usuario", user);
+
             return true; // Inicio de sesión exitoso
         }
         return false; // Credenciales incorrectas

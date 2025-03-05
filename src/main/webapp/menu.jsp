@@ -2,6 +2,8 @@
 
 <%@ page import="development.team.hoteltransylvania.Model.User" %>
 <%@ page import="jakarta.servlet.http.HttpSession" %>
+<%@ page import="org.mindrot.jbcrypt.BCrypt" %>
+<%@ page import="java.util.Date" %>
 <%
   HttpSession sessionObj = request.getSession(false);
   if (sessionObj == null || sessionObj.getAttribute("usuario") == null) {

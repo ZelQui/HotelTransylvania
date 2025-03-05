@@ -15,7 +15,7 @@ public class GestionEmployee {
     private static final DataSource dataSource = DataBaseUtil.getDataSource();
     private static final Logger LOGGER = LoggerConfifg.getLogger(GestionEmployee.class);
 
-    public static int registerEmployee(Employee employee) {
+    public int registerEmployee(Employee employee, int idRol) {
         String sql = "INSERT INTO empleados (nombre, rol_id, correo) VALUES (?, ?, ?)";
         int empleadoId = -1;
 
@@ -23,7 +23,7 @@ public class GestionEmployee {
              PreparedStatement ps = cnn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) { // Permite obtener el ID generado
 
             ps.setString(1, employee.getName());
-            ps.setInt(2, 1); // Se mantiene el valor 1 para rol_id
+            ps.setInt(2, idRol);
             ps.setString(3, employee.getEmail());
 
             int rowsAffected = ps.executeUpdate();
@@ -40,7 +40,7 @@ public class GestionEmployee {
         }
         return empleadoId;
     }
-    public static boolean updateEmployee(Employee newEmployee) {
+    public boolean updateEmployee(Employee newEmployee, int rolId) {
         String sql = "UPDATE empleados SET nombre = ?, rol_id = ? , correo = ? WHERE id = ?";
 
         boolean result = false;
@@ -49,19 +49,22 @@ public class GestionEmployee {
              PreparedStatement ps = cnn.prepareStatement(sql)) {
 
             ps.setString(1, newEmployee.getName());
-            ps.setString(2, newEmployee.getPosition());
+            ps.setInt(2, rolId);
             ps.setString(3, newEmployee.getEmail());
             ps.setInt(4, newEmployee.getId()); // Se asume que `id` es un atributo de `Employee`
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 LOGGER.info("Employee " + newEmployee.getId() + " updated successfully.");
+                System.out.println("Employee " + newEmployee.getId() + " updated successfully.");
                 result = true;
             } else {
                 LOGGER.warning("Error updating employee. No employee found with ID: " + newEmployee.getId());
+                System.out.println("Error updating employee. No employee found with ID: " + newEmployee.getId());
             }
         } catch (SQLException e) {
             LOGGER.severe("Error updating employee " + newEmployee.getId() + ": " + e.getMessage());
+            System.out.println("Error updating employee " + newEmployee.getId() + ": " + e.getMessage());
         }
 
         return result;
@@ -98,9 +101,42 @@ public class GestionEmployee {
 
         return result;
     }
+    public usersEmployeeDTO getEmployeeById(int employeeId) {
+        final String sql = "SELECT e.id AS id_empleado, u.id AS id_usuario, e.nombre, u.username AS nombre_usuario, " +
+                "e.correo, r.nombre AS rol, u.estado " +
+                "FROM empleados e " +
+                "JOIN usuarios u ON u.empleado_id = e.id " +
+                "JOIN roles r ON e.rol_id = r.id " +
+                "WHERE e.id = ?";
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ps.setInt(1, employeeId); // Asigna el parámetro a la consulta
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int idEmpleado = rs.getInt("id_empleado");
+                    int idUsuario = rs.getInt("id_usuario");
+                    String nombre = rs.getString("nombre");
+                    String nombreUsuario = rs.getString("nombre_usuario");
+                    String email = rs.getString("correo");
+                    String rol = rs.getString("rol");
+                    String estado = rs.getString("estado");
+
+                    return new usersEmployeeDTO(idEmpleado, idUsuario, nombre, nombreUsuario, email, rol, estado);
+                }
+            }
+
+        } catch (SQLException e) {
+            LOGGER.severe("Error retrieving employee by ID: " + e.getMessage());
+        }
+
+        return null; // Retorna null si no se encuentra el empleado
+    }
     public static List<usersEmployeeDTO> getAllEmployees() {
-        String sql = "SELECT e.id AS id_empleado, r.id AS id_usuario, e.nombre, u.username AS nombre_usuario, " +
-                "e.correo, r.nombre AS tipo, u.estado " +
+        String sql = "SELECT e.id AS id_empleado, u.id AS id_usuario, e.nombre, u.username AS nombre_usuario, " +
+                "e.correo, r.nombre AS rol, u.estado " +
                 "FROM empleados as e " +
                 "JOIN usuarios AS u ON u.empleado_id=e.id " +
                 "JOIN roles AS r ON e.rol_id=r.id";
@@ -116,10 +152,10 @@ public class GestionEmployee {
                 String nombre = rs.getString("nombre");
                 String nombre_usuario = rs.getString("nombre_usuario");
                 String email = rs.getString("correo");
-                String tipo = rs.getString("tipo");
+                String rol = rs.getString("rol");
                 String estado = rs.getString("estado");
 
-                allEmployees.add(new usersEmployeeDTO(id_empleado,id_usuario,nombre,nombre_usuario,email,tipo,estado));
+                allEmployees.add(new usersEmployeeDTO(id_empleado,id_usuario,nombre,nombre_usuario,email,rol,estado));
             }
 
         } catch (SQLException e) {
@@ -129,4 +165,28 @@ public class GestionEmployee {
         return allEmployees;
     }
 
+    public int getUserIdByEmployeeId(int employeeId) {
+        final String sql = "SELECT e.id AS id_empleado, u.id AS id_usuario " +
+                "FROM empleados as e " +
+                "JOIN usuarios AS u ON u.empleado_id=e.id " +
+                "WHERE e.id = ?";
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ps.setInt(1, employeeId); // Asigna el parámetro a la consulta
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int idUsuario = rs.getInt("id_usuario");
+                    return idUsuario;
+                }
+            }
+
+        } catch (SQLException e) {
+            LOGGER.severe("Error retrieving employee by ID: " + e.getMessage());
+        }
+
+        return 0;
+    }
 }
