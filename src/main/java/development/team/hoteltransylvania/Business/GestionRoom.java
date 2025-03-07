@@ -1,8 +1,6 @@
 package development.team.hoteltransylvania.Business;
 
-import development.team.hoteltransylvania.Model.Room;
-import development.team.hoteltransylvania.Model.StatusRoom;
-import development.team.hoteltransylvania.Model.TypeRoom;
+import development.team.hoteltransylvania.Model.*;
 import development.team.hoteltransylvania.Services.DataBaseUtil;
 import development.team.hoteltransylvania.Util.LoggerConfifg;
 
@@ -12,15 +10,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class GestionRoom {
     private static final DataSource dataSource = DataBaseUtil.getDataSource();
     private static final Logger LOGGER = LoggerConfifg.getLogger(GestionRoom.class);
 
     public static boolean registerRoom(Room Room) {
-        String sql = "INSERT INTO habitaciones (numero, tipo_id, estado_id, precio) VALUES (?, ?,?,?)";
+        String sql = "INSERT INTO habitaciones (numero, tipo_id, estado_id, precio, piso_id) VALUES (?,?,?,?,?)";
 
         boolean result = false;
 
@@ -29,9 +29,9 @@ public class GestionRoom {
 
             ps.setString(1, Room.getNumber());
             ps.setInt(2, Room.getTypeRoom().getId());
-            //AQUI SE DEBE CAMBIAR PORQUE ESTADO EN BD ES INTEGER
-            ps.setString(3, String.valueOf(Room.getStatusRoom().getDeclaringClass()));
+            ps.setInt(3, Room.getStatusRoom().getValue());
             ps.setDouble(4, Room.getPrice());
+            ps.setInt(5, Room.getFloor());
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
@@ -43,27 +43,29 @@ public class GestionRoom {
         }
         return result;
     }
-    public static boolean updateRoom(Room newRoom) {
-        String sql = "UPDATE habitaciones SET numero = ?, precio = ? WHERE id = ?";
+    public static boolean updateRoom(Room roomUpdate) {
+        String sql = "UPDATE habitaciones SET numero = ?, tipo_id = ?, estado_id = ?, precio = ? WHERE id = ?";
 
         boolean result = false;
 
         try (Connection cnn = dataSource.getConnection();
              PreparedStatement ps = cnn.prepareStatement(sql)) {
 
-            ps.setString(1, newRoom.getNumber());
-            ps.setDouble(2, newRoom.getPrice());
-            ps.setInt(3, newRoom.getId()); // Se asume que `id` es un atributo de `Room`
+            ps.setString(1, roomUpdate.getNumber());
+            ps.setDouble(2, roomUpdate.getTypeRoom().getId());
+            ps.setInt(3, roomUpdate.getStatusRoom().getValue());
+            ps.setDouble(4, roomUpdate.getPrice());
+            ps.setInt(5, roomUpdate.getId());
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
-                LOGGER.info("Room " + newRoom.getId() + " updated successfully.");
+                LOGGER.info("Room " + roomUpdate.getId() + " updated successfully.");
                 result = true;
             } else {
-                LOGGER.warning("Error updating Room. No Room found with ID: " + newRoom.getId());
+                LOGGER.warning("Error updating Room. No Room found with ID: " + roomUpdate.getId());
             }
         } catch (SQLException e) {
-            LOGGER.severe("Error updating Room " + newRoom.getId() + ": " + e.getMessage());
+            LOGGER.severe("Error updating Room " + roomUpdate.getId() + ": " + e.getMessage());
         }
 
         return result;
@@ -101,45 +103,157 @@ public class GestionRoom {
         return result;
     }
     public static List<Room> getAllRooms() {
-
-        String sql = "SELECT h.id, h.numero, h.tipo_id, h.estado_id, h.precio, t.tipo " +
+        String sql = "SELECT " +
+                "    h.id, " +
+                "    h.numero, " +
+                "    h.piso_id, " +
+                "    p.nombre AS nombre_piso, " +
+                "    h.tipo_id, " +
+                "    t.nombre AS tipo_nombre, " +
+                "    h.precio, " +
+                "    h.estado_id, " +
+                "    e.estado AS estado_nombre " +
                 "FROM habitaciones h " +
-                "JOIN tipo_habitacion t ON h.tipo_id = t.id";
-        List<Room> Rooms = new ArrayList<>();
+                "JOIN tipo_habitacion t ON h.tipo_id = t.id " +
+                "JOIN estado_habitacion e ON h.estado_id = e.id " +
+                "JOIN pisos p ON p.id = h.piso_id ";  // Paginación aplicada
+
+        List<Room> rooms = new ArrayList<>();
 
         try (Connection cnn = dataSource.getConnection();
-             PreparedStatement ps = cnn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String number = rs.getString("numero");
-                int tipoId = rs.getInt("tipo_id");
-                int estadoId = rs.getInt("estado_id");
+                int typeId = rs.getInt("tipo_id");
+                String typeName = rs.getString("tipo_nombre");
+                int statusId = rs.getInt("estado_id");
                 double price = rs.getDouble("precio");
-                String nameType = rs.getString("nameType");  // Obtener el nombre del tipo de habitación
+                int floorId = rs.getInt("piso_id");
 
-                TypeRoom typeRoom = new TypeRoom(tipoId, nameType);  // Crear objeto TypeRoom
-                StatusRoom statusRoom = getStatusRoomById(estadoId); // Método seguro para convertir el ID
+                // Se obtiene el enum directamente por ID
+                StatusRoom statusRoom = StatusRoom.fromId(statusId);
 
-                Rooms.add(new Room(id, number, typeRoom, statusRoom, price));
+                // Se crea el objeto TypeRoom directamente sin consulta extra
+                TypeRoom typeRoom = new TypeRoom(typeId, typeName);
+
+                rooms.add(new Room(id, number, typeRoom, statusRoom, price, floorId));
             }
 
         } catch (SQLException e) {
             LOGGER.severe("Error retrieving Rooms: " + e.getMessage());
         }
 
-        return Rooms;
+        return rooms.stream()
+                .sorted(Comparator.comparing((Room room) -> Integer.parseInt(room.getNumber())))
+                .collect(Collectors.toList());
     }
 
-    // Método para convertir estadoId en StatusRoom de manera segura
-    public static StatusRoom getStatusRoomById(int id) {
-        StatusRoom[] statuses = StatusRoom.values();
-        if (id >= 0 && id < statuses.length) {
-            return statuses[id];
+
+
+    /*public static TypeRoom getTypeRoom(String nombre) {
+        try {
+            return TypeRoom.valueOf(nombre.toLowerCase());
+        } catch (IllegalArgumentException e) {
+            LOGGER.severe("Error: TypeRoom no válido -> '" + nombre + "'");
+            return null; // Manejar errores adecuadamente
         }
-        throw new IllegalArgumentException("ID de estado no válido: " + id);
+    }*/
+    public static StatusRoom getStatusRoom(String nombre) {
+        try {
+            return StatusRoom.valueOf(nombre.toLowerCase());
+        } catch (IllegalArgumentException e) {
+            LOGGER.severe("Error: StatusRoom no válido -> '" + nombre + "'");
+            return null;
+        }
     }
+    public static int getTotalRooms() {
+        String sql = "SELECT COUNT(*) FROM habitaciones";
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            LOGGER.severe("Error counting Rooms: " + e.getMessage());
+        }
+        return 0;
+    }
+    public static TypeRoom getTypeRoomById(int idType) {
+        String sql = "SELECT * FROM tipo_habitacion WHERE id = ?";
+        TypeRoom typeRoom = null;
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ps.setInt(1, idType);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int tipoId = rs.getInt("id");
+                    String nombre = rs.getString("nombre");
+                    typeRoom = new TypeRoom(tipoId, nombre);
+                }
+            }
+
+        } catch (SQLException e) {
+            LOGGER.severe("Error retrieving TypeRoom: " + e.getMessage());
+        }
+
+        return typeRoom;
+    }
+    public static Room getRoomById(int roomId) {
+        String sql = "SELECT h.id, h.numero, h.tipo_id, h.piso_id, h.precio, h.estado_id, \n" +
+                "t.nombre AS tipo_nombre \n" +
+                "FROM habitaciones h\n" +
+                "JOIN tipo_habitacion t ON h.tipo_id = t.id\n" +
+                "WHERE h.id = ?;";
+        Room room = null;
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ps.setInt(1, roomId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String number = rs.getString("numero");
+                int typeId = rs.getInt("tipo_id");
+                String typeName = rs.getString("tipo_nombre");
+                int statusId = rs.getInt("estado_id");
+                double price = rs.getDouble("precio");
+                int floorId = rs.getInt("piso_id");
+
+                StatusRoom statusRoom = StatusRoom.fromId(statusId);
+                TypeRoom typeRoom = new TypeRoom(typeId, typeName);
+
+                room = new Room(id, number, typeRoom, statusRoom, price, floorId);
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error retrieving product with ID " + roomId + ": " + e.getMessage());
+        }
+
+        return room;
+    }
+
+    public static List<Room> filterRooms(String nombre) {
+        if (nombre == null || nombre.isEmpty()) {
+            return getAllRooms();
+        }
+
+        return getAllRooms().stream()
+                .filter(room -> room.getNumber().contains(nombre))
+                .collect(Collectors.toList());
+    }
+
+
 
 }
 

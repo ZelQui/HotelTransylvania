@@ -6,16 +6,26 @@ public class Room {
     private TypeRoom typeRoom;
     private StatusRoom statusRoom;
     private double price;
+    private int floor;
 
     public Room() {
     }
 
-    public Room(int id, String number, TypeRoom typeRoom, StatusRoom statusRoom, double price) {
+    public Room(int id, String number, TypeRoom typeRoom, StatusRoom statusRoom, double price, int floor) {
         this.id = id;
         this.number = number;
         this.typeRoom = typeRoom;
         this.statusRoom = statusRoom;
         this.price = price;
+        this.floor = floor;
+    }
+
+    public Room(String number, TypeRoom typeRoom, StatusRoom statusRoom, double price, int floor) {
+        this.number = number;
+        this.typeRoom = typeRoom;
+        this.statusRoom = statusRoom;
+        this.price = price;
+        this.floor = floor;
     }
 
     public int getId() {
@@ -58,6 +68,14 @@ public class Room {
         this.price = price;
     }
 
+    public int getFloor() {
+        return floor;
+    }
+
+    public void setFloor(int floor) {
+        this.floor = floor;
+    }
+
     @Override
     public String toString() {
         return "Room{" +
@@ -66,6 +84,7 @@ public class Room {
                 ", typeRoom=" + typeRoom +
                 ", statusRoom=" + statusRoom +
                 ", price=" + price +
+                ", floor=" + floor +
                 '}';
     }
 }
