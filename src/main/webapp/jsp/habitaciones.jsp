@@ -37,14 +37,14 @@
       </div>
       <div class="col-3 d-flex justify-content-end align-items-center">
         <label for="estadoSelect" class="form-label m-0 me-2">Estado:</label>
-        <select id="estadoSelect" class="form-select  w-auto">
-          <option value="activos">Activos</option>
-          <option value="inactivos">Inactivos</option>
+        <select id="estadoSelect" class="form-select w-auto">
+          <option value="todos">Todos</option>
+          <option value="libre">Libre</option>
+          <option value="ocupada">Ocupada</option>
+          <option value="en_mantenimiento">En Mantenimiento</option>
         </select>
         <script>
-          document.getElementById("estadoSelect").addEventListener("change", function() {
-            console.log("Estado seleccionado:", this.value);
-          });
+
         </script>
       </div>
     </div>
@@ -240,6 +240,24 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
+<script>
+  $(document).ready(function () {
+    $("#estadoSelect").on("change", function () {
+      let estadoSeleccionado = $(this).val().toLowerCase().trim();
+
+      $("#tablaHabitaciones tr").each(function () {
+        let estadoHabitacion = $(this).find("td:nth-child(6)").text().toLowerCase().trim();
+
+        if (estadoSeleccionado === "todos" || estadoHabitacion.includes(estadoSeleccionado)) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    });
+  });
+
+</script>
 
 </body>
 </html>
