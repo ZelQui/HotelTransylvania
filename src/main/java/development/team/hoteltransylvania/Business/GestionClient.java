@@ -168,4 +168,14 @@ public class GestionClient {
                 .filter(product -> product.getName().toLowerCase().contains(nombre.toLowerCase()))
                 .collect(Collectors.toList());
     }
+    public static Client getClient(String numeroDocumento) {
+        if (numeroDocumento == null || numeroDocumento.trim().isEmpty()) {
+            return null;
+        }
+
+        return getAllClients().stream()
+                .filter(client -> client.getNumberDocument().equalsIgnoreCase(numeroDocumento.trim()))
+                .findFirst()
+                .orElse(null);
+    }
 }

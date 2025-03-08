@@ -201,6 +201,17 @@ function buscar() {
         }
     });
 }
+function buscarCliente(){
+    var nameFilter = $("#numberDocument").val();
+    $.ajax({
+        url: "filterClientUniq",
+        data: { filter: nameFilter },
+        success: function (result) {
+            // Insertar la tabla filtrada
+            $("#datosCliente").html(result);
+        }
+    });
+}
 function Search(wordKey,tableSearch,quantitySearch,controller) {
     var nameFilter = $(wordKey).val();
     $.ajax({

@@ -50,26 +50,32 @@
           <form id="formReserva">
             <input type="hidden" id="inputAgregarReserva">
             <h5>Datos del Cliente:</h5>
-            <div class="mb-3">
-              <label for="nombre">Nombre Completo</label>
-              <input type="text" class="form-control" id="nombre" name="nombre" required>
+            <input type="text" class="form-control" id="numberDocument" placeholder="Buscar por Documento"
+                   onkeyup="buscarCliente()">
+            <div id="datosCliente">
+              <p style='color:red;' class='mt-2'>⚠️ Debes ingresar un número de documento</p>
+              <%--<div class="mb-3">
+                <label for="nombre">Nombre Completo</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" required>
+              </div>
+              <div class="mb-3">
+                <label for="tipoDocumento">Tipo de Documento</label>
+                <select class="form-select" id="tipoDocumento" name="tipoDocumento" required>
+                  <option value="#">DNI</option>
+                  <option value="#">PASAPORTE</option>
+                  <option value="#">RUC</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="documento">Documento</label>
+                <input type="text" class="form-control" id="documento" name="documento" required>
+              </div>
+              <div class="mb-3">
+                <label for="correo">Correo</label>
+                <input type="email" class="form-control" id="correo" name="correo" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+              </div>--%>
             </div>
-            <div class="mb-3">
-              <label for="tipoDocumento">Tipo de Documento</label>
-              <select class="form-select" id="tipoDocumento" name="tipoDocumento" required>
-                <option value="#">DNI</option>
-                <option value="#">PASAPORTE</option>
-                <option value="#">RUC</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="documento">Documento</label>
-              <input type="text" class="form-control" id="documento" name="documento" required>
-            </div>
-            <div class="mb-3">
-              <label for="correo">Correo</label>
-              <input type="email" class="form-control" id="correo" name="correo" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
-            </div>
+
 
             <hr>
 
