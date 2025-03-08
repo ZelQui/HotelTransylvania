@@ -11,9 +11,23 @@
     return;
   }
   User usuario = (User) sessionObj.getAttribute("usuario");
-  boolean mostrarModal = BCrypt.checkpw("123456", usuario.getPassword());
-%>
+  if (BCrypt.checkpw("123456", usuario.getPassword())) {
+  %>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var myModal = new bootstrap.Modal(document.getElementById("modalCambiarPassword"));
+      myModal.show();
 
+      // Evento cuando se oculta el modal
+      document.getElementById("modalCambiarPassword").addEventListener("hidden.bs.modal", function () {
+        document.body.classList.remove("modal-open");
+        document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
+      });
+    });
+  </script>
+  <%
+  }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
