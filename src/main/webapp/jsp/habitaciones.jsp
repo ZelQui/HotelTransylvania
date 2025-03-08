@@ -1,3 +1,4 @@
+
 <%@ page import="java.util.List" %>
 <%@ page import="development.team.hoteltransylvania.Model.Room" %>
 <%@ page import="development.team.hoteltransylvania.Business.GestionRoom" %>
@@ -25,8 +26,19 @@
   </nav>
 </div>
 <%
-  List<Room> rooms = GestionRoom.getAllRooms();
+  int pagina = 1; // Usamos "pagina" en lugar de "page"
+  int pageSize = 10;
+
+  String pageParam = request.getParameter("page");
+  if (pageParam != null) {
+    pagina = Integer.parseInt(pageParam);
+  }
+
+  List<Room> rooms = GestionRoom.getRoomsPaginated(pagina, pageSize);
+  int totalRooms = GestionRoom.getTotalRooms();
+  int totalPages = (int) Math.ceil((double) totalRooms / pageSize);
 %>
+
 
 <!-- Sección de habitaciones -->
 <div class="card mt-4">
@@ -183,59 +195,53 @@
           <th>Acciones</th>
         </tr>
         </thead>
-        <tbody id="tablaHabitaciones">
-        <% for(Room room : rooms) { %>
+        <tbody>
+        <% for (Room room : rooms) { %>
         <tr>
           <td><%= room.getNumber() %></td>
-          <%
-            String floor = "Nivel "+ room.getFloor();
-          %>
-          <td><%= floor %></td>
+          <td>Nivel <%= room.getFloor() %></td>
           <td><%= room.getTypeRoom().getName() %></td>
           <td><%= room.getPrice() %></td>
           <td>24hr.</td>
           <td><%= room.getStatusRoom().getName() %></td>
           <td class="d-flex justify-content-center gap-1">
-            <button class="btn btn-warning btn-sm" id="btn-editar"
+            <button class="btn btn-warning btn-sm"
                     data-bs-toggle="modal"
                     data-bs-target="#modalEditarHabitacion"
-                    onclick="editarRoom(<%=room.getId()%>)">
+                    onclick="editarRoom(<%= room.getId() %>)">
               ✏️
             </button>
             <form action="roomcontroller" method="post">
-              <input type="hidden" name="idroom" value="<%=room.getId()%>">
+              <input type="hidden" name="idroom" value="<%= room.getId() %>">
               <input type="hidden" name="actionRoom" value="delete">
               <button class="btn btn-danger btn-sm">❌</button>
             </form>
           </td>
         </tr>
         <% } %>
-
         </tbody>
       </table>
     </div>
 
     <div class="d-flex justify-content-end align-items-center">
       <nav aria-label="Page navigation">
-        <ul class="pagination mb-0">
-          <li class="page-item">
-            <a class="page-link" href="">Anterior</a>
+        <ul class="pagination">
+          <li class="page-item <% if (pagina == 1) { %>disabled<% } %>">
+            <a class="page-link" href="?page=<%= pagina - 1 %>">Anterior</a>
           </li>
 
-          <li class="page-item">
-            <a class="page-link" href="">1</a>
+          <% for (int i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <% if (i == pagina) { %>active<% } %>">
+            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
           </li>
+          <% } %>
 
-          <li class="page-item">
-            <a class="page-link" href="">
-              Siguiente
-            </a>
+          <li class="page-item <% if (pagina == totalPages) { %>disabled<% } %>">
+            <a class="page-link" href="?page=<%= pagina + 1 %>">Siguiente</a>
           </li>
         </ul>
       </nav>
     </div>
-
-
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -151,68 +151,6 @@ public class GestionRoom {
                 .sorted(Comparator.comparing((Room room) -> Integer.parseInt(room.getNumber())))
                 .collect(Collectors.toList());
     }
-    public static List<Room> getRoomsPaginated(int page, int pageSize) {
-        String sql = "SELECT " +
-                "    h.id, " +
-                "    h.numero, " +
-                "    h.piso_id, " +
-                "    p.nombre AS nombre_piso, " +
-                "    h.tipo_id, " +
-                "    t.nombre AS tipo_nombre, " +
-                "    h.precio, " +
-                "    h.estado_id, " +
-                "    e.estado AS estado_nombre " +
-                "FROM habitaciones h " +
-                "JOIN tipo_habitacion t ON h.tipo_id = t.id " +
-                "JOIN estado_habitacion e ON h.estado_id = e.id " +
-                "JOIN pisos p ON p.id = h.piso_id " +
-                "ORDER BY h.numero ASC " +
-                "LIMIT ? OFFSET ?";
-
-        List<Room> rooms = new ArrayList<>();
-
-        try (Connection cnn = dataSource.getConnection();
-             PreparedStatement ps = cnn.prepareStatement(sql)) {
-
-            ps.setInt(1, pageSize);
-            ps.setInt(2, (page - 1) * pageSize); // OFFSET = (página - 1) * tamaño
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String number = rs.getString("numero");
-                int typeId = rs.getInt("tipo_id");
-                String typeName = rs.getString("tipo_nombre");
-                int statusId = rs.getInt("estado_id");
-                double price = rs.getDouble("precio");
-                int floorId = rs.getInt("piso_id");
-
-                StatusRoom statusRoom = StatusRoom.fromId(statusId);
-                TypeRoom typeRoom = new TypeRoom(typeId, typeName);
-
-                rooms.add(new Room(id, number, typeRoom, statusRoom, price, floorId));
-            }
-
-        } catch (SQLException e) {
-            LOGGER.severe("Error retrieving Rooms: " + e.getMessage());
-        }
-
-        return rooms;
-    }
-    public static int getTotalRooms() {
-        String sql = "SELECT COUNT(*) FROM habitaciones";
-        try (Connection cnn = dataSource.getConnection();
-             PreparedStatement ps = cnn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            LOGGER.severe("Error counting Rooms: " + e.getMessage());
-        }
-        return 0;
-    }
 
 
 
@@ -231,6 +169,21 @@ public class GestionRoom {
             LOGGER.severe("Error: StatusRoom no válido -> '" + nombre + "'");
             return null;
         }
+    }
+    public static int getTotalRooms() {
+        String sql = "SELECT COUNT(*) FROM habitaciones";
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            LOGGER.severe("Error counting Rooms: " + e.getMessage());
+        }
+        return 0;
     }
     public static TypeRoom getTypeRoomById(int idType) {
         String sql = "SELECT * FROM tipo_habitacion WHERE id = ?";

@@ -49,110 +49,96 @@
         <div class="modal-body">
           <form id="formReserva">
             <input type="hidden" id="inputAgregarReserva">
-            <div class="row">
-              <!-- Datos del Cliente -->
-              <div class="col-md-4 border-end">
-                <h5>Datos del Cliente</h5>
-                <input type="text" class="form-control mb-3" id="numberDocument" placeholder="Buscar por Documento"
-                       onkeyup="buscarCliente()">
-                <div id="datosCliente">
-                  <p style='color:red;' class='mt-2'>⚠️ Debes ingresar un número de documento</p>
-                  <%--
-                  <div class="mb-3">
-                    <label for="nombre">Nombre Completo</label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="tipoDocumento">Tipo de Documento</label>
-                    <select class="form-select" id="tipoDocumento" name="tipoDocumento" required>
-                      <option value="#">DNI</option>
-                      <option value="#">PASAPORTE</option>
-                      <option value="#">RUC</option>
-                    </select>
-                  </div>
-                  <div class="mb-3">
-                    <label for="documento">Documento</label>
-                    <input type="text" class="form-control" id="documento" name="documento" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="correo">Correo</label>
-                    <input type="email" class="form-control" id="correo" name="correo" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
-                  </div>
-                  --%>
-                </div>
+            <h5>Datos del Cliente:</h5>
+            <input type="text" class="form-control" id="numberDocument" placeholder="Buscar por Documento"
+                   onkeyup="buscarCliente()">
+            <div id="datosCliente">
+              <p style='color:red;' class='mt-2'>⚠️ Debes ingresar un número de documento</p>
+              <%--<div class="mb-3">
+                <label for="nombre">Nombre Completo</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" required>
               </div>
-
-              <!-- Datos del Alojamiento -->
-              <div class="col-md-4 border-end">
-                <h5>Datos del Alojamiento</h5>
-                <div class="mb-3">
-                  <label for="tipoHabitacion">Tipo de Habitación</label>
-                  <select class="form-select" id="tipoHabitacion" required>
-                    <option value="#">Simple</option>
-                    <option value="#">Doble</option>
-                    <option value="#">Matrimonial</option>
-                    <option value="#">Suite</option>
-                    <option value="#">Presidencial</option>
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="habitacion">Habitación</label>
-                  <select class="form-select" id="habitacion" required>
-                    <option value="#">696</option>
-                    <option value="#">600</option>
-                    <option value="#">100</option>
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="fechaEntrada">Fecha y Hora de Entrada</label>
-                  <input type="date" class="form-control" id="fechaEntrada" required>
-                </div>
-                <div class="mb-3">
-                  <label for="fechaSalida">Fecha y Hora de Salida</label>
-                  <input type="date" class="form-control" id="fechaSalida" required>
-                </div>
+              <div class="mb-3">
+                <label for="tipoDocumento">Tipo de Documento</label>
+                <select class="form-select" id="tipoDocumento" name="tipoDocumento" required>
+                  <option value="#">DNI</option>
+                  <option value="#">PASAPORTE</option>
+                  <option value="#">RUC</option>
+                </select>
               </div>
-
-              <!-- Costo -->
-              <div class="col-md-4">
-                <h5>Costo</h5>
-                <div class="mb-3">
-                  <label for="descuento">Descuento</label>
-                  <select class="form-select" id="descuento">
-                    <option value="#">0%</option>
-                    <option value="#">5%</option>
-                    <option value="#">10%</option>
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="cobroExtra">Cobro extra</label>
-                  <input type="number" class="form-control" id="cobroExtra">
-                </div>
-                <div class="mb-3">
-                  <label for="adelanto">Adelanto</label>
-                  <input type="number" class="form-control" id="adelanto">
-                </div>
-                <div class="mb-3">
-                  <label for="totalPagar">Total a Pagar</label>
-                  <input type="number" class="form-control" id="totalPagar" required>
-                </div>
-                <div class="mb-3">
-                  <label for="observacion">Observaciones</label>
-                  <textarea id="observacion" class="form-control" rows="4"></textarea>
-                </div>
+              <div class="mb-3">
+                <label for="documento">Documento</label>
+                <input type="text" class="form-control" id="documento" name="documento" required>
               </div>
+              <div class="mb-3">
+                <label for="correo">Correo</label>
+                <input type="email" class="form-control" id="correo" name="correo" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+              </div>--%>
             </div>
 
-            <div class="modal-footer">
-              <button type="button" class="btn btn-success">Guardar</button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+
+            <hr>
+
+            <h5>Datos del Alojamiento:</h5>
+            <div class="mb-3">
+              <label for="tipoHabitacion">Tipo de Habitación</label><select class="form-select" id="tipoHabitacion" required>
+                <option value="#">Simple</option>
+                <option value="#">Doble</option>
+                <option value="#">Matrimonial</option>
+                <option value="#">Suite</option>
+                <option value="#">Presidencial</option>
+              </select>
             </div>
+            <div class="mb-3">
+              <label for="habitacion">Habitación</label>
+              <select class="form-select" id="habitacion" required>
+                <option value="#">696</option>
+                <option value="#">600</option>
+                <option value="#">100</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="fechaEntrada">Fecha y Hora de Entrada</label>
+              <input type="date" class="form-control" id="fechaEntrada" required>
+            </div>
+            <div class="mb-3">
+              <label for="fechaSalida">Fecha y Hora de Salida</label>
+              <input type="date" class="form-control" id="fechaSalida" required>
+            </div>
+
+            <hr>
+
+            <h5>Costo:</h5>
+            <div class="mb-3">
+              <label for="descuento">Descuento</label>
+              <select class="form-select" id="descuento">
+                <option value="#">0%</option>
+                <option value="#">5%</option>
+                <option value="#">10%</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="cobroExtra">Cobro extra</label>
+              <input type="number" class="form-control" id="cobroExtra">
+            </div>
+            <div class="mb-3">
+              <label for="adelanto">Adelanto</label>
+              <input type="number" class="form-control" id="adelanto">
+            </div>
+            <div class="mb-3">
+              <label for="totalPagar">Total a Pagar</label>
+              <input type="number" class="form-control" id="totalPagar" required>
+            </div>
+            <div class="mb-3">
+              <label for="observacion">Observaciones</label>
+              <textarea id="observacion" rows="4" cols="60"></textarea>
+            </div>
+            <button type="button" class="btn btn-success">Guardar</button>
           </form>
         </div>
       </div>
     </div>
   </div>
-
 </div>
 
 <!-- Modal para ver Detalle -->
