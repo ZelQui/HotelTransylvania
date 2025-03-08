@@ -8,11 +8,11 @@ import javax.sql.DataSource;
 
 public class DataBaseUtil {
     // Variables de configuración
-    private static final String DB_HOST = "roundhouse.proxy.rlwy.net";
-    private static final String DB_PORT = "19051";
+    private static final String DB_HOST = "tramway.proxy.rlwy.net";
+    private static final String DB_PORT = "54575";
     private static final String DB_NAME = "railway"; // Ajusta si tu BD tiene otro nombre
     private static final String DB_USERNAME = "postgres";
-    private static final String DB_PASSWORD = "dXOcgffueCWKRUHHSSfnYjZMXodBVqtF";
+    private static final String DB_PASSWORD = "pGuQqZmxvhmQfroUPxhfzdENsnEhEEUc";
     private static final String DB_DRIVER = "org.postgresql.Driver";
 
     // Construimos la URL de PostgreSQL
