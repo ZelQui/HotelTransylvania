@@ -235,6 +235,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Obtener parámetros de la URL
     const params = new URLSearchParams(window.location.search);
     let view = params.get("view") || "inicio";
+    let page = params.get("page") || 1; // Obtener el número de la página
 
     const paginas = {
         inicio: "jsp/inicio.jsp",
@@ -257,8 +258,26 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     if (paginas[view]) {
-        cargarPagina(paginas[view], view);
+        let url = paginas[view];
+        if (page && page !== 1) { // Solo agrega page si no es la página 1
+            url += `?page=${page}`;
+        }
+        cargarPagina(url, view);
     }
+
+    document.querySelectorAll(".pagination .page-link").forEach(link => {
+        link.addEventListener("click", function (e) {
+            e.preventDefault(); // Evita la recarga de la página
+
+            let url = new URL(this.href, window.location.origin);
+            let newPage = url.searchParams.get("page");
+
+            if (newPage) {
+                params.set("page", newPage);
+                window.location.href = `${window.location.pathname}?${params.toString()}`;
+            }
+        });
+    });
 
     const expandirMenu = {
         venderProducto: "puntoVenta",
@@ -280,11 +299,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    /// Asignar evento a las opciones del sidebar para actualizar 'view' en la URL
+    // Marcar como "active" la opción correcta en el sidebar
     document.querySelectorAll(".sidebar-link").forEach(item => {
+        let paginaSeleccionada = item.getAttribute("data-pagina");
+
+        if (paginaSeleccionada === view) {
+            // Remover la clase "active" de todos antes de asignarla a la correcta
+            document.querySelectorAll(".sidebar-link").forEach(link => link.classList.remove("active"));
+            item.classList.add("active");
+        }
+
+        // Evento para cambiar de vista sin recargar la página
         item.addEventListener("click", function (e) {
             e.preventDefault(); // Evita la recarga de la página
-            let paginaSeleccionada = this.getAttribute("data-pagina");
 
             if (paginas[paginaSeleccionada]) {
                 cargarPagina(paginas[paginaSeleccionada], paginaSeleccionada);
@@ -292,5 +319,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-
-
