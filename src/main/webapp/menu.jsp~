@@ -213,12 +213,12 @@
     <script>
       function logout() {
         fetch('logout', { method: 'POST' })
-          .then(response => {
-            if (response.redirected) {
-              window.location.href = response.url;
-            }
-          })
-          .catch(error => console.error('Error al cerrar sesión:', error));
+                .then(response => {
+                  if (response.redirected) {
+                    window.location.href = response.url;
+                  }
+                })
+                .catch(error => console.error('Error al cerrar sesión:', error));
       }
     </script>
   </aside>
