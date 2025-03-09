@@ -12,6 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Catálogo de Habitaciones</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 
 <body>
@@ -55,9 +56,6 @@
           <option value="ocupada">Ocupada</option>
           <option value="en_mantenimiento">En Mantenimiento</option>
         </select>
-        <script>
-
-        </script>
       </div>
     </div>
 
@@ -183,7 +181,7 @@
     </div>
 
     <div class="table-responsive">
-      <table class="table table-bordered align-middle">
+      <table id="tablaHabitaciones" class="table table-bordered align-middle">
         <thead class="table-warning">
         <tr>
           <th>Número de Habitación</th>
@@ -251,18 +249,24 @@
     $("#estadoSelect").on("change", function () {
       let estadoSeleccionado = $(this).val().toLowerCase().trim();
 
-      $("#tablaHabitaciones tr").each(function () {
+      $("#tablaHabitaciones tbody tr").each(function () {
         let estadoHabitacion = $(this).find("td:nth-child(6)").text().toLowerCase().trim();
 
-        if (estadoSeleccionado === "todos" || estadoHabitacion.includes(estadoSeleccionado)) {
+        if (estadoSeleccionado === "todos" || estadoHabitacion === estadoSeleccionado) {
           $(this).show();
         } else {
           $(this).hide();
         }
       });
-    });
-  });
 
+      actualizarContador();
+    });
+
+    function actualizarContador() {
+      let visibleRows = $("#tablaHabitaciones tbody tr:visible").length;
+      $("#sizeRooms").val(visibleRows);
+    }
+  });
 </script>
 
 </body>

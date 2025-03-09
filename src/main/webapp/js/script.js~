@@ -227,7 +227,7 @@ function Search(wordKey, tableSearch, quantitySearch, controller) {
 
             // Actualizar el input con la cantidad de registros
             $(quantitySearch).val(cantidad);
-        },
+        }, r
         error: function () {
             console.error("Error al obtener los datos filtrados.");
         }
