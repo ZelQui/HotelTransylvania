@@ -5,10 +5,7 @@ import development.team.hoteltransylvania.Services.DataBaseUtil;
 import development.team.hoteltransylvania.Util.LoggerConfifg;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -299,7 +296,24 @@ public class GestionRoom {
                 .filter(room -> room.getNumber().contains(nombre))
                 .collect(Collectors.toList());
     }
+    public static int quantityFloors(){
+        String sql = "SELECT COUNT(*) FROM pisos";
+        int count = 0;
 
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt(1); // Obtener el resultado del conteo
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return count;
+    }
 
 
 }

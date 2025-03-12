@@ -1,3 +1,7 @@
+<%@ page import="java.util.List" %>
+<%@ page import="development.team.hoteltransylvania.Model.Room" %>
+<%@ page import="development.team.hoteltransylvania.Business.GestionRoom" %>
+<%@ page import="java.util.stream.Collectors" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -7,7 +11,10 @@
   <title>Recepción</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
-
+<%
+  List<Room> rooms = GestionRoom.getAllRooms();
+  int floors = GestionRoom.quantityFloors();
+%>
 <body>
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
   <h4><i class="fas fa-sign-in-alt"></i> Recepción</h4>
@@ -23,98 +30,88 @@
 <!-- Pestañas -->
 <ul class="nav nav-tabs flex-column flex-md-row mt-4">
   <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#todos">Todos</button></li>
-  <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#primer-nivel">Primer Nivel</button></li>
-  <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#segundo-nivel">Segundo Nivel</button></li>
-  <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tercer-nivel">Tercer Nivel</button></li>
+  <%for (int i = 1; i <= floors ; i++) {%>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#<%=i%>-nivel">Nivel <%=i%></button></li>
+  <%}%>
 </ul>
 
 <!-- Contenido de pestañas -->
 <div class="tab-content mt-3">
+
   <div id="todos" class="tab-pane fade show active">
     <div class="row">
+      <%
+        for (Room room : rooms) {
+          String colorOfStatus;
+          switch (room.getStatusRoom().getValue()) {
+            case 2:
+              colorOfStatus = "occupied";
+              break;
+            case 3:
+              colorOfStatus = "warning";
+              break;
+            default:
+              colorOfStatus = "available";
+          }
+          // Convertir el nombre del estado en tipo oración
+          String statusName = room.getStatusRoom().getName().toLowerCase();
+          statusName = statusName.substring(0, 1).toUpperCase() + statusName.substring(1);
+      %>
       <div class="col-md-3">
-        <button class="room-card available" onclick="handleClick(101)">
-          <h5>101</h5>
-          <span>SENCILLA</span>
+        <button class="room-card <%= colorOfStatus %>" onclick="handleClick(101)">
+          <h5><%= room.getNumber() %></h5> <%-- Número --%>
+          <span><%= room.getTypeRoom().getName().toUpperCase() %></span> <%-- Tipo --%>
           <i class="fas fa-bed room-icon"></i>
           <div class="room-status">
-            <span>Disponible</span>
+            <span><%= statusName %> </span> <%-- Estado --%>
             <i class="fas fa-arrow-right"></i>
           </div>
         </button>
       </div>
-      <div class="col-md-3">
-        <button class="room-card occupied" onclick="handleClick(105)">
-          <h5>105</h5>
-          <span>TRIPLE</span>
-          <i class="fas fa-bed room-icon"></i>
-          <div class="room-status">
-            <span>Ocupada</span>
-            <i class="fas fa-arrow-right"></i>
-          </div>
-        </button>
-      </div>
-      <div class="col-md-3">
-        <button class="room-card available" onclick="handleClick(203)">
-          <h5>203</h5>
-          <span>SENCILLA</span>
-          <i class="fas fa-bed room-icon"></i>
-          <div class="room-status">
-            <span>Disponible</span>
-            <i class="fas fa-arrow-right"></i>
-          </div>
-        </button>
-      </div>
-      <div class="col-md-3">
-        <button class="room-card cleaning" onclick="handleClick(207)">
-          <h5>207</h5>
-          <span>DOBLE</span>
-          <i class="fas fa-bed room-icon"></i>
-          <div class="room-status">
-            <span>Limpieza</span>
-            <i class="fas fa-arrow-right"></i>
-          </div>
-        </button>
-      </div>
+      <% } %>
+
     </div>
   </div>
-  <div id="primer-nivel" class="tab-pane fade show">
+
+  <%for (int i = 1; i <= floors ; i++) { int floor = i;%>
+  <div id="<%=i%>-nivel" class="tab-pane fade show">
     <div class="row">
+      <%
+        List<Room> roomsFloor = rooms.stream()
+                .filter(room -> room.getFloor() == floor)
+                .collect(Collectors.toList());
+        for (Room room : roomsFloor) {
+          String colorOfStatus;
+          switch (room.getStatusRoom().getValue()) {
+            case 2:
+              colorOfStatus = "occupied";
+              break;
+            case 3:
+              colorOfStatus = "warning";
+              break;
+            default:
+              colorOfStatus = "available";
+          }
+          // Convertir el nombre del estado en tipo oración
+          String statusName = room.getStatusRoom().getName().toLowerCase();
+          statusName = statusName.substring(0, 1).toUpperCase() + statusName.substring(1);
+      %>
       <div class="col-md-3">
-        <button class="room-card available" onclick="handleClick(101)">
-          <h5>101</h5>
-          <span>SENCILLA</span>
+        <button class="room-card <%= colorOfStatus %>" onclick="handleClick(101)">
+          <h5><%= room.getNumber() %></h5> <%-- Número --%>
+          <span><%= room.getTypeRoom().getName().toUpperCase() %></span> <%-- Tipo --%>
           <i class="fas fa-bed room-icon"></i>
           <div class="room-status">
-            <span>Disponible</span>
+            <span><%= statusName %> </span> <%-- Estado --%>
             <i class="fas fa-arrow-right"></i>
           </div>
         </button>
       </div>
-      <div class="col-md-3">
-        <button class="room-card occupied" onclick="handleClick(105)">
-          <h5>105</h5>
-          <span>TRIPLE</span>
-          <i class="fas fa-bed room-icon"></i>
-          <div class="room-status">
-            <span>Ocupada</span>
-            <i class="fas fa-arrow-right"></i>
-          </div>
-        </button>
-      </div>
-      <div class="col-md-3">
-        <button class="room-card available" onclick="handleClick(203)">
-          <h5>203</h5>
-          <span>SENCILLA</span>
-          <i class="fas fa-bed room-icon"></i>
-          <div class="room-status">
-            <span>Disponible</span>
-            <i class="fas fa-arrow-right"></i>
-          </div>
-        </button>
-      </div>
+      <% } %>
     </div>
   </div>
+  <%}%>
+
 </div>
 
 <!-- Bootstrap JS -->

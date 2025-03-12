@@ -46,7 +46,7 @@
 
 /* Colores de las habitaciones */
 .available {
-    background-color: #28a745; /* Verde - Disponible */
+    background-color: #28a745; /* Verde - Libre */
 }
 
 .occupied {
@@ -62,5 +62,5 @@
 }
 
 .warning {
-    background-color: #fd7e14; /* Naranja - Mantenimiento */
+    background-color: #fd7e14; /* Naranja - En Mantenimiento */
 }
