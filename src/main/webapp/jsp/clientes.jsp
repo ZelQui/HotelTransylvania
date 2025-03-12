@@ -140,14 +140,14 @@
         <input type="number" id="sizeClients" min="1" max="999" value="<%=listClients.size()%>" class="form-control d-inline-block" style="width: 3rem;">registros
       </span>
       <div class="input-group" style="max-width: 250px;">
-        <input type="text" class="form-control" id="nameSearch" placeholder="Buscar"
-               onkeyup="Search('#nameSearch','#tablaClientes','#sizeClients','filterClientServlet')">
+        <input type="text" class="form-control" id="nameClientSearch" placeholder="Buscar"
+               onkeyup="Search('#nameClientSearch','#tablaClients','#sizeClients','filterClientServlet')">
         <span class="input-group-text"><i class="fas fa-search"></i></span>
       </div>
     </div>
 
     <div class="table-responsive">
-      <table class="table table-bordered align-middle">
+      <table id="tablaClients" class="table table-bordered align-middle">
         <thead class="table-warning">
         <tr>
           <th>N°</th>
@@ -159,7 +159,7 @@
           <th>Acciones</th>
         </tr>
         </thead>
-        <tbody id="tablaClientes">
+        <tbody>
         <%int count=1; for(Client client : listClients){%>
           <tr>
             <td><%=count%></td>

@@ -165,7 +165,7 @@ public class GestionClient {
         }
 
         return getAllClients().stream()
-                .filter(product -> product.getName().toLowerCase().contains(nombre.toLowerCase()))
+                .filter(client -> client.getName().toLowerCase().contains(nombre.toLowerCase()))
                 .collect(Collectors.toList());
     }
     public static Client getClient(String numeroDocumento) {

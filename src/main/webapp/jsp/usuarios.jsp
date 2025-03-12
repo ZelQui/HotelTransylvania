@@ -157,17 +157,19 @@
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <span>Mostrando
-        <input type="number" min="1" max="999" value="1" class="form-control d-inline-block" style="width: 3rem;">registros
+        <input type="number" id="sizeUsers" min="1" max="999"  value="<%=allEmplooyes.size()%>"
+               class="form-control d-inline-block" style="width: 5rem;" readonly> registros
       </span>
 
       <div class="input-group" style="max-width: 250px;">
-        <input type="text" class="form-control" id="nameSearch" placeholder="Buscar">
+        <input type="text" class="form-control" id="nameUserSearch" placeholder="Buscar por Nombre"
+               onkeyup="Search('#nameUserSearch','#tablaUsuarios','#sizeUsers','filterUserServlet')">
         <span class="input-group-text"><i class="fas fa-search"></i></span>
       </div>
     </div>
 
     <div class="table-responsive">
-      <table class="table table-bordered align-middle">
+      <table id="tablaUsuarios" class="table table-bordered align-middle">
         <thead class="table-warning">
         <tr>
           <th>N°</th>
@@ -179,7 +181,7 @@
           <th>Acciones</th>
         </tr>
         </thead>
-        <tbody id="tablaUsuarios">
+        <tbody>
           <% int count = 1; // Definir count antes del bucle %>
           <%for(usersEmployeeDTO employee : allEmplooyes){ %>
           <tr>

@@ -253,7 +253,7 @@ document.addEventListener("DOMContentLoaded", function () {
         usuarios: "jsp/usuarios.jsp",
         informacionHotelera: "jsp/informacionHotelera.jsp",
         habitaciones: "jsp/habitaciones.jsp",
-        habitacionesCategorias: "jsp/habitacionesCategorias.jsp",
+        habitacionesTipo: "jsp/habitacionesTipo.jsp",
         pisos: "jsp/pisos.jsp",
         habitacionesVenta: "jsp/habitacionesVenta.jsp",
         procesoSalida: "jsp/procesoSalida.jsp",
@@ -289,7 +289,7 @@ document.addEventListener("DOMContentLoaded", function () {
         reporteMensual: "reportes",
         informacionHotelera: "configuracion",
         habitaciones: "configuracion",
-        habitacionesCategorias: "configuracion",
+        habitacionesTipo: "configuracion",
         pisos: "configuracion"
     };
 

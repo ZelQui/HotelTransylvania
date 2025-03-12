@@ -4,7 +4,11 @@
 <%@ page import="jakarta.servlet.http.HttpSession" %>
 <%@ page import="org.mindrot.jbcrypt.BCrypt" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="development.team.hoteltransylvania.Model.InformationHotel" %>
+<%@ page import="development.team.hoteltransylvania.Business.GestionInformationHotel" %>
 <%
+  InformationHotel hotelInfo = GestionInformationHotel.getInformationHotel();
+
   HttpSession sessionObj = request.getSession(false);
   if (sessionObj == null || sessionObj.getAttribute("usuario") == null) {
     response.sendRedirect("index.jsp"); //Mensaje: Inicia sesión primero
@@ -75,10 +79,9 @@
       </button>
       <div class="sidebar-logo text-white">
         <i class="fa-solid fa-hotel "></i>
-        <span>Hotel Transylvania</span>
+        <span><%=hotelInfo.getName()%></span>
       </div>
     </div>
-
     <hr>
 
     <div class="sidebar-header">
@@ -89,7 +92,6 @@
     </div>
 
     <hr>
-
     <ul class="sidebar-nav">
       <li class="sidebar-item">
         <a id="btnInicio" href="#" class="sidebar-link" data-pagina="inicio" onclick="cargarPagina('jsp/inicio.jsp')">
@@ -189,9 +191,9 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a href="#" class="sidebar-link" data-pagina="habitacionesCategorias" onclick="cargarPagina('jsp/habitacionesCategorias.jsp')">
+            <a href="#" class="sidebar-link" data-pagina="habitacionesTipo" onclick="cargarPagina('jsp/habitacionesTipo.jsp')">
             <i class="fa-solid fa-gears me-2"></i>
-            Categorías
+            Tipos de Habitación
             </a>
           </li>
           <li class="sidebar-item">

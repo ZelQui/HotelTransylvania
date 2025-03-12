@@ -2,6 +2,7 @@ package development.team.hoteltransylvania.Business;
 
 import development.team.hoteltransylvania.DTO.usersEmployeeDTO;
 import development.team.hoteltransylvania.Model.Employee;
+import development.team.hoteltransylvania.Model.Room;
 import development.team.hoteltransylvania.Services.DataBaseUtil;
 import development.team.hoteltransylvania.Util.LoggerConfifg;
 
@@ -10,6 +11,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class GestionEmployee {
     private static final DataSource dataSource = DataBaseUtil.getDataSource();
@@ -189,4 +191,23 @@ public class GestionEmployee {
 
         return 0;
     }
+
+    public static List<usersEmployeeDTO> filterEmployee(String nombre) {
+        List<usersEmployeeDTO> allEmployees = getAllEmployees(); // Obtiene todos los empleados una sola vez
+
+        if (nombre == null || nombre.trim().isEmpty()) {
+            System.out.println("Lista completa de empleados retornada: " + allEmployees);
+            return allEmployees;
+        }
+
+        String nombreLower = nombre.toLowerCase(); // Convertir el criterio de búsqueda a minúsculas
+
+        List<usersEmployeeDTO> filteredEmployees = allEmployees.stream()
+                .filter(employee -> employee.getName_employee().toLowerCase().contains(nombreLower))
+                .collect(Collectors.toList());
+
+        System.out.println("Empleados filtrados: " + filteredEmployees);
+        return filteredEmployees;
+    }
+
 }
