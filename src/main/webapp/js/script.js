@@ -150,7 +150,6 @@ function editarClient(id) {
 function editarRoom(id) {
     document.getElementById("inputEditarHabitacion").value = id;
 
-
     fetch("roomcontroller?action=get&idroom=" + id)
         .then(response => response.json())  // Convertimos la respuesta a JSON
         .then(data => {
@@ -159,6 +158,17 @@ function editarRoom(id) {
             document.getElementById("tipoeditar").value = data.typeRoom.id;
             document.getElementById("precioEditar").value = data.price;
             document.getElementById("estatusEditar").value = data.statusRoom;
+        })
+        .catch(error => console.error("Error al obtener datos:", error));
+}
+function editarTypeRoom(id) {
+    document.getElementById("inputEditarTipoHabitacion").value = id;
+
+    fetch("typeroomcontroller?action=get&idtyperoom=" + id)
+        .then(response => response.json())  // Convertimos la respuesta a JSON
+        .then(data => {
+            // Llenar los campos del formulario con los datos obtenidos
+            document.getElementById("nombreEditar").value = data.name;
         })
         .catch(error => console.error("Error al obtener datos:", error));
 }

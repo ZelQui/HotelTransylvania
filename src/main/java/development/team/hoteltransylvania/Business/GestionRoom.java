@@ -109,7 +109,7 @@ public class GestionRoom {
                 "    h.piso_id, " +
                 "    p.nombre AS nombre_piso, " +
                 "    h.tipo_id, " +
-                "    t.nombre AS tipo_nombre, " +
+                "    t.nombre AS tipo_nombre, t.estatus AS estado_tipo, " +
                 "    h.precio, " +
                 "    h.estado_id, " +
                 "    e.estado AS estado_nombre " +
@@ -130,6 +130,7 @@ public class GestionRoom {
                 String number = rs.getString("numero");
                 int typeId = rs.getInt("tipo_id");
                 String typeName = rs.getString("tipo_nombre");
+                String statusTypeRoom = rs.getString("estado_tipo");
                 int statusId = rs.getInt("estado_id");
                 double price = rs.getDouble("precio");
                 int floorId = rs.getInt("piso_id");
@@ -138,7 +139,7 @@ public class GestionRoom {
                 StatusRoom statusRoom = StatusRoom.fromId(statusId);
 
                 // Se crea el objeto TypeRoom directamente sin consulta extra
-                TypeRoom typeRoom = new TypeRoom(typeId, typeName);
+                TypeRoom typeRoom = new TypeRoom(typeId, typeName, statusTypeRoom);
 
                 rooms.add(new Room(id, number, typeRoom, statusRoom, price, floorId));
             }
@@ -158,7 +159,7 @@ public class GestionRoom {
                 "    h.piso_id, " +
                 "    p.nombre AS nombre_piso, " +
                 "    h.tipo_id, " +
-                "    t.nombre AS tipo_nombre, " +
+                "    t.nombre AS tipo_nombre, t.estatus AS estado_tipo, " +
                 "    h.precio, " +
                 "    h.estado_id, " +
                 "    e.estado AS estado_nombre " +
@@ -184,18 +185,20 @@ public class GestionRoom {
                 String number = rs.getString("numero");
                 int typeId = rs.getInt("tipo_id");
                 String typeName = rs.getString("tipo_nombre");
+                String statusTypeR = rs.getString("estado_tipo");
                 int statusId = rs.getInt("estado_id");
                 double price = rs.getDouble("precio");
                 int floorId = rs.getInt("piso_id");
 
                 StatusRoom statusRoom = StatusRoom.fromId(statusId);
-                TypeRoom typeRoom = new TypeRoom(typeId, typeName);
+                TypeRoom typeRoom = new TypeRoom(typeId, typeName, statusTypeR);
 
                 rooms.add(new Room(id, number, typeRoom, statusRoom, price, floorId));
             }
 
         } catch (SQLException e) {
             LOGGER.severe("Error retrieving Rooms: " + e.getMessage());
+            System.out.println("Error retrieving Rooms: " + e.getMessage());
         }
 
         return rooms;
@@ -210,6 +213,7 @@ public class GestionRoom {
             }
         } catch (SQLException e) {
             LOGGER.severe("Error counting Rooms: " + e.getMessage());
+            System.out.println("Error counting Rooms: " + e.getMessage());
         }
         return 0;
     }
@@ -245,7 +249,8 @@ public class GestionRoom {
                 if (rs.next()) {
                     int tipoId = rs.getInt("id");
                     String nombre = rs.getString("nombre");
-                    typeRoom = new TypeRoom(tipoId, nombre);
+                    String estatus = rs.getString("estatus");
+                    typeRoom = new TypeRoom(tipoId, nombre, estatus);
                 }
             }
 
@@ -256,10 +261,10 @@ public class GestionRoom {
         return typeRoom;
     }
     public static Room getRoomById(int roomId) {
-        String sql = "SELECT h.id, h.numero, h.tipo_id, h.piso_id, h.precio, h.estado_id, \n" +
-                "t.nombre AS tipo_nombre \n" +
-                "FROM habitaciones h\n" +
-                "JOIN tipo_habitacion t ON h.tipo_id = t.id\n" +
+        String sql = "SELECT h.id, h.numero, h.tipo_id, h.piso_id, h.precio, h.estado_id, " +
+                "t.nombre AS tipo_nombre, t.estatus AS estado_tipo " +
+                "FROM habitaciones h " +
+                "JOIN tipo_habitacion t ON h.tipo_id = t.id " +
                 "WHERE h.id = ?;";
         Room room = null;
 
@@ -274,12 +279,13 @@ public class GestionRoom {
                 String number = rs.getString("numero");
                 int typeId = rs.getInt("tipo_id");
                 String typeName = rs.getString("tipo_nombre");
+                String estadoType = rs.getString("estado_tipo");
                 int statusId = rs.getInt("estado_id");
                 double price = rs.getDouble("precio");
                 int floorId = rs.getInt("piso_id");
 
                 StatusRoom statusRoom = StatusRoom.fromId(statusId);
-                TypeRoom typeRoom = new TypeRoom(typeId, typeName);
+                TypeRoom typeRoom = new TypeRoom(typeId, typeName, estadoType);
 
                 room = new Room(id, number, typeRoom, statusRoom, price, floorId);
             }

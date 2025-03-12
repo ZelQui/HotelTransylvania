@@ -48,9 +48,9 @@
       </div>
     </div>
 
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarTipo">
+    <%--<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarTipo">
       <i class="fas fa-plus"></i> Agregar nuevo
-    </button>
+    </button>--%>
   </div>
 
   <!-- Modal para agregar Tipo -->
@@ -62,13 +62,15 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="formTipo">
+          <!--Form Agregar-->
+          <form id="formTipo" action="typeroomcontroller" method="post">
             <input type="hidden" id="inputAgregarTipo">
+            <input type="hidden" value="add" name="actionTypeRoom">
             <div class="mb-3">
               <label for="nombre">Nombre</label>
-              <input type="text" class="form-control" id="nombre" required>
+              <input type="text" class="form-control" id="nombre" name="nombreType" required>
             </div>
-            <button type="button" class="btn btn-success">Guardar</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
           </form>
         </div>
       </div>
@@ -84,20 +86,14 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="formEditarTipo">
-            <input type="hidden" id="inputEditarTipo">
+          <!--Form Editar-->
+          <form id="formEditarTipo" action="typeroomcontroller" method="post">
+            <input type="hidden" name="idTypeRoom" id="inputEditarTipoHabitacion">
             <div class="mb-3">
               <label for="nombreEditar">Nombre</label>
-              <input type="text" class="form-control" id="nombreEditar" required>
+              <input type="text" class="form-control" id="nombreEditar" name="nombreEditar" required>
             </div>
-            <div class="mb-3">
-              <label for="estatusEditar">Estatus</label>
-              <select class="form-select" id="estatusEditar">
-                <option value="Activo">Activo</option>
-                <option value="Inactivo">Inactivo</option>
-              </select>
-            </div>
-            <button type="button" class="btn btn-success">Guardar</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
           </form>
         </div>
       </div>
@@ -107,17 +103,19 @@
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <span>Mostrando
-        <input type="number" min="1" max="999" value="1" class="form-control d-inline-block" style="width: 3rem;"> registros
+        <input type="number" min="1" max="999" id="sizeTypeRooms" value="<%=listTypeRooms.size()%>"
+               class="form-control d-inline-block" style="width: 5rem;" readonly> registros
       </span>
 
       <div class="input-group" style="max-width: 250px;">
-        <input type="text" class="form-control" id="nameSearch" placeholder="Buscar">
+        <input type="text" class="form-control" id="nameTRSearch" placeholder="Buscar"
+               onkeyup="Search('#nameTRSearch','#tablaHabitacionesTipos','#sizeTypeRooms','filterTypeRoomServlet')">
         <span class="input-group-text"><i class="fas fa-search"></i></span>
       </div>
     </div>
 
     <div class="table-responsive">
-      <table class="table table-bordered align-middle">
+      <table id="tablaHabitacionesTipos" class="table table-bordered align-middle">
         <thead class="table-warning">
         <tr>
           <th>N°</th>
@@ -126,15 +124,30 @@
           <th>Acciones</th>
         </tr>
         </thead>
-        <tbody id="tablaHabitacionesTipos">
+        <tbody>
         <%int count=1; for(TypeRoom typeRoom : listTypeRooms){%>
           <tr>
             <td><%=count%></td>
             <td><%=typeRoom.getName()%></td>
             <td>Activo</td>
             <td class="d-flex justify-content-center gap-1">
-              <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarTipo">✏️</button>
-              <button class="btn btn-danger btn-sm">❌</button>
+              <button class="btn btn-warning btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalEditarTipo"
+                      onclick="editarTypeRoom(<%=typeRoom.getId()%>)">✏️</button>
+              <% if (typeRoom.getStatus().equals("Activo")) { %>
+              <form action="typeroomcontroller" method="post">
+                <input type="hidden" name="idType" value="<%=typeRoom.getId()%>">
+                <input type="hidden" name="actionTypeRoom" value="inactivate">
+                <button class="btn btn-danger btn-sm">❌</button>
+              </form>
+              <% } else { %>
+              <form action="typeroomcontroller" method="post">
+                <input type="hidden" name="idType" value="<%=typeRoom.getId()%>">
+                <input type="hidden" name="actionTypeRoom" value="activate">
+                <button class="btn btn-success btn-sm">✅</button>
+              </form>
+              <% } %>
             </td>
           </tr>
         <%count++;}%>

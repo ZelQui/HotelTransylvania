@@ -1,9 +1,11 @@
 package development.team.hoteltransylvania.Business;
 
+import development.team.hoteltransylvania.DTO.usersEmployeeDTO;
 import development.team.hoteltransylvania.Model.*;
 import development.team.hoteltransylvania.Services.DataBaseUtil;
 import development.team.hoteltransylvania.Util.LoggerConfifg;
 
+import javax.lang.model.element.TypeElement;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,23 +22,25 @@ public class GestionTypeRoom {
     private static final Logger LOGGER = LoggerConfifg.getLogger(GestionRoom.class);
 
     public static boolean registerTypeRoom(TypeRoom typeRoom) {
-        String sql = "INSERT INTO tipo_habitacion (id, nombre) VALUES (?,?)";
+        String sql = "INSERT INTO tipo_habitacion (nombre, estatus) VALUES (?,?)";
 
         boolean result = false;
 
         try (Connection cnn = dataSource.getConnection();
              PreparedStatement ps = cnn.prepareStatement(sql)) {
 
-            ps.setInt(1, typeRoom.getId());
-            ps.setString(2, typeRoom.getName());
+            ps.setString(1, typeRoom.getName());
+            ps.setString(2, typeRoom.getStatus());
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 LOGGER.info("TypeRoom " + typeRoom.getId() + " registered successfully");
+                System.out.println("TypeRoom " + typeRoom.getId() + " registered successfully");
                 result = true;
             }
         } catch (SQLException e) {
             LOGGER.warning("Error when registering the TypeRoom: " + e.getMessage());
+            System.out.println("Error when registering the TypeRoom: " + e.getMessage());
         }
         return result;
     }
@@ -97,7 +101,7 @@ public class GestionTypeRoom {
         return result;
     }
     public static List<TypeRoom> getAllTypeRooms() {
-        String sql = "SELECT id, nombre FROM tipo_habitacion";
+        String sql = "SELECT id, nombre, estatus FROM tipo_habitacion";
 
         List<TypeRoom> typeRooms = new ArrayList<>();
 
@@ -108,12 +112,14 @@ public class GestionTypeRoom {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String nombre = rs.getString("nombre");
+                String estatus = rs.getString("estatus");
 
-                typeRooms.add(new TypeRoom(id, nombre));
+                typeRooms.add(new TypeRoom(id, nombre,estatus));
             }
 
         } catch (SQLException e) {
             LOGGER.severe("Error retrieving TypeRooms: " + e.getMessage());
+            System.out.println("Error retrieving TypeRooms: " + e.getMessage());
         }
         return typeRooms.stream()
                 .sorted(Comparator.comparingInt(TypeRoom::getId))
@@ -135,7 +141,7 @@ public class GestionTypeRoom {
     }
 
     public static List<TypeRoom> getTypeRoomsPaginated(int page, int pageSize) {
-        String sql = "SELECT th.id, th.nombre " +
+        String sql = "SELECT th.id, th.nombre, th.estatus " +
                 "FROM tipo_habitacion th " +
                 "ORDER BY th.id ASC " +
                 "LIMIT ? OFFSET ?";
@@ -151,15 +157,79 @@ public class GestionTypeRoom {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("nombre");
+                String estatus = rs.getString("estatus");
 
-                typeRooms.add(new TypeRoom(id, name));
+                typeRooms.add(new TypeRoom(id, name,estatus));
             }
 
         } catch (SQLException e) {
             LOGGER.severe("Error retrieving TypeRooms: " + e.getMessage());
+            System.out.println("Error retrieving TypeRooms: " + e.getMessage());
         }
 
         return typeRooms;
+    }
+    public static TypeRoom getTypeRoomById(int idType) {
+        String sql = "SELECT * FROM tipo_habitacion WHERE id = ?";
+        TypeRoom typeRoom = null;
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ps.setInt(1, idType);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int tipoId = rs.getInt("id");
+                    String nombre = rs.getString("nombre");
+                    String estatus = rs.getString("estatus");
+                    typeRoom = new TypeRoom(tipoId, nombre, estatus);
+                }
+            }
+
+        } catch (SQLException e) {
+            LOGGER.severe("Error retrieving TypeRoom: " + e.getMessage());
+        }
+
+        return typeRoom;
+    }
+
+    public static void updateStatus(int idType, String estado) {
+        String sql = "UPDATE tipo_habitacion SET estatus = ? WHERE id = ?";
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ps.setString(1, estado);
+            ps.setInt(2, idType);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                LOGGER.info("TypeRoom " + idType + " updated status successfully.");
+            } else {
+                LOGGER.warning("Error updating TypeRoom. No user found with ID: " + idType);
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error updating TypeRoom " + idType + ": " + e.getMessage());
+        }
+    }
+
+    public static List<TypeRoom> filterTypeRoom(String nombre) {
+        List<TypeRoom> allTypeRooms = getAllTypeRooms(); // Obtiene todos los empleados una sola vez
+
+        if (nombre == null || nombre.trim().isEmpty()) {
+            System.out.println("Lista completa de Tipo Habitaciones retornada: " + allTypeRooms);
+            return allTypeRooms;
+        }
+
+        String nombreLower = nombre.toLowerCase(); // Convertir el criterio de búsqueda a minúsculas
+
+        List<TypeRoom> filteredTypeRooms = allTypeRooms.stream()
+                .filter(typeRoom -> typeRoom.getName().toLowerCase().contains(nombreLower))
+                .collect(Collectors.toList());
+
+        System.out.println("Empleados filtrados: " + filteredTypeRooms);
+        return filteredTypeRooms;
     }
 }
 
