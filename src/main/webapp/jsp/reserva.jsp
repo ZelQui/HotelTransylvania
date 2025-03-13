@@ -57,7 +57,6 @@
                        onkeyup="buscarCliente()">
                 <div id="datosCliente">
                   <p style='color:red;' class='mt-2'>⚠️ Debes ingresar un número de documento</p>
-                  <%--
                   <div class="mb-3">
                     <label for="nombre">Nombre Completo</label>
                     <input type="text" class="form-control" id="nombre" name="nombre" required>
@@ -78,7 +77,6 @@
                     <label for="correo">Correo</label>
                     <input type="email" class="form-control" id="correo" name="correo" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
                   </div>
-                  --%>
                 </div>
               </div>
 

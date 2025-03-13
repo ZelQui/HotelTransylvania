@@ -1,3 +1,7 @@
+<%@ page import="development.team.hoteltransylvania.Model.Room" %>
+<%@ page import="java.util.List" %>
+<%@ page import="development.team.hoteltransylvania.Business.GestionRoom" %>
+<%@ page import="java.util.stream.Collectors" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -5,7 +9,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <title>Inicio</title>
 </head>
-
+<%
+    List<Room> rooms = GestionRoom.getAllRooms();
+    int quantityRooms = rooms.size();
+    int quantityRoomsFree = rooms.stream().filter(stado -> stado.getStatusRoom().getValue()==1).collect(Collectors.toUnmodifiableList()).size();
+    int quantityRoomsBusy = rooms.stream().filter(stado -> stado.getStatusRoom().getValue()==2).collect(Collectors.toUnmodifiableList()).size();
+%>
 <body>
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
     <h4><i class="fa-solid fa-house me-2"></i> Inicio</h4>
@@ -19,57 +28,45 @@
 
 <!-- Sección de habitaciones -->
 <div class="row custom-row-rooms">
-    <div class="col-lg-3 col-md-3 col-sm-12">
+    <div class="col-lg-4 col-md-4 col-sm-12">
         <div class="small-box bg-info">
             <div class="inner">
-                <h3>50</h3>
+                <h3><%=quantityRooms%></h3>
                 <p>Total Habitaciones</p>
             </div>
             <div class="icon">
                 <i class="fas fa-bed room-icon"></i>
             </div>
-            <a href="#" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
+            <a onclick="cargarPagina('jsp/habitaciones.jsp')" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
 
-    <div class="col-lg-3 col-md-3 col-sm-12">
+    <div class="col-lg-4 col-md-4 col-sm-12">
         <div class="small-box bg-success">
             <div class="inner">
-                <h3>23</h3>
+                <h3><%=quantityRoomsFree%></h3>
                 <p>Habitaciones Libres</p>
             </div>
             <div class="icon">
                 <i class="fas fa-bed room-icon"></i>
             </div>
-            <a href="#" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
+            <a onclick="cargarPagina('jsp/habitaciones.jsp')" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
 
-    <div class="col-lg-3 col-md-3 col-sm-12">
+    <div class="col-lg-4 col-md-4 col-sm-12">
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>27</h3>
+                <h3><%=quantityRoomsBusy%></h3>
                 <p>Habitaciones Ocupadas</p>
             </div>
             <div class="icon">
                 <i class="fas fa-bed room-icon"></i>
             </div>
-            <a href="#" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
+            <a onclick="cargarPagina('jsp/habitaciones.jsp')" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
 
-    <div class="col-lg-3 col-md-3 col-sm-12">
-        <div class="small-box bg-warning">
-            <div class="inner">
-                <h3>4</h3>
-                <p>Habitaciones Reservadas Hoy</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-bed room-icon"></i>
-            </div>
-            <a href="#" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
 </div>
 
 <!-- Sección de estadísticas y habitaciones ocupadas -->
