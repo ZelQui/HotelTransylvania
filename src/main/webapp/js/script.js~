@@ -267,9 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
         pisos: "jsp/pisos.jsp",
         habitacionesVenta: "jsp/habitacionesVenta.jsp",
         procesoSalida: "jsp/procesoSalida.jsp",
-        ventaDirecta: "jsp/ventaDirecta.jsp",
-        procesarHabitacion: "jsp/procesarHabitacion.jsp"
-
+        ventaDirecta: "jsp/ventaDirecta.jsp"
     };
 
     if (paginas[view]) {

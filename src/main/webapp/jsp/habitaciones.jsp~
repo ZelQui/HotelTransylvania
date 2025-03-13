@@ -54,7 +54,7 @@
           <option value="todos">Todos</option>
           <option value="libre">Libre</option>
           <option value="ocupada">Ocupada</option>
-          <option value="en_mantenimiento">En Mantenimiento</option>
+          <option value="en mantenimiento">En Mantenimiento</option>
         </select>
       </div>
     </div>
@@ -252,15 +252,21 @@
       $("#tablaHabitaciones tbody tr").each(function () {
         let estadoHabitacion = $(this).find("td:nth-child(6)").text().toLowerCase().trim();
 
-        if (estadoSeleccionado === "todos" || estadoHabitacion.includes(estadoSeleccionado)) {
+        if (estadoSeleccionado === "todos" || estadoHabitacion === estadoSeleccionado) {
           $(this).show();
         } else {
           $(this).hide();
         }
       });
-    });
-  });
 
+      actualizarContador();
+    });
+
+    function actualizarContador() {
+      let visibleRows = $("#tablaHabitaciones tbody tr:visible").length;
+      $("#sizeRooms").val(visibleRows);
+    }
+  });
 </script>
 
 </body>
