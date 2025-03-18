@@ -19,7 +19,8 @@ public class FilterUserController extends HttpServlet {
         resp.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = resp.getWriter()) {
             String filter = req.getParameter("filter");
-            List<usersEmployeeDTO> employees = GestionEmployee.filterEmployee(filter);
+            String estate = req.getParameter("estate");
+            List<usersEmployeeDTO> employees = GestionEmployee.filterEmployee(filter,estate);
             int count = 1;
             for (usersEmployeeDTO employee : employees) {
                 out.println("<tr>");

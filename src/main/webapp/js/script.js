@@ -222,12 +222,37 @@ function buscarCliente(){
         }
     });
 }
-function Search(wordKey, tableSearch, quantitySearch, controller) {
+/*function Search(wordKey, tableSearch, quantitySearch, controller) {
     var nameFilter = $(wordKey).val().trim();
 
     $.ajax({
         url: controller,
         data: { filter: nameFilter },
+        success: function (result) {
+            $(tableSearch).find("tbody").html(result);
+
+            // Extraer la cantidad de registros desde el comentario oculto
+            var match = result.match(/<!--COUNT:(\d+)-->/);
+            var cantidad = match ? parseInt(match[1]) : 0;
+
+            // Actualizar el input con la cantidad de registros
+            $(quantitySearch).val(cantidad);
+        },
+        error: function () {
+            console.error("Error al obtener los datos filtrados.");
+        }
+    });
+}*/
+window.Search = function(wordKey, stateKey, tableSearch, quantitySearch, controller) {
+    var nameFilter = $(wordKey).val().trim();
+    var stateFilter = $(stateKey).val().trim();
+    console.log("Filtros enviados:", { filter: nameFilter, estate: stateFilter });
+    $.ajax({
+        url: controller,
+        data: {
+            filter: nameFilter,
+            estate: stateFilter
+        },
         success: function (result) {
             $(tableSearch).find("tbody").html(result);
 

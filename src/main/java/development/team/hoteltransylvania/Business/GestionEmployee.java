@@ -192,22 +192,18 @@ public class GestionEmployee {
         return 0;
     }
 
-    public static List<usersEmployeeDTO> filterEmployee(String nombre) {
+    public static List<usersEmployeeDTO> filterEmployee(String nombre, String estado) {
         List<usersEmployeeDTO> allEmployees = getAllEmployees(); // Obtiene todos los empleados una sola vez
 
-        if (nombre == null || nombre.trim().isEmpty()) {
-            System.out.println("Lista completa de empleados retornada: " + allEmployees);
-            return allEmployees;
-        }
+        String estadoLower = estado.toLowerCase().trim();
+        String nombreLower = nombre.toLowerCase().trim();
 
-        String nombreLower = nombre.toLowerCase(); // Convertir el criterio de búsqueda a minúsculas
-
-        List<usersEmployeeDTO> filteredEmployees = allEmployees.stream()
-                .filter(employee -> employee.getName_employee().toLowerCase().contains(nombreLower))
+        return allEmployees.stream()
+                .filter(employee ->
+                        (nombreLower.isEmpty() || employee.getName_employee().toLowerCase().contains(nombreLower)) &&
+                                (estadoLower.isEmpty() || employee.getEstado_user().equalsIgnoreCase(estadoLower))
+                )
                 .collect(Collectors.toList());
-
-        System.out.println("Empleados filtrados: " + filteredEmployees);
-        return filteredEmployees;
     }
 
 }

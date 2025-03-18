@@ -36,15 +36,13 @@
       </div>
       <div class="col-3 d-flex justify-content-end align-items-center">
         <label for="estadoSelect" class="form-label m-0 me-2">Estado:</label>
-        <select id="estadoSelect" class="form-select  w-auto">
-          <option value="activos">Activos</option>
-          <option value="inactivos">Inactivos</option>
+        <select id="estadoSelect" class="form-select  w-auto"
+                onchange="Search('#nameUserSearch', '#estadoSelect','#tablaUsuarios','#sizeUsers','filterUserServlet')">
+          <option value="">Todos</option>
+          <option value="Activo">Activos</option>
+          <option value="Inactivo">Inactivos</option>
         </select>
-        <script>
-          document.getElementById("estadoSelect").addEventListener("change", function() {
-            console.log("Estado seleccionado:", this.value);
-          });
-        </script>
+
       </div>
     </div>
     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarUsuario">
@@ -163,7 +161,7 @@
 
       <div class="input-group" style="max-width: 250px;">
         <input type="text" class="form-control" id="nameUserSearch" placeholder="Buscar por Nombre"
-               onkeyup="Search('#nameUserSearch','#tablaUsuarios','#sizeUsers','filterUserServlet')">
+               onkeyup="Search('#nameUserSearch', '#estadoSelect','#tablaUsuarios','#sizeUsers','filterUserServlet')">
         <span class="input-group-text"><i class="fas fa-search"></i></span>
       </div>
     </div>
