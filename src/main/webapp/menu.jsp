@@ -130,6 +130,18 @@
             Catálogo de Productos
             </a>
           </li>
+          <li class="sidebar-item">
+            <a href="#" class="sidebar-link" data-pagina="habitacionesServicio" onclick="cargarPagina('jsp/habitacionesServicio.jsp')">
+              <i class="fa-solid fa-basket-shopping me-2"></i>
+              Vender Servicios
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#" class="sidebar-link" data-pagina="catalagoServicios" onclick="cargarPagina('jsp/catalagoServicios.jsp', 'catalogoServicios')">
+              <i class="fa-solid fa-basket-shopping me-2"></i>
+              Catálogo de Servicios
+            </a>
+          </li>
         </ul>
       </li>
       <li class="sidebar-item">

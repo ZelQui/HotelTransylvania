@@ -268,7 +268,10 @@ document.addEventListener("DOMContentLoaded", function () {
         habitacionesVenta: "jsp/habitacionesVenta.jsp",
         procesoSalida: "jsp/procesoSalida.jsp",
         ventaDirecta: "jsp/ventaDirecta.jsp",
-        procesarHabitacion: "jsp/procesarHabitacion.jsp"
+        procesarHabitacion: "jsp/procesarHabitacion.jsp",
+        venderServicios: "jsp/venderServicios.jsp",
+        catalogoServicios: "jsp/catalogoServicios.jsp",
+        habitacionesServicio: "jsp/habitacionesServicio.jsp"
 
     };
 
@@ -295,8 +298,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     const expandirMenu = {
-        venderProducto: "puntoVenta",
+        venderProductos: "puntoVenta",
         catalogoProductos: "puntoVenta",
+        venderServicio: "puntoVenta",
+        catalogoServicios: "puntoVenta",
         reporteDiario: "reportes",
         reporteMensual: "reportes",
         informacionHotelera: "configuracion",
