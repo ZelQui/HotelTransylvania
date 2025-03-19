@@ -172,6 +172,17 @@ function editarTypeRoom(id) {
         })
         .catch(error => console.error("Error al obtener datos:", error));
 }
+function editarFloor(id) {
+    document.getElementById("inputEditarPiso").value = id;
+
+    fetch("floorcontroller?action=get&idfloor=" + id)
+        .then(response => response.json())  // Convertimos la respuesta a JSON
+        .then(data => {
+            // Llenar los campos del formulario con los datos obtenidos
+            document.getElementById("nombreEditar").value = data.name;
+        })
+        .catch(error => console.error("Error al obtener datos:", error));
+}
 function editarUser(id) {
     document.getElementById("inputEditarUsuario").value = id;
 

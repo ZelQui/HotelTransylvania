@@ -1,12 +1,27 @@
+<%@ page import="development.team.hoteltransylvania.Business.GestionFloor" %>
+<%@ page import="development.team.hoteltransylvania.Model.Floor" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Niveles / Pisos</title>
+  <title>Pisos / Niveles</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
+<%
+  int pagina = 1;
+  int pageSize = 10;
+  String pageParam = request.getParameter("page");
+  if (pageParam != null) {
+    pagina = Integer.parseInt(pageParam);
+  }
+  List<Floor> listFloors = GestionFloor.getAllFloorsPaginated(pagina, pageSize);
+  int totalFloors = GestionFloor.getTotalFloors();
+  int totalPages = (int) Math.ceil((double) totalFloors / pageSize);
+%>
 
 <body>
 <div class="d-flex justify-content-between align-items-center">
@@ -29,7 +44,8 @@
       </div>
       <div class="col-3 d-flex justify-content-end align-items-center">
         <label for="estadoSelect" class="form-label m-0 me-2">Estado:</label>
-        <select id="estadoSelect" class="form-select  w-auto">
+        <select id="estadoSelect" class="form-select  w-auto"
+                onchange="Search('#nameTRSearch', '#estadoSelect','#tablaPisos','#sizeFloors','filterFloorServlet',1,10)">
           <option value="">Todos</option>
           <option value="Activo">Activos</option>
           <option value="Inactivo">Inactivos</option>
@@ -51,13 +67,15 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="formPiso">
+          <!--Form Agregar-->
+          <form id="formPiso" action="floorcontroller" method="post">
             <input type="hidden" id="inputAgregarPiso">
+            <input type="hidden" value="add" name="actionFloor">
             <div class="mb-3">
               <label for="nombre">Nombre</label>
-              <input type="text" class="form-control" id="nombre" required>
+              <input type="text" class="form-control" id="nombre" name="nombreFloor" required>
             </div>
-            <button type="button" class="btn btn-success">Guardar</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
           </form>
         </div>
       </div>
@@ -73,20 +91,14 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="formEditarPiso">
-            <input type="hidden" id="inputEditarPiso">
+          <!--Form Editar-->
+          <form id="formEditarPiso" action="floorcontroller" method="post">
+            <input type="hidden" name="idFloor" id="inputEditarPiso">
             <div class="mb-3">
               <label for="nombreEditar">Nombre</label>
-              <input type="text" class="form-control" id="nombreEditar" required>
+              <input type="text" class="form-control" id="nombreEditar" name="nombreEditar" required>
             </div>
-            <div class="mb-3">
-              <label for="estatusEditar">Estatus</label>
-              <select class="form-select" id="estatusEditar">
-                <option value="Activo">Activo</option>
-                <option value="Inactivo">Inactivo</option>
-              </select>
-            </div>
-            <button type="button" class="btn btn-success">Guardar</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
           </form>
         </div>
       </div>
@@ -96,17 +108,19 @@
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <span>Mostrando
-        <input type="number" min="1" max="999" value="1" class="form-control d-inline-block" style="width: 3rem;">registros
+        <input type="number" min="1" max="999" id="sizeFloors" value="<%=listFloors.size()%>"
+               class="form-control d-inline-block" style="width: 3rem;">registros
       </span>
 
       <div class="input-group" style="max-width: 250px;">
-        <input type="text" class="form-control" id="nameSearch" placeholder="Buscar">
+        <input type="text" class="form-control" id="nameSearch" placeholder="Buscar"
+               onkeyup="Search('#nameTRSearch', '#estadoSelect','#tablaPisos','#sizeFloors','filterFloorServlet',1,10)">
         <span class="input-group-text"><i class="fas fa-search"></i></span>
       </div>
     </div>
 
     <div class="table-responsive">
-      <table class="table table-bordered align-middle">
+      <table id="tablaPisos" class="table table-bordered align-middle">
         <thead class="table-warning">
         <tr>
           <th>N°</th>
@@ -115,26 +129,53 @@
           <th>Acciones</th>
         </tr>
         </thead>
-        <tbody id="tablaUsuarios">
+        <tbody >
+        <%int count=1; for(Floor floors : listFloors){%>
         <tr>
-          <td>1</td>
-          <td>Primer Piso</td>
-          <td>Activo</td>
+          <td><%=count%></td>
+          <td><%=floors.getName()%></td>
+          <td><%=floors.getStatus()%></td>
           <td class="d-flex justify-content-center gap-1">
-            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarPiso">✏️</button>
-            <button class="btn btn-danger btn-sm">❌</button>
+            <button class="btn btn-warning btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalEditarPiso"
+                    onclick="editarFloor(<%=floors.getId()%>)">✏️</button>
+            <% if (floors.getStatus().equals("Activo")) { %>
+            <form action="floorcontroller" method="post">
+              <input type="hidden" name="idFloor" value="<%=floors.getId()%>">
+              <input type="hidden" name="actionFloor" value="inactivate">
+              <button class="btn btn-danger btn-sm">❌</button>
+            </form>
+            <% } else { %>
+            <form action="floorcontroller" method="post">
+              <input type="hidden" name="idFloor" value="<%=floors.getId()%>">
+              <input type="hidden" name="actionFloor" value="activate">
+              <button class="btn btn-success btn-sm">✅</button>
+            </form>
+            <% } %>
           </td>
         </tr>
+        <%count++;}%>
         </tbody>
       </table>
     </div>
 
     <div class="d-flex justify-content-end align-items-center">
       <nav aria-label="Page navigation example">
-        <ul class="pagination mb-0">
-          <li class="page-item"><a class="page-link" href="#">Anterior</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
+        <ul class="pagination mb-0" id="pagination">
+          <li class="page-item <% if (pagina == 1) { %>disabled<% } %>">
+            <a class="page-link" href="menu.jsp?view=pisos&page=<%= pagina - 1 %>">Anterior</a>
+          </li>
+
+          <% for (int i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <% if (i == pagina) { %>active<% } %>">
+            <a class="page-link" href="menu.jsp?view=pisos&page=<%= i %>"><%= i %></a>
+          </li>
+          <% } %>
+
+          <li class="page-item <% if (pagina == totalPages) { %>disabled<% } %>">
+            <a class="page-link" href="menu.jsp?view=pisos&page=<%= pagina + 1 %>">Siguiente</a>
+          </li>
         </ul>
       </nav>
     </div>

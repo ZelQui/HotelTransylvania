@@ -2,8 +2,6 @@ package development.team.hoteltransylvania.Controller;
 
 import com.google.gson.Gson;
 import development.team.hoteltransylvania.Business.GestionTypeRoom;
-import development.team.hoteltransylvania.Model.Room;
-import development.team.hoteltransylvania.Model.StatusRoom;
 import development.team.hoteltransylvania.Model.TypeRoom;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -39,11 +37,11 @@ public class TypeRoomController extends HttpServlet {
         String action = req.getParameter("actionTypeRoom");
 
         switch (action) {
-            /*case "add":
+            case "add":
                 String nombre = req.getParameter("nombreType");
                 GestionTypeRoom.registerTypeRoom(new TypeRoom(1,nombre,"Activo"));
                 resp.sendRedirect("menu.jsp?view=habitacionesTipo");
-                break;*/
+                break;
             case "update":
                 int id = Integer.parseInt(req.getParameter("idTypeRoom"));
                 String nombreUpdate = req.getParameter("nombreEditar");

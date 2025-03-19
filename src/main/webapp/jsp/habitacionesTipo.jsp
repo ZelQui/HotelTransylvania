@@ -12,7 +12,6 @@
 </head>
 
 <%
-
   int pagina = 1;
   int pageSize = 10;
 
@@ -24,7 +23,6 @@
   List<TypeRoom> listTypeRooms = GestionTypeRoom.getAllTypeRoomsPaginated(pagina, pageSize);
   int totalRooms = GestionTypeRoom.getTotalTypeRooms();
   int totalPages = (int) Math.ceil((double) totalRooms / pageSize);
-
 %>
 
 <body>
@@ -57,9 +55,9 @@
       </div>
     </div>
 
-    <%--<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarTipo">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarTipo">
       <i class="fas fa-plus"></i> Agregar nuevo
-    </button>--%>
+    </button>
   </div>
 
   <!-- Modal para agregar Tipo -->

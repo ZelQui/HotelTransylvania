@@ -211,7 +211,7 @@
           <li class="sidebar-item">
             <a href="#" class="sidebar-link" data-pagina="pisos" onclick="cargarPagina('jsp/pisos.jsp')">
             <i class="fa-solid fa-gears me-2"></i>
-            Niveles / Pisos
+            Pisos / Niveles
             </a>
           </li>
         </ul>
