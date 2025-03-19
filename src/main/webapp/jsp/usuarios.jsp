@@ -26,7 +26,7 @@
 
 <%
   int pagina = 1;
-  int pageSize = 1;
+  int pageSize = 8;
 
   String pageParam = request.getParameter("page");
   if (pageParam != null) {

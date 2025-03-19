@@ -18,53 +18,75 @@ public class GestionFloor {
     private static final DataSource dataSource = DataBaseUtil.getDataSource();
     private static final Logger LOGGER = LoggerConfifg.getLogger(GestionFloor.class);
 
-    public static boolean registerFloor(Floor Floor) {
-        String sql = "INSERT INTO pisos (nombre, estatus) VALUES (?,?)";
+    public static boolean registerFloor(Floor floor) {
+        if (floorNameExists(floor.getName())) {
+            LOGGER.warning("Floor name " + floor.getName() + " already exists.");
+            return false;
+        }
 
+        String sql = "INSERT INTO pisos (nombre, estatus) VALUES (?, ?)";
         boolean result = false;
 
         try (Connection cnn = dataSource.getConnection();
              PreparedStatement ps = cnn.prepareStatement(sql)) {
 
-            ps.setString(1, Floor.getName());
-            ps.setString(2, Floor.getStatus());
+            ps.setString(1, floor.getName());
+            ps.setString(2, floor.getStatus());
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
-                LOGGER.info("Floor " + Floor.getId() + " registered successfully");
-                System.out.println("Floor " + Floor.getId() + " registered successfully");
+                LOGGER.info("Floor " + floor.getName() + " registered successfully.");
                 result = true;
             }
         } catch (SQLException e) {
-            LOGGER.warning("Error when registering the Floor: " + e.getMessage());
-            System.out.println("Error when registering the Floor: " + e.getMessage());
+            LOGGER.warning("Error registering the Floor: " + e.getMessage());
         }
         return result;
     }
-    public static boolean updateFloor(Floor FloorUpdate) {
-        String sql = "UPDATE pisos SET nombre = ? WHERE id = ?";
 
+    public static boolean updateFloor(Floor floorUpdate) {
+        if (floorNameExists(floorUpdate.getName())) {
+            LOGGER.warning("Cannot update. Floor name " + floorUpdate.getName() + " already exists.");
+            return false;
+        }
+
+        String sql = "UPDATE pisos SET nombre = ?, estatus = ? WHERE id = ?";
         boolean result = false;
 
         try (Connection cnn = dataSource.getConnection();
              PreparedStatement ps = cnn.prepareStatement(sql)) {
 
-            ps.setString(1, FloorUpdate.getName());
-            ps.setInt(2, FloorUpdate.getId());
+            ps.setString(1, floorUpdate.getName());
+            ps.setString(2, floorUpdate.getStatus());
+            ps.setInt(3, floorUpdate.getId());
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
-                LOGGER.info("floor " + FloorUpdate.getId() + " updated successfully.");
+                LOGGER.info("Floor " + floorUpdate.getId() + " updated successfully.");
                 result = true;
             } else {
-                LOGGER.warning("Error updating Floor found with ID: " + FloorUpdate.getId());
+                LOGGER.warning("No Floor found with ID: " + floorUpdate.getId());
             }
         } catch (SQLException e) {
-            LOGGER.severe("Error updating floor " + FloorUpdate.getId() + ": " + e.getMessage());
+            LOGGER.severe("Error updating Floor " + floorUpdate.getId() + ": " + e.getMessage());
         }
-
         return result;
     }
+
+    private static boolean floorNameExists(String floorName) {
+        String sql = "SELECT 1 FROM pisos WHERE nombre = ?";
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+            ps.setString(1, floorName);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error checking Floor name: " + e.getMessage());
+        }
+        return false;
+    }
+
     public static boolean deleteFloor(int FloorId) {
         String checkSql = "SELECT COUNT(*) FROM pisos WHERE id = ?";
         String deleteSql = "DELETE FROM pisos WHERE id = ?";

@@ -1,16 +1,11 @@
 package development.team.hoteltransylvania.Business;
 
-import development.team.hoteltransylvania.DTO.usersEmployeeDTO;
 import development.team.hoteltransylvania.Model.*;
 import development.team.hoteltransylvania.Services.DataBaseUtil;
 import development.team.hoteltransylvania.Util.LoggerConfifg;
 
-import javax.lang.model.element.TypeElement;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -19,12 +14,18 @@ import java.util.stream.Collectors;
 
 public class GestionTypeRoom {
     private static final DataSource dataSource = DataBaseUtil.getDataSource();
-    private static final Logger LOGGER = LoggerConfifg.getLogger(GestionRoom.class);
+    private static final Logger LOGGER = LoggerConfifg.getLogger(GestionTypeRoom.class);
 
     public static boolean registerTypeRoom(TypeRoom typeRoom) {
-        String sql = "INSERT INTO tipo_habitacion (nombre, estatus) VALUES (?,?)";
-
         boolean result = false;
+
+        if (!enumValueExists(typeRoom.getName())) {
+            if (!addEnumValue(typeRoom.getName())) {
+                return false; // Si no pudo agregar el nuevo ENUM, no continúa
+            }
+        }
+
+        String sql = "INSERT INTO tipo_habitacion (nombre, estatus) VALUES (?::tipo_habitacion_enum, ?)";
 
         try (Connection cnn = dataSource.getConnection();
              PreparedStatement ps = cnn.prepareStatement(sql)) {
@@ -34,20 +35,26 @@ public class GestionTypeRoom {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
-                LOGGER.info("TypeRoom " + typeRoom.getId() + " registered successfully");
-                System.out.println("TypeRoom " + typeRoom.getId() + " registered successfully");
+                LOGGER.info("TypeRoom " + typeRoom.getId() + " registered successfully.");
                 result = true;
             }
         } catch (SQLException e) {
             LOGGER.warning("Error when registering the TypeRoom: " + e.getMessage());
-            System.out.println("Error when registering the TypeRoom: " + e.getMessage());
         }
+
         return result;
     }
-    public static boolean updateTypeRoom(TypeRoom TypeRoomUpdate) {
-        String sql = "UPDATE tipo_habitacion SET nombre = ? WHERE id = ?";
 
+    public static boolean updateTypeRoom(TypeRoom TypeRoomUpdate) {
         boolean result = false;
+
+        if (!enumValueExists(TypeRoomUpdate.getName())) {
+            if (!addEnumValue(TypeRoomUpdate.getName())) {
+                return false; // Si no pudo agregar el nuevo ENUM, no continúa
+            }
+        }
+
+        String sql = "UPDATE tipo_habitacion SET nombre = ? WHERE id = ?";
 
         try (Connection cnn = dataSource.getConnection();
              PreparedStatement ps = cnn.prepareStatement(sql)) {
@@ -60,7 +67,7 @@ public class GestionTypeRoom {
                 LOGGER.info("Room " + TypeRoomUpdate.getId() + " updated successfully.");
                 result = true;
             } else {
-                LOGGER.warning("Error updating TypeRoom found with ID: " + TypeRoomUpdate.getId());
+                LOGGER.warning("No TypeRoom found with ID: " + TypeRoomUpdate.getId());
             }
         } catch (SQLException e) {
             LOGGER.severe("Error updating Room " + TypeRoomUpdate.getId() + ": " + e.getMessage());
@@ -68,6 +75,45 @@ public class GestionTypeRoom {
 
         return result;
     }
+
+    /**
+     * Método para verificar si un valor ya existe en el ENUM de PostgreSQL.
+     */
+    private static boolean enumValueExists(String typeRoomName) {
+        String sql = "SELECT 1 FROM pg_enum WHERE enumtypid = ("
+                + "SELECT oid FROM pg_type WHERE typname = 'tipo_habitacion_enum') "
+                + "AND enumlabel = ?";
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+            ps.setString(1, typeRoomName);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next(); // Si encuentra un resultado, el ENUM ya existe
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error checking ENUM value: " + e.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * Método para agregar un nuevo valor al ENUM en PostgreSQL.
+     */
+    private static boolean addEnumValue(String newValue) {
+        String enumType = "tipo_habitacion_enum"; // Reemplaza con el nombre real de tu ENUM
+        String sql = "ALTER TYPE " + enumType + " ADD VALUE '" + newValue + "'";
+
+        try (Connection cnn = dataSource.getConnection();
+            Statement stmt = cnn.createStatement()) { // Usamos Statement porque PreparedStatement no soporta ALTER TYPE
+            stmt.executeUpdate(sql);
+            LOGGER.info("Added new ENUM value: " + newValue);
+            return true;
+        } catch (SQLException e) {
+            LOGGER.severe("Error adding ENUM value: " + e.getMessage());
+            return false;
+        }
+    }
+
     public static boolean deleteTypeRoom(int TypeRoomId) {
         String checkSql = "SELECT COUNT(*) FROM tipo_habitacion WHERE id = ?";
         String deleteSql = "DELETE FROM tipo_habitacion WHERE id = ?";

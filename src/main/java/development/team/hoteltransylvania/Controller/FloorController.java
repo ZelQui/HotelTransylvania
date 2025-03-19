@@ -38,7 +38,7 @@ public class FloorController extends HttpServlet {
 
         switch (action) {
             case "add":
-                String nombre = req.getParameter("nombreType");
+                String nombre = req.getParameter("nombreFloor");
                 GestionFloor.registerFloor(new Floor(1,nombre,"Activo"));
                 resp.sendRedirect("menu.jsp?view=pisos");
                 break;

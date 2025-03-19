@@ -113,7 +113,7 @@
       </span>
 
       <div class="input-group" style="max-width: 250px;">
-        <input type="text" class="form-control" id="nameSearch" placeholder="Buscar"
+        <input type="text" class="form-control" id="nameTRSearch" placeholder="Buscar"
                onkeyup="Search('#nameTRSearch', '#estadoSelect','#tablaPisos','#sizeFloors','filterFloorServlet',1,10)">
         <span class="input-group-text"><i class="fas fa-search"></i></span>
       </div>
