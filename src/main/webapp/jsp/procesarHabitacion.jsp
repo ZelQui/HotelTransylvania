@@ -97,12 +97,12 @@
         <div class="row">
           <div class="col-md-6 mt-2">
             <label for="fechaEntrada" class="form-label"><strong>Fecha y Hora de Entrada:</strong></label>
-            <input type="date" class="form-control" id="fechaEntrada">
+            <input type="datetime-local" class="form-control" id="fechaEntrada">
           </div>
 
           <div class="col-md-6 mt-2">
             <label for="fechaSalida" class="form-label"><strong>Fecha y Hora de Salida:</strong></label>
-            <input type="text" class="form-control" id="fechaSalida">
+            <input type="datetime-local" class="form-control" id="fechaSalida">
           </div>
 
           <div class="col-md-6 mt-2">

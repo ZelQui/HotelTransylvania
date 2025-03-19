@@ -103,11 +103,11 @@
                 </div>
                 <div class="mb-3">
                   <label for="fechaEntrada">Fecha y Hora de Entrada</label>
-                  <input type="date" class="form-control" id="fechaEntrada" required>
+                  <input type="datetime-local" class="form-control" id="fechaEntrada" required>
                 </div>
                 <div class="mb-3">
                   <label for="fechaSalida">Fecha y Hora de Salida</label>
-                  <input type="date" class="form-control" id="fechaSalida" required>
+                  <input type="datetime-local" class="form-control" id="fechaSalida" required>
                 </div>
               </div>
 
@@ -221,11 +221,11 @@
             </div>
             <div class="mb-3">
               <label for="fechaEntradaDetalle">Fecha y Hora de Entrada</label>
-              <input type="date" class="form-control" id="fechaEntradaDetalle" readonly>
+              <input type="datetime-local" class="form-control" id="fechaEntradaDetalle" readonly>
             </div>
             <div class="mb-3">
               <label for="fechaSalidaDetalle">Fecha y Hora de Salida</label>
-              <input type="date" class="form-control" id="fechaSalidaDetalle" readonly>
+              <input type="datetime-local" class="form-control" id="fechaSalidaDetalle" readonly>
             </div>
           </div>
 
@@ -339,11 +339,11 @@
               </div>
               <div class="mb-3">
                 <label for="fechaEntradaEditar" class="form-label">Fecha y Hora de Entrada</label>
-                <input type="date" class="form-control" id="fechaEntradaEditar" required>
+                <input type="datetime-local" class="form-control" id="fechaEntradaEditar" required>
               </div>
               <div class="mb-3">
                 <label for="fechaSalidaEditar" class="form-label">Fecha y Hora de Salida</label>
-                <input type="date" class="form-control" id="fechaSalidaEditar" required>
+                <input type="datetime-local" class="form-control" id="fechaSalidaEditar" required>
               </div>
             </div>
 
