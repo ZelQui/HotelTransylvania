@@ -166,6 +166,73 @@ public class GestionEmployee {
 
         return allEmployees;
     }
+    public static List<usersEmployeeDTO> getAllEmployeesPaginated(int page, int pageSize) {
+        String sql = "SELECT e.id AS id_empleado, u.id AS id_usuario, e.nombre, u.username AS nombre_usuario, " +
+                "e.correo, r.nombre AS rol, u.estado " +
+                "FROM empleados as e " +
+                "JOIN usuarios AS u ON u.empleado_id=e.id " +
+                "JOIN roles AS r ON e.rol_id=r.id "+
+                "LIMIT ? OFFSET ?";
+        List<usersEmployeeDTO> allEmployees = new ArrayList<>();
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ps.setInt(1, pageSize);
+            ps.setInt(2, (page - 1) * pageSize);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id_empleado = rs.getInt("id_empleado");
+                int id_usuario = rs.getInt("id_usuario");
+                String nombre = rs.getString("nombre");
+                String nombre_usuario = rs.getString("nombre_usuario");
+                String email = rs.getString("correo");
+                String rol = rs.getString("rol");
+                String estado = rs.getString("estado");
+
+                allEmployees.add(new usersEmployeeDTO(id_empleado,id_usuario,nombre,nombre_usuario,email,rol,estado));
+            }
+
+        } catch (SQLException e) {
+            LOGGER.severe("Error retrieving employees: " + e.getMessage());
+        }
+
+        return allEmployees;
+    }
+    public static List<usersEmployeeDTO> filterEmployees(String nombre, String estado, int page, int size) {
+        List<usersEmployeeDTO> allEmployees = getAllEmployees(); // Obtiene todos los registros
+
+        String estadoLower = estado.toLowerCase().trim();
+        String nombreLower = nombre.toLowerCase().trim();
+
+        List<usersEmployeeDTO> filteredEmplooyes = allEmployees.stream()
+                .filter(employee ->
+                        (nombreLower.isEmpty() || employee.getName_employee().toLowerCase().contains(nombreLower)) &&
+                                (estadoLower.isEmpty() || employee.getEstado_user().equalsIgnoreCase(estadoLower))
+                )
+                .collect(Collectors.toList());
+
+        // Paginación: calcular desde qué índice empezar y hasta dónde llegar
+        int fromIndex = (page - 1) * size;
+        int toIndex = Math.min(fromIndex + size, filteredEmplooyes.size());
+
+        return filteredEmplooyes.subList(fromIndex, toIndex);
+    }
+    public static int countFilteredEmployee(String nombre, String estado) {
+        List<usersEmployeeDTO> allEmployee = getAllEmployees();
+
+        String estadoLower = estado.toLowerCase().trim();
+        String nombreLower = nombre.toLowerCase().trim();
+
+        return (int) allEmployee.stream()
+                .filter(employee ->
+                        (nombreLower.isEmpty() || employee.getName_employee().toLowerCase().contains(nombreLower)) &&
+                                (estadoLower.isEmpty() || employee.getEstado_user().equalsIgnoreCase(estadoLower))
+                )
+                .count();
+    }
 
     public int getUserIdByEmployeeId(int employeeId) {
         final String sql = "SELECT e.id AS id_empleado, u.id AS id_usuario " +
@@ -191,7 +258,6 @@ public class GestionEmployee {
 
         return 0;
     }
-
     public static List<usersEmployeeDTO> filterEmployee(String nombre, String estado) {
         List<usersEmployeeDTO> allEmployees = getAllEmployees(); // Obtiene todos los empleados una sola vez
 

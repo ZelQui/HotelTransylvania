@@ -27,7 +27,7 @@
   </nav>
 </div>
 <%
-  int pagina = 1; // Usamos "pagina" en lugar de "page"
+  int pagina = 1;
   int pageSize = 10;
 
   String pageParam = request.getParameter("page");
@@ -50,11 +50,12 @@
       </div>
       <div class="col-3 d-flex justify-content-end align-items-center">
         <label for="estadoSelect" class="form-label m-0 me-2">Estado:</label>
-        <select id="estadoSelect" class="form-select w-auto">
-          <option value="todos">Todos</option>
+        <select id="estadoSelect" class="form-select w-auto"
+        onchange="Search('#nameSearch','#estadoSelect','#tablaHabitaciones','#sizeRooms','filterRoomServlet', 1, 10)">
+          <option value="">Todos</option>
           <option value="libre">Libre</option>
           <option value="ocupada">Ocupada</option>
-          <option value="en_mantenimiento">En Mantenimiento</option>
+          <option value="en mantenimiento">En Mantenimiento</option>
         </select>
       </div>
     </div>
@@ -175,7 +176,7 @@
 
       <div class="input-group" style="max-width: 250px;">
         <input type="text" class="form-control" id="nameSearch" placeholder="Buscar"
-               onkeyup="Search('#nameSearch','#tablaHabitaciones','#sizeRooms','filterRoomServlet')">
+               onkeyup="Search('#nameSearch','#estadoSelect','#tablaHabitaciones','#sizeRooms','filterRoomServlet', 1, 10)">
         <span class="input-group-text"><i class="fas fa-search"></i></span>
       </div>
     </div>
@@ -223,7 +224,7 @@
 
     <div class="d-flex justify-content-end align-items-center">
       <nav aria-label="Page navigation">
-        <ul class="pagination">
+        <ul class="pagination" id="pagination">
           <li class="page-item <% if (pagina == 1) { %>disabled<% } %>">
             <a class="page-link" href="menu.jsp?view=habitaciones&page=<%= pagina - 1 %>">Anterior</a>
           </li>
@@ -243,31 +244,6 @@
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-  $(document).ready(function () {
-    $("#estadoSelect").on("change", function () {
-      let estadoSeleccionado = $(this).val().toLowerCase().trim();
-
-      $("#tablaHabitaciones tbody tr").each(function () {
-        let estadoHabitacion = $(this).find("td:nth-child(6)").text().toLowerCase().trim();
-
-        if (estadoSeleccionado === "todos" || estadoHabitacion === estadoSeleccionado) {
-          $(this).show();
-        } else {
-          $(this).hide();
-        }
-      });
-
-      actualizarContador();
-    });
-
-    function actualizarContador() {
-      let visibleRows = $("#tablaHabitaciones tbody tr:visible").length;
-      $("#sizeRooms").val(visibleRows);
-    }
-  });
-</script>
 
 </body>
 </html>

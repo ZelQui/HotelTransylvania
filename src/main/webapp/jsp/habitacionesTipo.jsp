@@ -12,7 +12,19 @@
 </head>
 
 <%
-  List<TypeRoom> listTypeRooms = GestionTypeRoom.getAllTypeRooms();
+
+  int pagina = 1;
+  int pageSize = 10;
+
+  String pageParam = request.getParameter("page");
+  if (pageParam != null) {
+    pagina = Integer.parseInt(pageParam);
+  }
+
+  List<TypeRoom> listTypeRooms = GestionTypeRoom.getAllTypeRoomsPaginated(pagina, pageSize);
+  int totalRooms = GestionTypeRoom.getTotalTypeRooms();
+  int totalPages = (int) Math.ceil((double) totalRooms / pageSize);
+
 %>
 
 <body>
@@ -36,15 +48,12 @@
       </div>
       <div class="col-3 d-flex justify-content-end align-items-center">
         <label for="estadoSelect" class="form-label m-0 me-2">Estado:</label>
-        <select id="estadoSelect" class="form-select  w-auto">
-          <option value="activos">Activos</option>
-          <option value="inactivos">Inactivos</option>
+        <select id="estadoSelect" class="form-select  w-auto"
+                onchange="Search('#nameTRSearch', '#estadoSelect','#tablaHabitacionesTipos','#sizeTypeRooms','filterTypeRoomServlet',1,10)">
+          <option value="">Todos</option>
+          <option value="Activo">Activos</option>
+          <option value="Inactivo">Inactivos</option>
         </select>
-        <script>
-          document.getElementById("estadoSelect").addEventListener("change", function() {
-            console.log("Estado seleccionado:", this.value);
-          });
-        </script>
       </div>
     </div>
 
@@ -109,7 +118,7 @@
 
       <div class="input-group" style="max-width: 250px;">
         <input type="text" class="form-control" id="nameTRSearch" placeholder="Buscar"
-               onkeyup="Search('#nameTRSearch','#tablaHabitacionesTipos','#sizeTypeRooms','filterTypeRoomServlet')">
+               onkeyup="Search('#nameTRSearch', '#estadoSelect','#tablaHabitacionesTipos','#sizeTypeRooms','filterTypeRoomServlet',1,10)">
         <span class="input-group-text"><i class="fas fa-search"></i></span>
       </div>
     </div>
@@ -129,7 +138,7 @@
           <tr>
             <td><%=count%></td>
             <td><%=typeRoom.getName()%></td>
-            <td>Activo</td>
+            <td><%=typeRoom.getStatus()%></td>
             <td class="d-flex justify-content-center gap-1">
               <button class="btn btn-warning btn-sm"
                       data-bs-toggle="modal"
@@ -157,10 +166,20 @@
 
     <div class="d-flex justify-content-end align-items-center">
       <nav aria-label="Page navigation example">
-        <ul class="pagination mb-0">
-          <li class="page-item"><a class="page-link" href="#">Anterior</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
+        <ul class="pagination mb-0" id="pagination">
+          <li class="page-item <% if (pagina == 1) { %>disabled<% } %>">
+            <a class="page-link" href="menu.jsp?view=habitaciones&page=<%= pagina - 1 %>">Anterior</a>
+          </li>
+
+          <% for (int i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <% if (i == pagina) { %>active<% } %>">
+            <a class="page-link" href="menu.jsp?view=habitaciones&page=<%= i %>"><%= i %></a>
+          </li>
+          <% } %>
+
+          <li class="page-item <% if (pagina == totalPages) { %>disabled<% } %>">
+            <a class="page-link" href="menu.jsp?view=habitaciones&page=<%= pagina + 1 %>">Siguiente</a>
+          </li>
         </ul>
       </nav>
     </div>

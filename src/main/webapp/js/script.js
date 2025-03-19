@@ -243,31 +243,70 @@ function buscarCliente(){
         }
     });
 }*/
-window.Search = function(wordKey, stateKey, tableSearch, quantitySearch, controller) {
+window.Search = function(wordKey, stateKey, tableSearch, quantitySearch, controller, page = 1, size = 10) {
     var nameFilter = $(wordKey).val().trim();
     var stateFilter = $(stateKey).val().trim();
-    console.log("Filtros enviados:", { filter: nameFilter, estate: stateFilter });
+    console.log("Filtros enviados:", { filter: nameFilter, estate: stateFilter, page, size });
+
     $.ajax({
         url: controller,
         data: {
             filter: nameFilter,
-            estate: stateFilter
+            estate: stateFilter,
+            page: page,
+            size: size
         },
         success: function (result) {
             $(tableSearch).find("tbody").html(result);
 
             // Extraer la cantidad de registros desde el comentario oculto
             var match = result.match(/<!--COUNT:(\d+)-->/);
-            var cantidad = match ? parseInt(match[1]) : 0;
+            var totalRecords = match ? parseInt(match[1]) : 0;
 
             // Actualizar el input con la cantidad de registros
-            $(quantitySearch).val(cantidad);
+            $(quantitySearch).val($("tbody tr").length);
+
+            // Actualizar la paginación
+            updatePagination(totalRecords, page, size, wordKey, stateKey, tableSearch, quantitySearch, controller);
         },
         error: function () {
             console.error("Error al obtener los datos filtrados.");
         }
     });
 }
+
+function updatePagination(totalRecords, currentPage, size, wordKey, stateKey, tableSearch, quantitySearch, controller) {
+    var totalPages = Math.ceil(totalRecords / size);
+    var paginationContainer = $("#pagination"); // Contenedor de paginación
+    paginationContainer.empty();
+
+    // Botón "Anterior"
+    var prevDisabled = currentPage === 1 ? "disabled" : "";
+    paginationContainer.append(
+        `<li class="page-item ${prevDisabled}">
+            <a class="page-link" href="#" onclick="Search('${wordKey}', '${stateKey}', '${tableSearch}', '${quantitySearch}', '${controller}', ${currentPage - 1}, ${size})">⬅️</a>
+        </li>`
+    );
+
+    // Números de página
+    for (var i = 1; i <= totalPages; i++) {
+        var activeClass = i === currentPage ? "active" : "";
+        paginationContainer.append(
+            `<li class="page-item ${activeClass}">
+                <a class="page-link" href="#" onclick="Search('${wordKey}', '${stateKey}', '${tableSearch}', '${quantitySearch}', '${controller}', ${i}, ${size})">${i}</a>
+            </li>`
+        );
+    }
+
+    // Botón "Siguiente"
+    var nextDisabled = currentPage === totalPages ? "disabled" : "";
+    paginationContainer.append(
+        `<li class="page-item ${nextDisabled}">
+            <a class="page-link" href="#" onclick="Search('${wordKey}', '${stateKey}', '${tableSearch}', '${quantitySearch}', '${controller}', ${currentPage + 1}, ${size})">➡️</a>
+        </li>`
+    );
+}
+
 
 document.addEventListener("DOMContentLoaded", function () {
     // Obtener parámetros de la URL

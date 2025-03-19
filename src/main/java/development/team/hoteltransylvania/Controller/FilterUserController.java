@@ -20,7 +20,15 @@ public class FilterUserController extends HttpServlet {
         try (PrintWriter out = resp.getWriter()) {
             String filter = req.getParameter("filter");
             String estate = req.getParameter("estate");
-            List<usersEmployeeDTO> employees = GestionEmployee.filterEmployee(filter,estate);
+
+            // Obtener parámetros de paginación (si no existen, se asignan valores por defecto)
+            int page = req.getParameter("page") != null ? Integer.parseInt(req.getParameter("page")) : 1;
+            int size = req.getParameter("size") != null ? Integer.parseInt(req.getParameter("size")) : 10;
+
+            // Obtener lista paginada
+            List<usersEmployeeDTO> employees = GestionEmployee.filterEmployees(filter, estate, page, size);
+            int totalEmployee = GestionEmployee.countFilteredEmployee(filter, estate);
+
             int count = 1;
             for (usersEmployeeDTO employee : employees) {
                 out.println("<tr>");
@@ -59,7 +67,7 @@ public class FilterUserController extends HttpServlet {
 
                 count++;
             }
-            out.println("<!--COUNT:" + employees.size() + "-->");
+            out.println("<!--COUNT:" + totalEmployee + "-->");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

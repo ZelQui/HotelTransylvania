@@ -1,5 +1,6 @@
 package development.team.hoteltransylvania.Business;
 
+import development.team.hoteltransylvania.DTO.usersEmployeeDTO;
 import development.team.hoteltransylvania.Model.*;
 import development.team.hoteltransylvania.Services.DataBaseUtil;
 import development.team.hoteltransylvania.Util.LoggerConfifg;
@@ -203,6 +204,39 @@ public class GestionRoom {
 
         return rooms;
     }
+    public static List<Room> filterRooms(String nombre, String estado, int page, int size) {
+        List<Room> allRooms = getAllRooms(); // Obtiene todos los registros
+
+        String estadoLower = estado.toLowerCase().trim();
+        String nombreLower = nombre.toLowerCase().trim();
+
+        List<Room> filteredRooms = allRooms.stream()
+                .filter(room ->
+                        (nombreLower.isEmpty() || room.getNumber().contains(nombreLower)) &&
+                                (estadoLower.isEmpty() || room.getStatusRoom().getName().equalsIgnoreCase(estadoLower))
+                )
+                .collect(Collectors.toList());
+
+        // Paginación: calcular desde qué índice empezar y hasta dónde llegar
+        int fromIndex = (page - 1) * size;
+        int toIndex = Math.min(fromIndex + size, filteredRooms.size());
+
+        return filteredRooms.subList(fromIndex, toIndex);
+    }
+    public static int countFilteredRooms(String nombre, String estado) {
+        List<Room> allRooms = getAllRooms();
+
+        String estadoLower = estado.toLowerCase().trim();
+        String nombreLower = nombre.toLowerCase().trim();
+
+        return (int) allRooms.stream()
+                .filter(room ->
+                        (nombreLower.isEmpty() || room.getNumber().contains(nombreLower)) &&
+                                (estadoLower.isEmpty() || room.getStatusRoom().getName().equalsIgnoreCase(estadoLower))
+                ).count();
+    }
+
+
     public static int getTotalRooms() {
         String sql = "SELECT COUNT(*) FROM habitaciones";
         try (Connection cnn = dataSource.getConnection();
@@ -217,17 +251,6 @@ public class GestionRoom {
         }
         return 0;
     }
-
-
-
-    /*public static TypeRoom getTypeRoom(String nombre) {
-        try {
-            return TypeRoom.valueOf(nombre.toLowerCase());
-        } catch (IllegalArgumentException e) {
-            LOGGER.severe("Error: TypeRoom no válido -> '" + nombre + "'");
-            return null; // Manejar errores adecuadamente
-        }
-    }*/
     public static StatusRoom getStatusRoom(String nombre) {
         try {
             return StatusRoom.valueOf(nombre.toLowerCase());
@@ -296,15 +319,6 @@ public class GestionRoom {
         return room;
     }
 
-    public static List<Room> filterRooms(String nombre) {
-        if (nombre == null || nombre.isEmpty()) {
-            return getAllRooms();
-        }
-
-        return getAllRooms().stream()
-                .filter(room -> room.getNumber().contains(nombre))
-                .collect(Collectors.toList());
-    }
 
     public static int quantityFloors(){
         String sql = "SELECT COUNT(*) FROM pisos";

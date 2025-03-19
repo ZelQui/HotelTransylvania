@@ -1,6 +1,7 @@
 <%@ page import="development.team.hoteltransylvania.Business.GestionEmployee" %>
 <%@ page import="java.util.List" %>
 <%@ page import="development.team.hoteltransylvania.DTO.usersEmployeeDTO" %>
+<%@ page import="development.team.hoteltransylvania.Model.User" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -24,7 +25,17 @@
 </div>
 
 <%
-  List<usersEmployeeDTO> allEmplooyes = GestionEmployee.getAllEmployees();
+  int pagina = 1;
+  int pageSize = 1;
+
+  String pageParam = request.getParameter("page");
+  if (pageParam != null) {
+    pagina = Integer.parseInt(pageParam);
+  }
+
+  List<usersEmployeeDTO> allEmplooyes = GestionEmployee.getAllEmployeesPaginated(pagina, pageSize);
+  int totalEmployee = GestionEmployee.getAllEmployees().size();
+  int totalPages = (int) Math.ceil((double) totalEmployee / pageSize);
 %>
 
 <!-- Sección de usuarios -->
@@ -37,7 +48,7 @@
       <div class="col-3 d-flex justify-content-end align-items-center">
         <label for="estadoSelect" class="form-label m-0 me-2">Estado:</label>
         <select id="estadoSelect" class="form-select  w-auto"
-                onchange="Search('#nameUserSearch', '#estadoSelect','#tablaUsuarios','#sizeUsers','filterUserServlet')">
+                onchange="Search('#nameUserSearch', '#estadoSelect','#tablaUsuarios','#sizeUsers','filterUserServlet', 1, 10)">
           <option value="">Todos</option>
           <option value="Activo">Activos</option>
           <option value="Inactivo">Inactivos</option>
@@ -161,7 +172,7 @@
 
       <div class="input-group" style="max-width: 250px;">
         <input type="text" class="form-control" id="nameUserSearch" placeholder="Buscar por Nombre"
-               onkeyup="Search('#nameUserSearch', '#estadoSelect','#tablaUsuarios','#sizeUsers','filterUserServlet')">
+               onkeyup="Search('#nameUserSearch', '#estadoSelect','#tablaUsuarios','#sizeUsers','filterUserServlet', 1, 10)">
         <span class="input-group-text"><i class="fas fa-search"></i></span>
       </div>
     </div>
@@ -222,10 +233,20 @@
 
     <div class="d-flex justify-content-end align-items-center">
       <nav aria-label="Page navigation example">
-        <ul class="pagination mb-0">
-          <li class="page-item"><a class="page-link" href="#">Anterior</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
+        <ul class="pagination mb-0" id="pagination">
+          <li class="page-item <% if (pagina == 1) { %>disabled<% } %>">
+            <a class="page-link" href="menu.jsp?view=usuarios&page=<%= pagina - 1 %>">Anterior</a>
+          </li>
+
+          <% for (int i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <% if (i == pagina) { %>active<% } %>">
+            <a class="page-link" href="menu.jsp?view=usuarios&page=<%= i %>"><%= i %></a>
+          </li>
+          <% } %>
+
+          <li class="page-item <% if (pagina == totalPages) { %>disabled<% } %>">
+            <a class="page-link" href="menu.jsp?view=usuarios&page=<%= pagina + 1 %>">Siguiente</a>
+          </li>
         </ul>
       </nav>
     </div>

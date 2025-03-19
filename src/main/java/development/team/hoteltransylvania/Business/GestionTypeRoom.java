@@ -125,6 +125,66 @@ public class GestionTypeRoom {
                 .sorted(Comparator.comparingInt(TypeRoom::getId))
                 .collect(Collectors.toList());
     }
+    public static List<TypeRoom> getAllTypeRoomsPaginated(int page, int pageSize) {
+        String sql = "SELECT id, nombre, estatus FROM tipo_habitacion " +
+                "LIMIT ? OFFSET ?";;
+
+        List<TypeRoom> typeRooms = new ArrayList<>();
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ps.setInt(1, pageSize);
+            ps.setInt(2, (page - 1) * pageSize);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String nombre = rs.getString("nombre");
+                String estatus = rs.getString("estatus");
+
+                typeRooms.add(new TypeRoom(id, nombre,estatus));
+            }
+
+        } catch (SQLException e) {
+            LOGGER.severe("Error retrieving TypeRooms: " + e.getMessage());
+            System.out.println("Error retrieving TypeRooms: " + e.getMessage());
+        }
+        return typeRooms.stream()
+                .sorted(Comparator.comparingInt(TypeRoom::getId))
+                .collect(Collectors.toList());
+    }
+    public static List<TypeRoom> filterTypeRooms(String nombre, String estado, int page, int size) {
+        List<TypeRoom> allTypes = getAllTypeRooms(); // Obtiene todos los registros
+
+        String estadoLower = estado.toLowerCase().trim();
+        String nombreLower = nombre.toLowerCase().trim();
+
+        List<TypeRoom> filteredRoomsType = allTypes.stream()
+                .filter(room ->
+                        (nombreLower.isEmpty() || room.getName().toLowerCase().contains(nombreLower)) &&
+                                (estadoLower.isEmpty() || room.getStatus().equalsIgnoreCase(estadoLower))
+                )
+                .collect(Collectors.toList());
+
+        // Paginación: calcular desde qué índice empezar y hasta dónde llegar
+        int fromIndex = (page - 1) * size;
+        int toIndex = Math.min(fromIndex + size, filteredRoomsType.size());
+
+        return filteredRoomsType.subList(fromIndex, toIndex);
+    }
+    public static int countFilteredTypeRooms(String nombre, String estado) {
+        List<TypeRoom> allTypes = getAllTypeRooms();
+
+        String estadoLower = estado.toLowerCase().trim();
+        String nombreLower = nombre.toLowerCase().trim();
+
+        return (int) allTypes.stream()
+                .filter(room ->
+                        (nombreLower.isEmpty() || room.getName().toLowerCase().contains(nombreLower)) &&
+                                (estadoLower.isEmpty() || room.getStatus().equalsIgnoreCase(estadoLower))
+                ).count();
+    }
 
     public static int getTotalTypeRooms() {
         String sql = "SELECT COUNT(*) FROM tipo_habitacion";

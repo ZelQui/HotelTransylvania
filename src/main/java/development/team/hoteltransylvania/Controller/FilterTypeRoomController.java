@@ -1,8 +1,10 @@
 package development.team.hoteltransylvania.Controller;
 
 import development.team.hoteltransylvania.Business.GestionEmployee;
+import development.team.hoteltransylvania.Business.GestionRoom;
 import development.team.hoteltransylvania.Business.GestionTypeRoom;
 import development.team.hoteltransylvania.DTO.usersEmployeeDTO;
+import development.team.hoteltransylvania.Model.Room;
 import development.team.hoteltransylvania.Model.TypeRoom;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,7 +23,15 @@ public class FilterTypeRoomController extends HttpServlet {
         resp.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = resp.getWriter()) {
             String filter = req.getParameter("filter");
-            List<TypeRoom> typeRooms = GestionTypeRoom.filterTypeRoom(filter);
+            String estate = req.getParameter("estate");
+
+            // Obtener parámetros de paginación (si no existen, se asignan valores por defecto)
+            int page = req.getParameter("page") != null ? Integer.parseInt(req.getParameter("page")) : 1;
+            int size = req.getParameter("size") != null ? Integer.parseInt(req.getParameter("size")) : 10;
+
+            // Obtener lista paginada
+            List<TypeRoom> typeRooms = GestionTypeRoom.filterTypeRooms(filter, estate, page, size);
+            int totalRoom = GestionTypeRoom.countFilteredTypeRooms(filter, estate);
             int count = 1;
             for (TypeRoom typeRoom : typeRooms) {
                 out.println("<tr>");
@@ -51,7 +61,7 @@ public class FilterTypeRoomController extends HttpServlet {
 
                 count++;
             }
-            out.println("<!--COUNT:" + typeRooms.size() + "-->");
+            out.println("<!--COUNT:" + totalRoom + "-->");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

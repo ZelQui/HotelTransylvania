@@ -30,14 +30,10 @@
       <div class="col-3 d-flex justify-content-end align-items-center">
         <label for="estadoSelect" class="form-label m-0 me-2">Estado:</label>
         <select id="estadoSelect" class="form-select  w-auto">
-          <option value="activos">Activos</option>
-          <option value="inactivos">Inactivos</option>
+          <option value="">Todos</option>
+          <option value="Activo">Activos</option>
+          <option value="Inactivo">Inactivos</option>
         </select>
-        <script>
-          document.getElementById("estadoSelect").addEventListener("change", function() {
-            console.log("Estado seleccionado:", this.value);
-          });
-        </script>
       </div>
     </div>
 
