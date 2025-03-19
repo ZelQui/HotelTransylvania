@@ -280,7 +280,16 @@ function updatePagination(totalRecords, currentPage, size, wordKey, stateKey, ta
     const paginationContainer = $("#pagination");
     paginationContainer.empty();
 
-    if (totalPages === 0) return;
+    // Contenedor donde quieres mostrar el mensaje
+    const noDataContainer = $("#no-data");
+    noDataContainer.empty();
+
+    if (totalPages === 0) {
+        noDataContainer.html('<div class="alert alert-info text-center">No hay datos para mostrar</div>');
+        return;
+    }
+
+    noDataContainer.empty(); // Limpiamos el mensaje si había uno
 
     const prevPage = currentPage > 1 ? currentPage - 1 : 1;
     const nextPage = currentPage < totalPages ? currentPage + 1 : totalPages;

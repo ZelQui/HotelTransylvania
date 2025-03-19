@@ -233,6 +233,7 @@
 
     <div class="d-flex justify-content-end align-items-center">
       <nav aria-label="Page navigation example">
+        <div id="no-data"></div>
         <ul class="pagination mb-0" id="pagination">
           <li class="page-item <% if (pagina == 1) { %>disabled<% } %>">
             <a class="page-link" aria-label="Anterior" href="menu.jsp?view=usuarios&page=<%= pagina - 1 %>">Anterior</a>
@@ -240,12 +241,12 @@
 
           <% for (int i = 1; i <= totalPages; i++) { %>
           <li class="page-item <% if (i == pagina) { %>active<% } %>">
-            <a class="page-link" aria-label="Anterior" href="menu.jsp?view=usuarios&page=<%= i %>"><%= i %></a>
+            <a class="page-link" aria-label="Actual" href="menu.jsp?view=usuarios&page=<%= i %>"><%= i %></a>
           </li>
           <% } %>
 
           <li class="page-item <% if (pagina == totalPages) { %>disabled<% } %>">
-            <a class="page-link" href="menu.jsp?view=usuarios&page=<%= pagina + 1 %>">Siguiente</a>
+            <a class="page-link" aria-label="Siguiente" href="menu.jsp?view=usuarios&page=<%= pagina + 1 %>">Siguiente</a>
           </li>
         </ul>
       </nav>

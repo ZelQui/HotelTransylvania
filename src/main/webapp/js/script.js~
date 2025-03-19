@@ -276,36 +276,49 @@ window.Search = function(wordKey, stateKey, tableSearch, quantitySearch, control
 }
 
 function updatePagination(totalRecords, currentPage, size, wordKey, stateKey, tableSearch, quantitySearch, controller) {
-    var totalPages = Math.ceil(totalRecords / size);
-    var paginationContainer = $("#pagination"); // Contenedor de paginación
+    const totalPages = Math.ceil(totalRecords / size);
+    const paginationContainer = $("#pagination");
     paginationContainer.empty();
 
+    // Contenedor donde quieres mostrar el mensaje
+    const noDataContainer = $("#no-data");
+    noDataContainer.empty();
+
+    if (totalPages === 0) {
+        noDataContainer.html('<div class="alert alert-info text-center">No hay datos para mostrar</div>');
+        return;
+    }
+
+    noDataContainer.empty(); // Limpiamos el mensaje si había uno
+
+    const prevPage = currentPage > 1 ? currentPage - 1 : 1;
+    const nextPage = currentPage < totalPages ? currentPage + 1 : totalPages;
+
     // Botón "Anterior"
-    var prevDisabled = currentPage === 1 ? "disabled" : "";
     paginationContainer.append(
-        `<li class="page-item ${prevDisabled}">
-            <a class="page-link" href="#" onclick="Search('${wordKey}', '${stateKey}', '${tableSearch}', '${quantitySearch}', '${controller}', ${currentPage - 1}, ${size})">Anterior</a>
+        `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="if(${currentPage === 1}) return false; Search('${wordKey}', '${stateKey}', '${tableSearch}', '${quantitySearch}', '${controller}', ${prevPage}, ${size})">Anterior</a>
         </li>`
     );
 
     // Números de página
-    for (var i = 1; i <= totalPages; i++) {
-        var activeClass = i === currentPage ? "active" : "";
+    for (let i = 1; i <= totalPages; i++) {
         paginationContainer.append(
-            `<li class="page-item ${activeClass}">
+            `<li class="page-item ${i === currentPage ? 'active' : ''}">
                 <a class="page-link" href="#" onclick="Search('${wordKey}', '${stateKey}', '${tableSearch}', '${quantitySearch}', '${controller}', ${i}, ${size})">${i}</a>
             </li>`
         );
     }
 
     // Botón "Siguiente"
-    var nextDisabled = currentPage === totalPages ? "disabled" : "";
     paginationContainer.append(
-        `<li class="page-item ${nextDisabled}">
-            <a class="page-link" href="#" onclick="Search('${wordKey}', '${stateKey}', '${tableSearch}', '${quantitySearch}', '${controller}', ${currentPage + 1}, ${size})">Siguiente</a>
+        `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="if(${currentPage === totalPages}) return false; Search('${wordKey}', '${stateKey}', '${tableSearch}', '${quantitySearch}', '${controller}', ${nextPage}, ${size})">Siguiente</a>
         </li>`
     );
 }
+
+
 
 
 document.addEventListener("DOMContentLoaded", function () {

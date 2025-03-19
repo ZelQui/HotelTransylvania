@@ -232,7 +232,8 @@
     </div>
 
     <div class="d-flex justify-content-end align-items-center">
-      <nav aria-label="Page navigation example">
+      <nav aria-label="Page navigation">
+        <div id="no-data"></div>
         <ul class="pagination mb-0" id="pagination">
           <li class="page-item <% if (pagina == 1) { %>disabled<% } %>">
             <a class="page-link" aria-label="Anterior" href="menu.jsp?view=usuarios&page=<%= pagina - 1 %>">Anterior</a>
