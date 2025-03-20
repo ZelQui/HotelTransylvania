@@ -265,6 +265,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="js/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- Script para validar que ambas contraseñas coincidan antes de enviar el formulario -->
 <script>
@@ -286,16 +287,30 @@
                 errorMensaje.style.display = "block";
             } else {
                 errorMensaje.style.display = "none";
+                // Mostrar alerta de contraseña actualizada
+                event.preventDefault(); // Evitar el envío del formulario para mostrar la alerta
+                Swal.fire({
+                    title: 'Contraseña Actualizada',
+                    text: 'Tu contraseña ha sido actualizada exitosamente.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                    allowOutsideClick: false // Evitar cerrar la alerta hasta que se presione el botón OK
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById("formCambiarPassword").submit(); // Enviar el formulario después de la alerta
+                    }
+                });
             }
         });
+    });
 
-        // Evitar problemas con múltiples modales abiertos
-        document.addEventListener("hidden.bs.modal", function () {
-            document.body.classList.remove("modal-open");
-            document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
-        });
+    // Evitar problemas con múltiples modales abiertos
+    document.addEventListener("hidden.bs.modal", function () {
+        document.body.classList.remove("modal-open");
+        document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
     });
 </script>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
