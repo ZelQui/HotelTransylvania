@@ -10,6 +10,7 @@
 </head>
 
 <body>
+<!-- Encabezado -->
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
     <h4><i class="fa-solid fa-right-from-bracket me-2"></i> Verificación de Salida</h4>
 
@@ -84,10 +85,5 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-    function handleClick(roomNumber) {
-        alert("Has seleccionado la habitación " + roomNumber);
-    }
-</script>
 </body>
 </html>

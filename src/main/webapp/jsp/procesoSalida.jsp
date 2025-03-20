@@ -7,6 +7,7 @@
 </head>
 
 <body>
+<!-- Encabezado -->
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
   <h4><i class="fa-solid fa-right-from-bracket me-2"></i> Proceso de Salida</h4>
 
@@ -121,20 +122,21 @@
       </table>
     </div>
 
-    <p class="fw-bold">Total a Pagar: S/.30</p>
+    <p class="fw-bold mt-3 mt-sm-3">TOTAL: S/.30</p>
 
     <!-- Método de Pago en un Select-->
-    <div class="form-group">
-      <label for="metodoPago">Método de Pago:</label>
-      <select class="form-control" id="metodoPago">
-        <option value="efectivo">Efectivo</option>
-        <option value="tarjeta">Tarjeta de Créditos</option>
-        <option value="transferencia">Transferencia</option>
-        <option value="yape">Yape</option>
-        <option value="plin">Plin</option>
+    <div class="input-group my-3" id="metodoPagoGroup" style="max-width: 320px;">
+      <label class="input-group-text" for="metodoPago"><i class="fa-solid fa-money-bill-wave"></i></label>
+      <select class="form-select" id="metodoPago" name="metodoPago" required>
+        <option value="" selected disabled>Método de Pago</option>
+        <option value="Efectivo">Efectivo</option>
+        <option value="Transferencia">Transferencia</option>
+        <option value="Tarjeta">Tarjeta</option>
+        <option value="Yape / Plin">Yape / Plin</option>
       </select>
     </div>
 
+    <!-- Botones -->
     <div class="d-flex flex-column flex-md-row justify-content-between mt-2">
       <div class="d-flex flex-column flex-md-row justify-content-start gap-1">
         <button class="btn btn-danger w-auto w-sm-100" onclick="cargarPagina('jsp/VerificacionSalidas.jsp')"> Regresar </button>

@@ -58,7 +58,7 @@
           statusName = statusName.substring(0, 1).toUpperCase() + statusName.substring(1);
       %>
       <div class="col-md-3">
-        <button class="room-card <%= colorOfStatus %>" onclick="handleClick(101)">
+        <button class="room-card <%= colorOfStatus %>" onclick="cargarPagina('jsp/procesarHabitacion.jsp')">
           <h5><%= room.getNumber() %></h5> <%-- Número --%>
           <span><%= room.getTypeRoom().getName().toUpperCase() %></span> <%-- Tipo --%>
           <i class="fas fa-bed room-icon"></i>
@@ -97,7 +97,7 @@
           statusName = statusName.substring(0, 1).toUpperCase() + statusName.substring(1);
       %>
       <div class="col-md-3">
-        <button class="room-card <%= colorOfStatus %>" onclick="handleClick(101)">
+        <button class="room-card <%= colorOfStatus %>" onclick="cargarPagina('jsp/procesarHabitacion.jsp')">
           <h5><%= room.getNumber() %></h5> <%-- Número --%>
           <span><%= room.getTypeRoom().getName().toUpperCase() %></span> <%-- Tipo --%>
           <i class="fas fa-bed room-icon"></i>
