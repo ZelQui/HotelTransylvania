@@ -364,9 +364,9 @@
 
 <!-- Script para mostrar alertas >-->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         // Alertas de los botones de reiniciar, eliminar y activar usuario
-        document.getElementById('contenido').addEventListener('submit', function (e) {
+        document.getElementById('contenido').addEventListener('submit', function(e) {
             if (e.target.classList.contains('form-restart')) {
                 e.preventDefault();
                 Swal.fire({
@@ -425,7 +425,7 @@
         });
 
         // Alerta para registrar usuario
-        document.getElementById('contenido').addEventListener('submit', function (e) {
+        document.getElementById('contenido').addEventListener('submit', function(e) {
             if (e.target.id === 'formUsuario') {
                 e.preventDefault();
                 Swal.fire({
@@ -448,7 +448,7 @@
         });
 
         // Alerta para editar usuario
-        document.getElementById('contenido').addEventListener('submit', function (e) {
+        document.getElementById('contenido').addEventListener('submit', function(e) {
             if (e.target.id === 'formEditarUsuario') {
                 e.preventDefault();
                 Swal.fire({
