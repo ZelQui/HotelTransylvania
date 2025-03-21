@@ -2,6 +2,7 @@
 <%@ page import="development.team.hoteltransylvania.Model.Room" %>
 <%@ page import="development.team.hoteltransylvania.Business.GestionRoom" %>
 <%@ page import="java.util.stream.Collectors" %>
+<%@ page import="development.team.hoteltransylvania.Model.Floor" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -12,8 +13,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <%
-    List<Room> rooms = GestionRoom.getAllRooms();
-    int floors = GestionRoom.quantityFloors();
+    List<Room> rooms = GestionRoom.getAllRoomsReservation(); //cmabiar por habitaciones habilkitadas segun piso
+    List<Floor> floors = GestionRoom.quantityFloorsEnabled();
 %>
 <body>
 <!-- Encabezado -->
@@ -33,9 +34,9 @@
     <li class="nav-item">
         <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#todos">Todos</button>
     </li>
-    <%for (int i = 1; i <= floors; i++) {%>
+    <%for (Floor floor : floors) {%>
     <li class="nav-item">
-        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#<%=i%>-nivel">Nivel <%=i%>
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#<%=floor.getId()%>-nivel"><%=floor.getName()%>
         </button>
     </li>
     <%}%>
@@ -81,14 +82,13 @@
     </div>
 
     <%
-        for (int i = 1; i <= floors; i++) {
-            int floor = i;
+        for (Floor floor : floors) {
     %>
-    <div id="<%=i%>-nivel" class="tab-pane fade show">
+    <div id="<%=floor.getId()%>-nivel" class="tab-pane fade show">
         <div class="row">
             <%
                 List<Room> roomsFloor = rooms.stream()
-                        .filter(room -> room.getFloor() == floor)
+                        .filter(room -> room.getFloor() == floor.getId())
                         .collect(Collectors.toList());
                 for (Room room : roomsFloor) {
                     String colorOfStatus;

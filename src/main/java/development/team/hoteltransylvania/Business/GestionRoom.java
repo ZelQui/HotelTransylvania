@@ -103,6 +103,57 @@ public class GestionRoom {
 
         return result;
     }
+    public static List<Room> getAllRoomsReservation() {
+        String sql = "SELECT " +
+                "    h.id, " +
+                "    h.numero, " +
+                "    h.piso_id, " +
+                "    p.nombre AS nombre_piso, " +
+                "    h.tipo_id, " +
+                "    t.nombre AS tipo_nombre, t.estatus AS estado_tipo, " +
+                "    h.precio, " +
+                "    h.estado_id, " +
+                "    e.estado AS estado_nombre " +
+                "FROM habitaciones h " +
+                "JOIN tipo_habitacion t ON h.tipo_id = t.id " +
+                "JOIN estado_habitacion e ON h.estado_id = e.id " +
+                "JOIN pisos p ON p.id = h.piso_id " +
+                "WHERE p.estatus = 'Activo'";  // Paginación aplicada
+
+        List<Room> rooms = new ArrayList<>();
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String number = rs.getString("numero");
+                int typeId = rs.getInt("tipo_id");
+                String typeName = rs.getString("tipo_nombre");
+                String statusTypeRoom = rs.getString("estado_tipo");
+                int statusId = rs.getInt("estado_id");
+                double price = rs.getDouble("precio");
+                int floorId = rs.getInt("piso_id");
+
+                // Se obtiene el enum directamente por ID
+                StatusRoom statusRoom = StatusRoom.fromId(statusId);
+
+                // Se crea el objeto TypeRoom directamente sin consulta extra
+                TypeRoom typeRoom = new TypeRoom(typeId, typeName, statusTypeRoom);
+
+                rooms.add(new Room(id, number, typeRoom, statusRoom, price, floorId));
+            }
+
+        } catch (SQLException e) {
+            LOGGER.severe("Error retrieving Rooms: " + e.getMessage());
+        }
+
+        return rooms.stream()
+                .sorted(Comparator.comparing((Room room) -> Integer.parseInt(room.getNumber())))
+                .collect(Collectors.toList());
+    }
     public static List<Room> getAllRooms() {
         String sql = "SELECT " +
                 "    h.id, " +
@@ -321,7 +372,7 @@ public class GestionRoom {
 
 
     public static int quantityFloors(){
-        String sql = "SELECT COUNT(*) FROM pisos";
+        String sql = "SELECT COUNT(*) FROM pisos WHERE estatus = 'Activo'";
         int count = 0;
 
         try (Connection cnn = dataSource.getConnection();
@@ -337,6 +388,25 @@ public class GestionRoom {
             throw new RuntimeException(e);
         }
         return count;
+    }
+
+    public static List<Floor> quantityFloorsEnabled(){
+        String sql = "SELECT * FROM pisos WHERE estatus = 'Activo'";
+        List<Floor> floors = new ArrayList<>();
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                floors.add(new Floor(rs.getInt("id"), rs.getString("nombre"), rs.getString("estatus")));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return floors;
     }
 }
 
