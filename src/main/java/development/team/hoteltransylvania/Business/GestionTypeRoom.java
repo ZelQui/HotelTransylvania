@@ -301,22 +301,40 @@ public class GestionTypeRoom {
     }
 
     public static void updateStatus(int idType, String estado) {
-        String sql = "UPDATE tipo_habitacion SET estatus = ? WHERE id = ?";
+        // SQL para verificar si hay habitaciones de este tipo que no estén libres
+        String checkSql = "SELECT COUNT(*) FROM habitaciones h " +
+                "JOIN estado_habitacion eh ON h.estado_id = eh.id " +
+                "WHERE h.tipo_id = ? AND eh.id != 1";
+
+        // SQL para actualizar el estado del tipo de habitación
+        String updateSql = "UPDATE tipo_habitacion SET estatus = ? WHERE id = ?";
 
         try (Connection cnn = dataSource.getConnection();
-             PreparedStatement ps = cnn.prepareStatement(sql)) {
+             PreparedStatement checkPs = cnn.prepareStatement(checkSql)) {
 
-            ps.setString(1, estado);
-            ps.setInt(2, idType);
+            checkPs.setInt(1, idType);
+            ResultSet rs = checkPs.executeQuery();
 
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                LOGGER.info("TypeRoom " + idType + " updated status successfully.");
-            } else {
-                LOGGER.warning("Error updating TypeRoom. No user found with ID: " + idType);
+            if (rs.next() && rs.getInt(1) > 0) {
+                LOGGER.warning("No se puede actualizar el estado del tipo de habitación " + idType +
+                        " porque hay habitaciones de este tipo que no están libres.");
+                return; // Salimos del método si hay habitaciones ocupadas
+            }
+
+            // Si todas las habitaciones de este tipo están libres, procedemos con la actualización
+            try (PreparedStatement updatePs = cnn.prepareStatement(updateSql)) {
+                updatePs.setString(1, estado);
+                updatePs.setInt(2, idType);
+
+                int rowsAffected = updatePs.executeUpdate();
+                if (rowsAffected > 0) {
+                    LOGGER.info("Tipo de habitación " + idType + " actualizado exitosamente.");
+                } else {
+                    LOGGER.warning("No se encontró el tipo de habitación con ID: " + idType);
+                }
             }
         } catch (SQLException e) {
-            LOGGER.severe("Error updating TypeRoom " + idType + ": " + e.getMessage());
+            LOGGER.severe("Error actualizando el tipo de habitación " + idType + ": " + e.getMessage());
         }
     }
 
