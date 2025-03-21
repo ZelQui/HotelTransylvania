@@ -118,7 +118,7 @@ public class GestionRoom {
                 "JOIN tipo_habitacion t ON h.tipo_id = t.id " +
                 "JOIN estado_habitacion e ON h.estado_id = e.id " +
                 "JOIN pisos p ON p.id = h.piso_id " +
-                "WHERE p.estatus = 'Activo'";  // Paginación aplicada
+                "WHERE p.estatus = 'Activo' and t.estatus = 'Activo'";  // Paginación aplicada
 
         List<Room> rooms = new ArrayList<>();
 
