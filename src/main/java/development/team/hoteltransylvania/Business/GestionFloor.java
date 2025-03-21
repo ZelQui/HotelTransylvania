@@ -274,22 +274,40 @@ public class GestionFloor {
     }
 
     public static void updateStatus(int idFloor, String estado) {
-        String sql = "UPDATE pisos SET estatus = ? WHERE id = ?";
+        // SQL para verificar si hay habitaciones que no están libres en el piso
+        String checkSql = "SELECT COUNT(*) FROM habitaciones h " +
+                "JOIN estado_habitacion eh ON h.estado_id = eh.id " +
+                "WHERE h.piso_id = ? AND eh.id != 1";
+
+        // SQL para actualizar el estado del piso
+        String updateSql = "UPDATE pisos SET estatus = ? WHERE id = ?";
 
         try (Connection cnn = dataSource.getConnection();
-             PreparedStatement ps = cnn.prepareStatement(sql)) {
+             PreparedStatement checkPs = cnn.prepareStatement(checkSql)) {
 
-            ps.setString(1, estado);
-            ps.setInt(2, idFloor);
+            checkPs.setInt(1, idFloor);
+            ResultSet rs = checkPs.executeQuery();
 
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                LOGGER.info("Floor " + idFloor + " updated status successfully.");
-            } else {
-                LOGGER.warning("Error updating Floor. No user found with ID: " + idFloor);
+            if (rs.next() && rs.getInt(1) > 0) {
+                LOGGER.warning("No se puede actualizar el estado del piso " + idFloor +
+                        " porque hay habitaciones que no están libres.");
+                return; // Salimos del método si hay habitaciones ocupadas
+            }
+
+            // Si todas las habitaciones están libres, procedemos con la actualización
+            try (PreparedStatement updatePs = cnn.prepareStatement(updateSql)) {
+                updatePs.setString(1, estado);
+                updatePs.setInt(2, idFloor);
+
+                int rowsAffected = updatePs.executeUpdate();
+                if (rowsAffected > 0) {
+                    LOGGER.info("Piso " + idFloor + " actualizado exitosamente.");
+                } else {
+                    LOGGER.warning("No se encontró el piso con ID: " + idFloor);
+                }
             }
         } catch (SQLException e) {
-            LOGGER.severe("Error updating Floor " + idFloor + ": " + e.getMessage());
+            LOGGER.severe("Error actualizando el piso " + idFloor + ": " + e.getMessage());
         }
     }
 
