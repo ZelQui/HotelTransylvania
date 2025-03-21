@@ -296,7 +296,7 @@ function updatePagination(totalRecords, currentPage, size, wordKey, stateKey, ta
     noDataContainer.empty();
 
     if (totalPages === 0) {
-        noDataContainer.html('<div class="alert alert-info text-center">No hay datos para mostrar</div>');
+        noDataContainer.html('<div class="alert alert-info w-100 text-center">No hay datos para mostrar</div>');
         return;
     }
 
