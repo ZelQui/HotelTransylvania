@@ -1,3 +1,8 @@
+<%@ page import="development.team.hoteltransylvania.Model.TypeRoom" %>
+<%@ page import="java.util.List" %>
+<%@ page import="development.team.hoteltransylvania.Business.GestionTypeRoom" %>
+<%@ page import="development.team.hoteltransylvania.Model.Floor" %>
+<%@ page import="development.team.hoteltransylvania.Business.GestionRoom" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -7,7 +12,10 @@
   <title>Reserva</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
+<%
+  List<TypeRoom> allTypeRooms = GestionTypeRoom.getAllTypeRooms();
+  List<Floor> floors = GestionRoom.quantityFloorsEnabled();
+%>
 <body>
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
   <h4><i class="fa-solid fa-calendar-days me-2"></i> Reserva</h4>
@@ -86,11 +94,17 @@
                 <div class="mb-3">
                   <label for="tipoHabitacion">Tipo de Habitación</label>
                   <select class="form-select" id="tipoHabitacion" required>
-                    <option value="#">Simple</option>
-                    <option value="#">Doble</option>
-                    <option value="#">Matrimonial</option>
-                    <option value="#">Suite</option>
-                    <option value="#">Presidencial</option>
+                    <%for(TypeRoom typeRoom : allTypeRooms){%>
+                      <option value="<%=typeRoom.getId()%>"><%=typeRoom.getName()%></option>
+                    <%}%>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="piso">Piso</label>
+                  <select class="form-select" id="piso" required>
+                    <%for(Floor floor : floors){%>
+                      <option value="<%=floor.getId()%>"><%=floor.getName()%></option>
+                    <%}%>
                   </select>
                 </div>
                 <div class="mb-3">
