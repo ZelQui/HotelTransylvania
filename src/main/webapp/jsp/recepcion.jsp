@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <%
-    List<Room> rooms = GestionRoom.getAllRoomsReservation(); //cmabiar por habitaciones habilkitadas segun piso
+    List<Room> rooms = GestionRoom.getAllRoomsReservation(); // Cambiar por habitaciones habilitadas segun piso
     List<Floor> floors = GestionRoom.quantityFloorsEnabled();
 %>
 <body>
@@ -42,9 +42,22 @@
     <%}%>
 </ul>
 
+<%
+    // Verificamos si hay al menos un piso activo
+    boolean hayPisoActivo = false;
+    for (Floor floor : floors) {
+        if (floor.getStatus().equals("Activo")) {
+            hayPisoActivo = true;
+            break;
+        }
+    }
+%>
+
 <!-- Contenido de pestañas -->
 <div class="tab-content mt-3">
 
+    <% if (hayPisoActivo) { %>
+    <!-- Aquí renderiza todo el código actual de las habitaciones y los pisos -->
     <div id="todos" class="tab-pane fade show active">
         <div class="row">
             <%
@@ -67,23 +80,23 @@
             <div class="col-md-3">
                 <button class="room-card <%= colorOfStatus %>" onclick="cargarPagina('jsp/procesarHabitacion.jsp')">
                     <h5><%= room.getNumber() %>
-                    </h5> <%-- Número --%>
-                    <span><%= room.getTypeRoom().getName().toUpperCase() %></span> <%-- Tipo --%>
+                    </h5>
+                    <span><%= room.getTypeRoom().getName().toUpperCase() %></span>
                     <i class="fas fa-bed room-icon"></i>
                     <div class="room-status">
-                        <span><%= statusName %> </span> <%-- Estado --%>
+                        <span><%= statusName %></span>
                         <i class="fas fa-arrow-right"></i>
                     </div>
                 </button>
             </div>
             <% } %>
-
         </div>
     </div>
 
-    <%
-        for (Floor floor : floors) {
+    <% for (Floor floor : floors) {
+        if (!floor.getStatus().equals("Activo")) continue; // Solo mostrar si está activo
     %>
+
     <div id="<%=floor.getId()%>-nivel" class="tab-pane fade show">
         <div class="row">
             <%
@@ -109,11 +122,11 @@
             <div class="col-md-3">
                 <button class="room-card <%= colorOfStatus %>" onclick="cargarPagina('jsp/procesarHabitacion.jsp')">
                     <h5><%= room.getNumber() %>
-                    </h5> <%-- Número --%>
-                    <span><%= room.getTypeRoom().getName().toUpperCase() %></span> <%-- Tipo --%>
+                    </h5>
+                    <span><%= room.getTypeRoom().getName().toUpperCase() %></span>
                     <i class="fas fa-bed room-icon"></i>
                     <div class="room-status">
-                        <span><%= statusName %> </span> <%-- Estado --%>
+                        <span><%= statusName %></span>
                         <i class="fas fa-arrow-right"></i>
                     </div>
                 </button>
@@ -121,17 +134,19 @@
             <% } %>
         </div>
     </div>
-    <%}%>
+    <% } %>
+
+    <% } else { %>
+    <!-- Mensaje si no hay pisos activos -->
+    <div class="alert alert-info text-center" role="alert">
+        No hay habitaciones habilitadas. Agregue o habilite un piso desde la opción <strong>'Pisos'</strong>.
+    </div>
+    <% } %>
 
 </div>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-    function handleClick(roomNumber) {
-        alert("Has seleccionado la habitación " + roomNumber);
-    }
-</script>
 </body>
 </html>
