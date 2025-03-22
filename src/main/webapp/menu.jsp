@@ -37,6 +37,8 @@
     <link rel="stylesheet" href="css/habitaciones.css">
     <!-- Estilo de ventaDirecta.jsp y venderProductos.jsp -->
     <link rel="stylesheet" href="css/venderProductos.css">
+    <!-- FullCalendar CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
 </head>
 
 <body>
@@ -106,6 +108,12 @@
                 <a href="#" class="sidebar-link" data-pagina="reserva" onclick="cargarPagina('jsp/reserva.jsp')">
                     <i class="fa-solid fa-calendar-days me-2"></i>
                     <span>Reserva</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link" data-pagina="reservaCalendario" onclick="cargarPagina('jsp/reservaCalendario.jsp')">
+                    <i class="fa-solid fa-calendar-days me-2"></i>
+                    <span>Reserva en Calendario</span>
                 </a>
             </li>
             <li class="sidebar-item">
@@ -266,6 +274,8 @@
 <script src="js/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 
 <!-- Script para validar que ambas contraseñas coincidan antes de enviar el formulario -->
 <script>
@@ -472,5 +482,107 @@
     });
 
 </script>
+
+<!-- Script para cargar el calendario -->
+<script>
+    function iniciarCalendario() {
+        const fecha = new Date();
+        const opcionesFecha = { year: 'numeric', month: 'long', day: 'numeric' };
+        const fechaTexto = fecha.toLocaleDateString('es-ES', opcionesFecha);
+        document.getElementById('currentDate').textContent = fecha.toLocaleDateString('es-ES', opcionesFecha);
+
+
+        const calendarEl = document.getElementById('calendar');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            selectable: true,
+            locale: 'es',
+            timeZone: 'America/Lima',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+            },
+            buttonText: {
+                today:    'Hoy',
+                month:    'Mes',
+                week:     'Semana',
+                day:      'Día',
+                list:     'Lista'
+            },
+            select: function (info) {
+                // Formatear fechas para los inputs datetime-local
+                const entrada = new Date(info.start);
+                const salida = new Date(info.end);
+                const formatoISO = (fecha) => fecha.toISOString().slice(0, 16); // yyyy-mm-ddThh:mm
+
+                // Autocompletar los campos de fecha y hora del modal
+                document.getElementById('fechaEntradaRango').value = formatoISO(entrada);
+                document.getElementById('fechaSalidaRango').value = formatoISO(salida);
+
+                // Mostrar el modal de rango
+                const rangoModal = new bootstrap.Modal(document.getElementById('rangoReservaModal'));
+                rangoModal.show();
+
+                // Asignar la acción de submit al formulario de rango
+                document.getElementById('formRango').onsubmit = function (e) {
+                    e.preventDefault();
+                    const nombreCliente = document.getElementById('nombreRango').value.trim();
+                    const habitacion = document.getElementById('habitacionRango').value;
+                    const start = document.getElementById('fechaEntradaRango').value;
+                    const end = document.getElementById('fechaSalidaRango').value;
+
+                    if (nombreCliente && habitacion && start && end) {
+                        calendar.addEvent({
+                            title: `Reserva - ${nombreCliente}`,
+                            room: `Habitación - ${habitacion}`,
+                            start: start,
+                            end: end,
+                            allDay: false
+                        });
+                        rangoModal.hide();
+                        e.target.reset();
+                        alert("✅ ¡Reserva registrada exitosamente!");
+                        console.log("Reserva registrada:", nombreCliente, habitacion, start, end);
+                    } else {
+                        alert("⚠️ Por favor, completa todos los campos para registrar la reserva.");
+                    }
+                };
+            }
+        });
+
+        calendar.render();
+
+        // Guardar la reserva desde el modal principal "Agregar Reserva"
+        document.querySelector('#modalAgregarReserva .btn-success').addEventListener('click', function (e) {
+            e.preventDefault();
+            const nombreCliente = document.getElementById('nombre').value.trim();
+            const habitacion = document.getElementById('habitacion').value;
+            const start = document.getElementById('fechaEntrada').value;
+            const end = document.getElementById('fechaSalida').value;
+
+            if (nombreCliente && habitacion && start && end) {
+                calendar.addEvent({
+                    title: `Reserva - ${nombreCliente}`,
+                    room: `Habitación - ${habitacion}`,
+                    start: start,
+                    end: end,
+                    allDay: false
+                });
+
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalAgregarReserva'));
+                modal.hide();
+                document.getElementById('formReserva').reset();
+                alert("✅ ¡Reserva registrada exitosamente!");
+                console.log("Reserva registrada:", nombreCliente, habitacion, start, end);
+            } else {
+                alert("⚠️ Por favor, completa todos los campos para registrar la reserva.");
+            }
+        });
+    }
+</script>
+
+
+
 </body>
 </html>

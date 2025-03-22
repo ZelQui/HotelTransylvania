@@ -50,6 +50,11 @@ function cargarPagina(pagina, view = "", limpiarView = false) {
             setTimeout(() => {
                 if (pagina === "jsp/inicio.jsp") {
                     iniciarGrafica(); // Ejecutar solo si es la página de inicio
+                } else if (pagina === "jsp/reservaCalendario.jsp") {
+                    // Ejecuta la función de inicialización del calendario si es la vista del calendario
+                    if (typeof iniciarCalendario === 'function') {
+                        iniciarCalendario();
+                    }
                 }
             }, 100);
         })
@@ -95,18 +100,19 @@ function iniciarGrafica() {
             responsive: true,
             maintainAspectRatio: true,
             scales: {
-                y: { beginAtZero: true }
+                y: {beginAtZero: true}
             }
         }
     });
 
     // Evento para cambiar los datos cuando se seleccione otro año
-    filtroAnio.addEventListener("change", function() {
+    filtroAnio.addEventListener("change", function () {
         const nuevoAnio = filtroAnio.value;
         chart.data.datasets[0].data = datosIngresos[nuevoAnio]; // Actualizar datos
         chart.update(); // Refrescar la gráfica
     });
 }
+
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".btnEditarProducto").forEach(button => {
         button.addEventListener("click", function () {
@@ -121,6 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
 function abrirModalEditar(id) {
     document.getElementById("inputEditarIdProducto").value = id;
     fetch("productcontrol?action=get&idproduct=" + id)
@@ -132,6 +139,7 @@ function abrirModalEditar(id) {
         })
         .catch(error => console.error("Error al obtener datos:", error));
 }
+
 function editarClient(id) {
     document.getElementById("inputEditarCliente").value = id;
 
@@ -147,6 +155,7 @@ function editarClient(id) {
         })
         .catch(error => console.error("Error al obtener datos:", error));
 }
+
 function editarRoom(id) {
     document.getElementById("inputEditarHabitacion").value = id;
 
@@ -161,6 +170,7 @@ function editarRoom(id) {
         })
         .catch(error => console.error("Error al obtener datos:", error));
 }
+
 function editarTypeRoom(id) {
     document.getElementById("inputEditarTipoHabitacion").value = id;
 
@@ -172,6 +182,7 @@ function editarTypeRoom(id) {
         })
         .catch(error => console.error("Error al obtener datos:", error));
 }
+
 function editarFloor(id) {
     document.getElementById("inputEditarPiso").value = id;
 
@@ -183,6 +194,7 @@ function editarFloor(id) {
         })
         .catch(error => console.error("Error al obtener datos:", error));
 }
+
 function editarUser(id) {
     document.getElementById("inputEditarUsuario").value = id;
 
@@ -204,11 +216,12 @@ function editarUser(id) {
         })
         .catch(error => console.error("Error al obtener datos:", error));
 }
+
 function buscar() {
     var nameFilter = $("#nameSearch").val();
     $.ajax({
         url: "filterProducServlet",
-        data: { filter: nameFilter },
+        data: {filter: nameFilter},
         success: function (result) {
             // Insertar la tabla filtrada
             $("#tablaCatalagoProductos").html(result);
@@ -222,17 +235,19 @@ function buscar() {
         }
     });
 }
-function buscarCliente(){
+
+function buscarCliente() {
     var nameFilter = $("#numberDocument").val();
     $.ajax({
         url: "filterClientUniq",
-        data: { filter: nameFilter },
+        data: {filter: nameFilter},
         success: function (result) {
             // Insertar la tabla filtrada
             $("#datosCliente").html(result);
         }
     });
 }
+
 /*function Search(wordKey, tableSearch, quantitySearch, controller) {
     var nameFilter = $(wordKey).val().trim();
 
@@ -254,10 +269,10 @@ function buscarCliente(){
         }
     });
 }*/
-window.Search = function(wordKey, stateKey, tableSearch, quantitySearch, controller, page = 1, size = 10) {
+window.Search = function (wordKey, stateKey, tableSearch, quantitySearch, controller, page = 1, size = 10) {
     var nameFilter = $(wordKey).val().trim();
     var stateFilter = $(stateKey).val().trim();
-    console.log("Filtros enviados:", { filter: nameFilter, estate: stateFilter, page, size });
+    console.log("Filtros enviados:", {filter: nameFilter, estate: stateFilter, page, size});
 
     $.ajax({
         url: controller,
@@ -356,7 +371,8 @@ document.addEventListener("DOMContentLoaded", function () {
         procesarHabitacion: "jsp/procesarHabitacion.jsp",
         venderServicios: "jsp/venderServicios.jsp",
         catalogoServicios: "jsp/catalogoServicios.jsp",
-        habitacionesServicio: "jsp/habitacionesServicio.jsp"
+        habitacionesServicio: "jsp/habitacionesServicio.jsp",
+        reservaCalendario: "jsp/reservaCalendario.jsp"
 
     };
 
@@ -425,16 +441,19 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-window.getRoomsByType = function (tipoHabitacion){
+window.getRoomsByType = function (tipoHabitacion) {
     var tipoHabitacionId = $(tipoHabitacion).val().trim();
+
+    // Detecta el contenedor correcto del select de habitaciones
+    var container = ($(tipoHabitacion).attr('id') === 'tipoHabitacionRango') ? '#combRoomsRango' : '#combRooms';
+
     $.ajax({
         url: "getRooms",
         data: {
             filter: tipoHabitacionId
         },
         success: function (result) {
-            // Insertar la tabla filtrada
-            $("#combRooms").html(result);
+            $(container).html(result);
         }
     });
 }
