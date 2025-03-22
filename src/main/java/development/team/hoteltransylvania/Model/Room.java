@@ -11,6 +11,11 @@ public class Room {
     public Room() {
     }
 
+    public Room(int id, String number) {
+        this.id = id;
+        this.number = number;
+    }
+
     public Room(int id, String number, TypeRoom typeRoom, StatusRoom statusRoom, double price, int floor) {
         this.id = id;
         this.number = number;

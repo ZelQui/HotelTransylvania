@@ -171,6 +171,31 @@ public class GestionTypeRoom {
                 .sorted(Comparator.comparingInt(TypeRoom::getId))
                 .collect(Collectors.toList());
     }
+    public static List<TypeRoom> getAllTypeRoomsActive() {
+        String sql = "SELECT id, nombre, estatus FROM tipo_habitacion WHERE estatus = 'Activo'";
+
+        List<TypeRoom> typeRooms = new ArrayList<>();
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String nombre = rs.getString("nombre");
+                String estatus = rs.getString("estatus");
+
+                typeRooms.add(new TypeRoom(id, nombre,estatus));
+            }
+
+        } catch (SQLException e) {
+            LOGGER.severe("Error retrieving TypeRooms: " + e.getMessage());
+            System.out.println("Error retrieving TypeRooms: " + e.getMessage());
+        }
+        return typeRooms.stream()
+                .sorted(Comparator.comparingInt(TypeRoom::getId))
+                .collect(Collectors.toList());
+    }
     public static List<TypeRoom> getAllTypeRoomsPaginated(int page, int pageSize) {
         String sql = "SELECT id, nombre, estatus FROM tipo_habitacion " +
                 "LIMIT ? OFFSET ?";;

@@ -3,6 +3,8 @@
 <%@ page import="development.team.hoteltransylvania.Business.GestionTypeRoom" %>
 <%@ page import="development.team.hoteltransylvania.Model.Floor" %>
 <%@ page import="development.team.hoteltransylvania.Business.GestionRoom" %>
+<%@ page import="java.util.Comparator" %>
+<%@ page import="java.util.stream.Collectors" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -13,8 +15,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <%
-  List<TypeRoom> allTypeRooms = GestionTypeRoom.getAllTypeRooms();
-  List<Floor> floors = GestionRoom.quantityFloorsEnabled();
+  List<TypeRoom> allTypeRooms = GestionTypeRoom.getAllTypeRoomsActive();
+  List<Floor> floors = GestionRoom.quantityFloorsEnabled().stream()
+          .sorted(Comparator.comparing(Floor::getId))
+          .collect(Collectors.toList());;
 %>
 <body>
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
@@ -93,26 +97,16 @@
                 <h5>Datos del Alojamiento</h5>
                 <div class="mb-3">
                   <label for="tipoHabitacion">Tipo de Habitación</label>
-                  <select class="form-select" id="tipoHabitacion" required>
+                  <select class="form-select" id="tipoHabitacion" onchange="getRoomsByType('#tipoHabitacion')" required>
                     <%for(TypeRoom typeRoom : allTypeRooms){%>
                       <option value="<%=typeRoom.getId()%>"><%=typeRoom.getName()%></option>
                     <%}%>
                   </select>
                 </div>
-                <div class="mb-3">
-                  <label for="piso">Piso</label>
-                  <select class="form-select" id="piso" required>
-                    <%for(Floor floor : floors){%>
-                      <option value="<%=floor.getId()%>"><%=floor.getName()%></option>
-                    <%}%>
-                  </select>
-                </div>
-                <div class="mb-3">
+                <div class="mb-3" id="combRooms">
                   <label for="habitacion">Habitación</label>
                   <select class="form-select" id="habitacion" required>
-                    <option value="#">696</option>
-                    <option value="#">600</option>
-                    <option value="#">100</option>
+                    <option value="">Seleccione una habitación</option>
                   </select>
                 </div>
                 <div class="mb-3">
@@ -465,5 +459,6 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

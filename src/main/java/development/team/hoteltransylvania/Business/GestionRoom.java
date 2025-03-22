@@ -408,5 +408,28 @@ public class GestionRoom {
         }
         return floors;
     }
+    public static List<Room> getRoomByTypeRoom(int typeRoomId) {
+        String sql = "SELECT * FROM habitaciones h " +
+                "INNER JOIN tipo_habitacion th ON h.tipo_id=th.id " +
+                "WHERE th.id = ? and h.estado_id = 1";
+        List<Room> rooms = new ArrayList<>();
+
+        try (Connection cnn = dataSource.getConnection();
+             PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ps.setInt(1, typeRoomId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String number = rs.getString("numero");
+                rooms.add(new Room(id, number));
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("No rooms of type could be found " + typeRoomId + ": " + e.getMessage());
+        }
+
+        return rooms;
+    }
 }
 

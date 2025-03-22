@@ -329,8 +329,6 @@ function updatePagination(totalRecords, currentPage, size, wordKey, stateKey, ta
     );
 }
 
-
-
 document.addEventListener("DOMContentLoaded", function () {
     // Obtener parámetros de la URL
     const params = new URLSearchParams(window.location.search);
@@ -426,3 +424,44 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+window.getRoomsByType = function (tipoHabitacion){
+    var tipoHabitacionId = $(tipoHabitacion).val().trim();
+    $.ajax({
+        url: "getRooms",
+        data: {
+            filter: tipoHabitacionId
+        },
+        success: function (result) {
+            // Insertar la tabla filtrada
+            $("#combRooms").html(result);
+        }
+    });
+}
+
+/*document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("tipoHabitacion").addEventListener("change", function() {
+        var tipoHabitacionId = this.value;
+        var roomSelect = document.getElementById("habitacion");
+
+        // Limpiar opciones anteriores
+        roomSelect.innerHTML = '<option value="">Cargando...</option>';
+
+        // Realizar una petición AJAX
+        fetch("getRooms?tipoHabitacion=" + tipoHabitacionId)
+            .then(response => response.json())
+            .then(data => {
+                roomSelect.innerHTML = '<option value="">Seleccione una Habitación</option>';
+                data.forEach(room => {
+                    let option = document.createElement("option");
+                    option.value = room.id;
+                    option.textContent = room.number;
+                    roomSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error("Error al obtener las habitaciones:", error);
+                roomSelect.innerHTML = '<option value="">Error al cargar</option>';
+            });
+    });
+});*/
