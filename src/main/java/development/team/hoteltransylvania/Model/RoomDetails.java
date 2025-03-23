@@ -4,11 +4,13 @@ public class RoomDetails {
     private int id;
     private Reservation reservation;
     private Room room;
+    private double total;
 
-    public RoomDetails(int id, Reservation reservation, Room room) {
+    public RoomDetails(int id, Reservation reservation, Room room, double total) {
         this.id = id;
         this.reservation = reservation;
         this.room = room;
+        this.total = total;
     }
 
     public RoomDetails() {
@@ -38,12 +40,21 @@ public class RoomDetails {
         this.room = room;
     }
 
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
     @Override
     public String toString() {
         return "RoomDetails{" +
                 "id=" + id +
                 ", reservation=" + reservation +
                 ", room=" + room +
+                ", total=" + total +
                 '}';
     }
 }

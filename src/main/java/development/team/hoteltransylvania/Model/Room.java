@@ -11,9 +11,10 @@ public class Room {
     public Room() {
     }
 
-    public Room(int id, String number) {
+    public Room(int id, String number, double price) {
         this.id = id;
         this.number = number;
+        this.price = price;
     }
 
     public Room(int id, String number, TypeRoom typeRoom, StatusRoom statusRoom, double price, int floor) {

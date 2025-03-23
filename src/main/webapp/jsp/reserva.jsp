@@ -124,33 +124,33 @@
                 <h5>Costo</h5>
                 <div class="mb-3">
                   <label for="descuento">Descuento</label>
-                  <select class="form-select" id="descuento">
-                    <option value="#">0%</option>
-                    <option value="#">5%</option>
-                    <option value="#">10%</option>
+                  <select class="form-select" id="descuento" required>
+                    <option value="0">0%</option>
+                    <option value="5">5%</option>
+                    <option value="10">10%</option>
                   </select>
                 </div>
                 <div class="mb-3">
                   <label for="cobroExtra">Cobro extra</label>
-                  <input type="number" class="form-control" id="cobroExtra">
+                  <input type="number" class="form-control" id="cobroExtra" required>
                 </div>
                 <div class="mb-3">
                   <label for="adelanto">Adelanto</label>
-                  <input type="number" class="form-control" id="adelanto">
+                  <input type="number" class="form-control" id="adelanto" onchange="getRoomsByType('#tipoHabitacion')" required>
                 </div>
-                <div class="mb-3">
+                <div class="mb-3" id="combTotalRoom">
                   <label for="totalPagar">Total a Pagar</label>
                   <input type="number" class="form-control" id="totalPagar" required>
                 </div>
                 <div class="mb-3">
                   <label for="observacion">Observaciones</label>
-                  <textarea id="observacion" class="form-control" rows="4"></textarea>
+                  <textarea id="observacion" class="form-control" rows="4" required></textarea>
                 </div>
               </div>
             </div>
 
             <div class="modal-footer">
-              <button type="button" class="btn btn-success">Guardar</button>
+              <button type="submit" class="btn btn-success">Guardar</button>
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
           </form>

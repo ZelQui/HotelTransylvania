@@ -423,7 +423,8 @@ public class GestionRoom {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String number = rs.getString("numero");
-                rooms.add(new Room(id, number));
+                double price = rs.getDouble("precio");
+                rooms.add(new Room(id, number,price));
             }
         } catch (SQLException e) {
             LOGGER.severe("No rooms of type could be found " + typeRoomId + ": " + e.getMessage());

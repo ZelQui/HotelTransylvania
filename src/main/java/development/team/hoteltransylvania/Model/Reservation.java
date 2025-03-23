@@ -9,19 +9,23 @@ public class Reservation {
     private Date fechaInicio;
     private Date fechaFin;
     private StatusReservation statusReservation;
-    private double total;
+    private double dsct;
+    private double cobro_extra;
+    private double adelanto;
 
     public Reservation() {
     }
 
-    public Reservation(int id, Client client, Employee employee, Date fechaInicio, Date fechaFin, StatusReservation statusReservation, double total) {
+    public Reservation(int id, Client client, Employee employee, Date fechaInicio, Date fechaFin, StatusReservation statusReservation, double dsct, double cobro_extra, double adelanto) {
         this.id = id;
         this.client = client;
         this.employee = employee;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.statusReservation = statusReservation;
-        this.total = total;
+        this.dsct = dsct;
+        this.cobro_extra = cobro_extra;
+        this.adelanto = adelanto;
     }
 
     public int getId() {
@@ -72,12 +76,28 @@ public class Reservation {
         this.statusReservation = statusReservation;
     }
 
-    public double getTotal() {
-        return total;
+    public double getDsct() {
+        return dsct;
     }
 
-    public void setTotal(double total) {
-        this.total = total;
+    public void setDsct(double dsct) {
+        this.dsct = dsct;
+    }
+
+    public double getCobro_extra() {
+        return cobro_extra;
+    }
+
+    public void setCobro_extra(double cobro_extra) {
+        this.cobro_extra = cobro_extra;
+    }
+
+    public double getAdelanto() {
+        return adelanto;
+    }
+
+    public void setAdelanto(double adelanto) {
+        this.adelanto = adelanto;
     }
 
     @Override
@@ -89,7 +109,9 @@ public class Reservation {
                 ", fechaInicio=" + fechaInicio +
                 ", fechaFin=" + fechaFin +
                 ", statusReservation=" + statusReservation +
-                ", total=" + total +
+                ", dsct=" + dsct +
+                ", cobro_extra=" + cobro_extra +
+                ", adelanto=" + adelanto +
                 '}';
     }
 }

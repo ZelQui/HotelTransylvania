@@ -453,7 +453,20 @@ window.getRoomsByType = function (tipoHabitacion) {
             filter: tipoHabitacionId
         },
         success: function (result) {
-            $(container).html(result);
+            $("#habitacion").html(result);
+        }
+    });
+}
+window.getPriceByRoom = function (habitacion) {
+    var HabitacionId = $(habitacion).val().trim();
+
+    $.ajax({
+        url: "getPriceRooms",
+        data: {
+            filter: HabitacionId
+        },
+        success: function (result) {
+            $("#combTotalRoom").html(result);
         }
     });
 }
