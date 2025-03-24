@@ -136,11 +136,11 @@
                 </div>
                 <div class="mb-3">
                   <label for="adelanto">Adelanto</label>
-                  <input type="number" class="form-control" id="adelanto" onchange="getRoomsByType('#tipoHabitacion')" required>
+                  <input type="number" class="form-control" id="adelanto" required>
                 </div>
-                <div class="mb-3" id="combTotalRoom">
+                <div class="mb-3">
                   <label for="totalPagar">Total a Pagar</label>
-                  <input type="number" class="form-control" id="totalPagar" required>
+                  <input type="number" class="form-control" id="totalPagar" readonly required>
                 </div>
                 <div class="mb-3">
                   <label for="observacion">Observaciones</label>

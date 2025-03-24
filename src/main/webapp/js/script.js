@@ -453,47 +453,35 @@ window.getRoomsByType = function (tipoHabitacion) {
             filter: tipoHabitacionId
         },
         success: function (result) {
-            $("#habitacion").html(result);
+            $("#combRooms").html(result);
+
+            setTimeout(() => {
+                updateTotal();
+            }, 100); // Esperamos 100ms para asegurarnos de que el DOM se haya actualizado
+
+            // 🔥 REASIGNAMOS EVENTO PARA QUE FUNCIONE SIEMPRE
+            $("#habitacion").off("change").on("change", updateTotal);
         }
     });
 }
-window.getPriceByRoom = function (habitacion) {
-    var HabitacionId = $(habitacion).val().trim();
+$(document).ready(function () {
+    // Asegura que estos campos actualicen el total al cambiar
+    $("#descuento, #cobroExtra, #adelanto").on("input change", updateTotal);
+    $(document).on("change", "#habitacion", updateTotal);
+});
+window.updateTotal = function () {
+    let precio = parseFloat($("#habitacion option:selected").attr("data-precio")) || 0;
+    let descuento = parseFloat($("#descuento").val()) || 0;
+    let cobroExtra = parseFloat($("#cobroExtra").val()) || 0;
+    let adelanto = parseFloat($("#adelanto").val()) || 0;
 
-    $.ajax({
-        url: "getPriceRooms",
-        data: {
-            filter: HabitacionId
-        },
-        success: function (result) {
-            $("#combTotalRoom").html(result);
-        }
-    });
-}
+    console.log("Precio base:", precio);
+    console.log("Descuento:", descuento);
+    console.log("Cobro Extra:", cobroExtra);
+    console.log("Adelanto:", adelanto);
 
-/*document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("tipoHabitacion").addEventListener("change", function() {
-        var tipoHabitacionId = this.value;
-        var roomSelect = document.getElementById("habitacion");
+    let total = precio - (precio * (descuento / 100)) + cobroExtra - adelanto;
+    total = total < 0 ? 0 : total;
 
-        // Limpiar opciones anteriores
-        roomSelect.innerHTML = '<option value="">Cargando...</option>';
-
-        // Realizar una petición AJAX
-        fetch("getRooms?tipoHabitacion=" + tipoHabitacionId)
-            .then(response => response.json())
-            .then(data => {
-                roomSelect.innerHTML = '<option value="">Seleccione una Habitación</option>';
-                data.forEach(room => {
-                    let option = document.createElement("option");
-                    option.value = room.id;
-                    option.textContent = room.number;
-                    roomSelect.appendChild(option);
-                });
-            })
-            .catch(error => {
-                console.error("Error al obtener las habitaciones:", error);
-                roomSelect.innerHTML = '<option value="">Error al cargar</option>';
-            });
-    });
-});*/
+    $("#totalPagar").val(total.toFixed(2));
+};
