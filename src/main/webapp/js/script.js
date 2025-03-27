@@ -441,11 +441,31 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// Define la función updateTotal primero
+window.updateTotal = function () {
+    let precio = parseFloat($("#habitacion option:selected").attr("data-precio")) || 0;
+    let descuento = parseFloat($("#descuento").val()) || 0;
+    let cobroExtra = parseFloat($("#cobroExtra").val()) || 0;
+    let adelanto = parseFloat($("#adelanto").val()) || 0;
+
+    let dias = calcularDias(); // Obtener cantidad de días (mínimo 1)
+    let subtotal = precio * dias; // Precio total por los días
+
+    let total = subtotal - (subtotal * (descuento / 100)) + cobroExtra - adelanto;
+    total = total < 0 ? 0 : total;
+
+    document.querySelector("#totalPagar").value = total.toFixed(2);
+
+};
+
+// Luego, cuando el DOM esté listo, asigna los eventos //ESTA ES LA FUNCION CLAVE
+$(document).on("change keyup", "#descuento, #cobroExtra, #adelanto, #fechaEntrada, #fechaSalida", function () {
+    updateTotal();
+});
+
+// Función para obtener habitaciones según el tipo seleccionado
 window.getRoomsByType = function (tipoHabitacion) {
     var tipoHabitacionId = $(tipoHabitacion).val().trim();
-
-    // Detecta el contenedor correcto del select de habitaciones
-    var container = ($(tipoHabitacion).attr('id') === 'tipoHabitacionRango') ? '#combRoomsRango' : '#combRooms';
 
     $.ajax({
         url: "getRooms",
@@ -459,29 +479,51 @@ window.getRoomsByType = function (tipoHabitacion) {
                 updateTotal();
             }, 100); // Esperamos 100ms para asegurarnos de que el DOM se haya actualizado
 
-            // 🔥 REASIGNAMOS EVENTO PARA QUE FUNCIONE SIEMPRE
+            // Reasignamos evento para que funcione siempre
             $("#habitacion").off("change").on("change", updateTotal);
         }
     });
-}
-$(document).ready(function () {
-    // Asegura que estos campos actualicen el total al cambiar
-    $("#descuento, #cobroExtra, #adelanto").on("input change", updateTotal);
-    $(document).on("change", "#habitacion", updateTotal);
-});
-window.updateTotal = function () {
-    let precio = parseFloat($("#habitacion option:selected").attr("data-precio")) || 0;
-    let descuento = parseFloat($("#descuento").val()) || 0;
-    let cobroExtra = parseFloat($("#cobroExtra").val()) || 0;
-    let adelanto = parseFloat($("#adelanto").val()) || 0;
-
-    console.log("Precio base:", precio);
-    console.log("Descuento:", descuento);
-    console.log("Cobro Extra:", cobroExtra);
-    console.log("Adelanto:", adelanto);
-
-    let total = precio - (precio * (descuento / 100)) + cobroExtra - adelanto;
-    total = total < 0 ? 0 : total;
-
-    $("#totalPagar").val(total.toFixed(2));
 };
+
+function calcularDias() {
+    let fechaEntrada = new Date(document.getElementById("fechaEntrada").value);
+    let fechaSalida = new Date(document.getElementById("fechaSalida").value);
+
+    if (!isNaN(fechaEntrada) && !isNaN(fechaSalida)) {
+        let diferencia = Math.ceil((fechaSalida - fechaEntrada) / (1000 * 60 * 60 * 24)); // Diferencia en días
+        return diferencia >= 1 ? diferencia : 1; // Siempre al menos 1 día
+    }
+    return 1; // Valor por defecto
+}
+function mostrarDatos(){
+    let datos = {
+        nombre: document.getElementById("nombre").value,
+        tipoDocumento: document.getElementById("tipoDocumento").value,
+        documento: document.getElementById("documento").value,
+        correo: document.getElementById("correo").value,
+        tipoHabitacion: document.getElementById("tipoHabitacion").value,
+        habitacion: document.getElementById("habitacion").value,
+        fechaEntrada: document.getElementById("fechaEntrada").value,
+        fechaSalida: document.getElementById("fechaSalida").value,
+        descuento: document.getElementById("descuento").value,
+        cobroExtra: document.getElementById("cobroExtra").value,
+        adelanto: document.getElementById("adelanto").value,
+        totalPagar: document.getElementById("totalPagar").value,
+        observacion: document.getElementById("observacion").value
+    };
+
+    console.log("Datos de la Reserva:");
+    console.log("Nombre:", datos.nombre);
+    console.log("Tipo de Documento:", datos.tipoDocumento);
+    console.log("Documento:", datos.documento);
+    console.log("Correo:", datos.correo);
+    console.log("Tipo de Habitación:", datos.tipoHabitacion);
+    console.log("Habitación:", datos.habitacion);
+    console.log("Fecha de Entrada:", datos.fechaEntrada);
+    console.log("Fecha de Salida:", datos.fechaSalida);
+    console.log("Descuento:", datos.descuento + "%");
+    console.log("Cobro Extra:", datos.cobroExtra);
+    console.log("Adelanto:", datos.adelanto);
+    console.log("Total a Pagar:", datos.totalPagar);
+    console.log("Observaciones:", datos.observacion);
+}

@@ -33,8 +33,6 @@ public class getRooms extends HttpServlet {
             }
             out.println("</select>");
 
-
-
         } catch (Exception e) {
             e.printStackTrace(); // Para depuración en el servidor
         }

@@ -105,7 +105,7 @@
                 </div>
                 <div class="mb-3" id="combRooms">
                   <label for="habitacion">Habitación</label>
-                  <select class="form-select" id="habitacion" required>
+                  <select class="form-select" id="habitacion" required onchange='updateTotal()'>
                     <option value="">Seleccione una habitación</option>
                   </select>
                 </div>
@@ -150,7 +150,7 @@
             </div>
 
             <div class="modal-footer">
-              <button type="submit" class="btn btn-success">Guardar</button>
+              <button type="button" class="btn btn-success" onclick="mostrarDatos()">Guardar</button>
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
           </form>
