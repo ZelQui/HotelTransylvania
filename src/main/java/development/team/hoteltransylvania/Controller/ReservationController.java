@@ -17,6 +17,14 @@ public class ReservationController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //todo
+        String action1 = req.getParameter("nombre");
+        String action2 = req.getParameter("tipoDocumento");
+        String action3 = req.getParameter("fechaEntrada");
+        String action4 = req.getParameter("adelanto");
+
+        System.out.println(action1);
+        System.out.println(action2);
+        System.out.println(action3);
+        System.out.println(action4);
     }
 }

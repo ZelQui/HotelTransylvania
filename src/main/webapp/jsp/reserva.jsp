@@ -5,6 +5,8 @@
 <%@ page import="development.team.hoteltransylvania.Business.GestionRoom" %>
 <%@ page import="java.util.Comparator" %>
 <%@ page import="java.util.stream.Collectors" %>
+<%@ page import="development.team.hoteltransylvania.DTO.TableReservationDTO" %>
+<%@ page import="development.team.hoteltransylvania.Business.GestionReservation" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -16,10 +18,20 @@
 </head>
 <%
   List<TypeRoom> allTypeRooms = GestionTypeRoom.getAllTypeRoomsActive();
-  List<Floor> floors = GestionRoom.quantityFloorsEnabled().stream()
-          .sorted(Comparator.comparing(Floor::getId))
-          .collect(Collectors.toList());;
+
+  int pagina = 1;
+  int pageSize = 10;
+
+  String pageParam = request.getParameter("page");
+  if (pageParam != null) {
+    pagina = Integer.parseInt(pageParam);
+  }
+
+  /*List<TableReservationDTO> allReservations = GestionReservation.getReservationPaginated(pagina, pageSize);
+  int totalEmployee = GestionEmployee.getAllEmployees().size();
+  int totalPages = (int) Math.ceil((double) totalEmployee / pageSize);*/
 %>
+
 <body>
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
   <h4><i class="fa-solid fa-calendar-days me-2"></i> Reserva</h4>
@@ -59,7 +71,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form id="formReserva">
+          <form id="formReserva" method="post" action="reservatioController">
             <input type="hidden" id="inputAgregarReserva">
             <div class="row">
               <!-- Datos del Cliente -->
@@ -97,7 +109,7 @@
                 <h5>Datos del Alojamiento</h5>
                 <div class="mb-3">
                   <label for="tipoHabitacion">Tipo de Habitación</label>
-                  <select class="form-select" id="tipoHabitacion" onchange="getRoomsByType('#tipoHabitacion')" required>
+                  <select class="form-select" id="tipoHabitacion" name="tipoHabitacion" onchange="getRoomsByType('#tipoHabitacion')" required>
                     <%for(TypeRoom typeRoom : allTypeRooms){%>
                       <option value="<%=typeRoom.getId()%>"><%=typeRoom.getName()%></option>
                     <%}%>
@@ -105,17 +117,17 @@
                 </div>
                 <div class="mb-3" id="combRooms">
                   <label for="habitacion">Habitación</label>
-                  <select class="form-select" id="habitacion" required onchange='updateTotal()'>
+                  <select class="form-select" id="habitacion" name="habitacion" required onchange='updateTotal()'>
                     <option value="">Seleccione una habitación</option>
                   </select>
                 </div>
                 <div class="mb-3">
                   <label for="fechaEntrada">Fecha y Hora de Entrada</label>
-                  <input type="datetime-local" class="form-control" id="fechaEntrada" required>
+                  <input type="datetime-local" class="form-control" id="fechaEntrada" name="fechaEntrada" required>
                 </div>
                 <div class="mb-3">
                   <label for="fechaSalida">Fecha y Hora de Salida</label>
-                  <input type="datetime-local" class="form-control" id="fechaSalida" required>
+                  <input type="datetime-local" class="form-control" id="fechaSalida" name="fechaSalida" required>
                 </div>
               </div>
 
@@ -124,7 +136,7 @@
                 <h5>Costo</h5>
                 <div class="mb-3">
                   <label for="descuento">Descuento</label>
-                  <select class="form-select" id="descuento" required>
+                  <select class="form-select" id="descuento" name="descuento" required>
                     <option value="0">0%</option>
                     <option value="5">5%</option>
                     <option value="10">10%</option>
@@ -132,25 +144,25 @@
                 </div>
                 <div class="mb-3">
                   <label for="cobroExtra">Cobro extra</label>
-                  <input type="number" class="form-control" id="cobroExtra" required>
+                  <input type="number" class="form-control" id="cobroExtra" name="cobroExtra" required>
                 </div>
                 <div class="mb-3">
                   <label for="adelanto">Adelanto</label>
-                  <input type="number" class="form-control" id="adelanto" required>
+                  <input type="number" class="form-control" id="adelanto" name="adelanto" required>
                 </div>
                 <div class="mb-3">
                   <label for="totalPagar">Total a Pagar</label>
-                  <input type="number" class="form-control" id="totalPagar" readonly required>
+                  <input type="number" class="form-control" id="totalPagar" name="totalPagar" readonly required>
                 </div>
                 <div class="mb-3">
                   <label for="observacion">Observaciones</label>
-                  <textarea id="observacion" class="form-control" rows="4" required></textarea>
+                  <textarea id="observacion" class="form-control" rows="4" name="observacion" required></textarea>
                 </div>
               </div>
             </div>
 
             <div class="modal-footer">
-              <button type="button" class="btn btn-success" onclick="mostrarDatos()">Guardar</button>
+              <button type="submit" class="btn btn-success">Guardar</button>
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
           </form>
@@ -418,8 +430,9 @@
       <tr>
         <th>N°</th>
         <th>Cliente</th>
-        <th>Habitación</th>
-        <th>Tipo de Habitación</th>
+        <th>Tipo Doc.</th>
+        <th>N° Doc.</th>
+        <th>Habitación</th> <%--ejemplo: 302 - Presidencial--%>
         <th>Fecha de Entrada</th>
         <th>Fecha de Salida</th>
         <th>Estado</th>
@@ -430,8 +443,9 @@
       <tr>
         <td>1</td>
         <td>Gonashi</td>
-        <td>696</td>
-        <td>Presidencial</td>
+        <td>DNI</td>
+        <td>12345678</td>
+        <td>696 - Presidencial</td>
         <td>15-05-25 13:33</td>
         <td>16-05-25 12:05</td>
         <td class="text-primary">Nueva Reservación</td>
