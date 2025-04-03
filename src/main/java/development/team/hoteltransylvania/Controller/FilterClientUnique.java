@@ -34,6 +34,7 @@ public class FilterClientUnique extends HttpServlet {
             // Construcción de HTML con los datos del cliente
             out.println("<div class=\"mb-3\">");
             out.println("    <label for=\"nombre\">Nombre Completo</label>");
+            out.println("    <input type=\"hidden\" class=\"form-control\" id=\"idCLiente\" name=\"idCLiente\" value=\"" + client.getId() + "\" required>");
             out.println("    <input type=\"text\" class=\"form-control\" id=\"nombre\" name=\"nombre\" value=\"" + client.getName() + "\" required>");
             out.println("</div>");
 

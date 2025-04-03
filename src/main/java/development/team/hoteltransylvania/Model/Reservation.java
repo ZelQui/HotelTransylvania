@@ -1,22 +1,38 @@
 package development.team.hoteltransylvania.Model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Reservation {
     private int id;
     private Client client;
     private Employee employee;
-    private Date fechaInicio;
-    private Date fechaFin;
+    private Timestamp fechaInicio;
+    private Timestamp fechaFin;
     private StatusReservation statusReservation;
-    private double dsct;
+    private int dsct;
     private double cobro_extra;
     private double adelanto;
+    private int cant_dias;
 
     public Reservation() {
     }
 
-    public Reservation(int id, Client client, Employee employee, Date fechaInicio, Date fechaFin, StatusReservation statusReservation, double dsct, double cobro_extra, double adelanto) {
+    public Reservation(Client client, Employee employee, Timestamp fechaInicio, Timestamp fechaFin, StatusReservation statusReservation, int dsct,
+                       double cobro_extra, double adelanto, int cant_dias) {
+        this.client = client;
+        this.employee = employee;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.statusReservation = statusReservation;
+        this.dsct = dsct;
+        this.cobro_extra = cobro_extra;
+        this.adelanto = adelanto;
+        this.cant_dias = cant_dias;
+    }
+
+    public Reservation(int id, Client client, Employee employee, Timestamp fechaInicio, Timestamp fechaFin, StatusReservation statusReservation,
+                       int dsct, double cobro_extra, double adelanto, int cant_dias) {
         this.id = id;
         this.client = client;
         this.employee = employee;
@@ -26,6 +42,15 @@ public class Reservation {
         this.dsct = dsct;
         this.cobro_extra = cobro_extra;
         this.adelanto = adelanto;
+        this.cant_dias = cant_dias;
+    }
+
+    public int getCant_dias() {
+        return cant_dias;
+    }
+
+    public void setCant_dias(int cant_dias) {
+        this.cant_dias = cant_dias;
     }
 
     public int getId() {
@@ -52,19 +77,19 @@ public class Reservation {
         this.employee = employee;
     }
 
-    public Date getFechaInicio() {
+    public Timestamp getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(Date fechaInicio) {
+    public void setFechaInicio(Timestamp fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public Date getFechaFin() {
+    public Timestamp getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(Date fechaFin) {
+    public void setFechaFin(Timestamp fechaFin) {
         this.fechaFin = fechaFin;
     }
 
@@ -76,11 +101,11 @@ public class Reservation {
         this.statusReservation = statusReservation;
     }
 
-    public double getDsct() {
+    public int getDsct() {
         return dsct;
     }
 
-    public void setDsct(double dsct) {
+    public void setDsct(int dsct) {
         this.dsct = dsct;
     }
 
@@ -112,6 +137,7 @@ public class Reservation {
                 ", dsct=" + dsct +
                 ", cobro_extra=" + cobro_extra +
                 ", adelanto=" + adelanto +
+                ", cant_dias=" + cant_dias +
                 '}';
     }
 }

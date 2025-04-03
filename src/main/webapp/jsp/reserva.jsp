@@ -78,11 +78,12 @@
               <div class="col-md-4 border-end">
                 <h5>Datos del Cliente</h5>
                 <input type="text" class="form-control mb-3" id="numberDocument" placeholder="Buscar por Documento"
-                       onkeyup="buscarCliente()">
+                       onkeyup="buscarCliente()" required>
                 <div id="datosCliente">
                   <p style='color:red;' class='mt-2'>⚠️ Debes ingresar un número de documento</p>
                   <div class="mb-3">
                     <label for="nombre">Nombre Completo</label>
+                    <input type="hidden" class="form-control" id="idCLiente" name="idCLiente" required>
                     <input type="text" class="form-control" id="nombre" name="nombre" required>
                   </div>
                   <div class="mb-3">

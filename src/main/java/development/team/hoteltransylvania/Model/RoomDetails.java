@@ -13,6 +13,12 @@ public class RoomDetails {
         this.total = total;
     }
 
+    public RoomDetails(Reservation reservation, Room room, double total) {
+        this.reservation = reservation;
+        this.room = room;
+        this.total = total;
+    }
+
     public RoomDetails() {
     }
 

@@ -27,7 +27,7 @@ public class getRooms extends HttpServlet {
 
             // Construcción de HTML con los datos del cliente
             out.println("<label for='habitacion'>Habitación</label>");
-            out.println("<select class='form-select' id='habitacion' required onchange='updateTotal()'>");
+            out.println("<select class='form-select' id='habitacion' name='habitacion' required onchange='updateTotal()'>");
             for (Room room : rooms) {
                 out.println("<option value='"+room.getId()+"' data-precio='"+room.getPrice()+"'>"+room.getNumber()+"</option>");
             }
