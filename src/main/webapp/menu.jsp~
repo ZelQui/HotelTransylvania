@@ -602,7 +602,7 @@
                     text: 'El cliente no puede ser nulo o ya existe.',
                     timer: 3000,
                     showConfirmButton: false,
-                    position: 'center',
+                    position: 'top',
                     toast: true
                 });
             }

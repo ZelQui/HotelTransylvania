@@ -57,7 +57,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <form method="post" action="clientcontrol">
+          <form id="formAgregarCliente" method="post" action="clientcontrol">
             <input type="hidden" id="inputAgregarCliente">
             <input type="hidden" value="add" name="actionclient">
             <div class="mb-3">

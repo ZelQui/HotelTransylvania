@@ -53,6 +53,7 @@ public class ClientsController extends HttpServlet {
 
                 if(clientName == null || clientName.equals("Error al consultar documento")) {
                     out.println("<script type=\"text/javascript\">");
+                    out.println("alert('Nombre incorrecto');");
                     out.println("history.back();");
                     out.println("</script>");
                 }else {
