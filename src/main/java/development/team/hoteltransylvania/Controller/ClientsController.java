@@ -41,7 +41,8 @@ public class ClientsController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("actionclient");
-
+        resp.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = resp.getWriter();
         switch (action) {
             case "add":
                 String clientName = req.getParameter("clientname");
@@ -49,8 +50,17 @@ public class ClientsController extends HttpServlet {
                 String typeDocument = req.getParameter("typedocument");
                 String document = req.getParameter("document");
                 String telephone = req.getParameter("telephone");
-                GestionClient.registerClient(new Client(clientName,telephone,clientEmail, TypeDocument.valueOf(typeDocument),document));
-                resp.sendRedirect("menu.jsp?view=clientes");
+
+                if(clientName == null || clientName.equals("Error al consultar documento")) {
+                    out.println("<script type=\"text/javascript\">");
+                    out.println("alert('Nombre incorrecto');");
+                    out.println("history.back();");
+                    out.println("</script>");
+                }else {
+                    GestionClient.registerClient(new Client(clientName,telephone,clientEmail, TypeDocument.valueOf(typeDocument),document));
+                    resp.sendRedirect("menu.jsp?view=clientes");
+                }
+
                 break;
             case "delete":
                 int idClient = Integer.parseInt(req.getParameter("idClient"));
