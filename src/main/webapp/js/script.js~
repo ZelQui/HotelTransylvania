@@ -536,11 +536,18 @@ function toggleRadioInput() {
 }
 
 // Lógica para manejar el botón de exportar
-document.getElementById("exportButton").addEventListener("click", function() {
-    const option = document.querySelector('input[name="downloadOption"]:checked');
+document.getElementById("exportButton").addEventListener("click", function () {
+    const downloadLastChecked = document.getElementById("downloadLast").checked;
+    const downloadAllChecked = document.getElementById("downloadAll").checked;
     const numLast = document.getElementById("numLast").value;
 
-    if (!option) {
+    if (downloadLastChecked) {
+        // Aquí puedes agregar la lógica para descargar los últimos datos según el número ingresado
+        console.log(`Descargar los últimos ${numLast} datos`);
+    } else if (downloadAllChecked) {
+        // Aquí puedes agregar la lógica para descargar todos los datos
+        console.log("Descargar todos los datos");
+    } else {
         Swal.fire({
             icon: 'warning',
             title: 'Debe seleccionar una opción de descarga',
@@ -550,18 +557,5 @@ document.getElementById("exportButton").addEventListener("click", function() {
             position: 'center',
             toast: true
         });
-        return;
-    }
-
-    if (option.value === "last") {
-        if (!numLast || parseInt(numLast) <= 0) {
-            alert("Ingrese un número válido para los últimos registros.");
-            return;
-        }
-        console.log(`Descargar los últimos ${numLast} datos`);
-        // Aquí iría la lógica para filtrar y exportar los últimos datos
-    } else if (option.value === "all") {
-        console.log("Descargar todos los datos");
-        // Aquí iría la lógica para exportar todos los datos
     }
 });

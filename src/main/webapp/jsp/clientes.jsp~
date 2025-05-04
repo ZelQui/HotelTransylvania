@@ -149,7 +149,7 @@
               <label class="form-check-label ms-2 me-3" for="downloadLast">
                 Descargar los últimos
               </label>
-              <input type="number" id="numLast" class="form-control" placeholder="Cantidad" style="width: 100px;" disabled>
+              <input type="number" id="numLast" class="form-control" placeholder="Cantidad" style="width: 200px;" disabled>
             </div>
             <!-- Descargar todos -->
             <div class="form-check d-flex align-items-center mt-2">
